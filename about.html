@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0f14;--card:#141420;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+a{text-decoration:none;color:inherit;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
+.logo span{color:var(--red);}
+.nav-r a{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
+.nav-r a:hover{color:var(--white);}
+.content{max-width:800px;margin:0 auto;padding:110px 40px 80px;}
+h1{font-family:'Bebas Neue';font-size:3rem;letter-spacing:.05em;margin-bottom:8px;}
+h1 span{color:var(--red);}
+.sub{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
+h2{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;color:var(--gold);margin:40px 0 12px;}
+p{font-size:.95rem;line-height:1.9;color:rgba(253,250,244,.65);margin-bottom:16px;}
+ul{padding-left:24px;margin-bottom:16px;}
+li{font-size:.93rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:6px;}
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
+.highlight{background:rgba(230,48,34,.08);border-left:3px solid var(--red);padding:16px 20px;margin:24px 0;font-size:.9rem;color:rgba(253,250,244,.75);line-height:1.7;}
+footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
+.foot-logo span{color:var(--red);}
+footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
+.foot-links a{font-family:'Rajdhani';font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:16px;transition:color .2s;}
+.foot-links a:hover{color:var(--red);}
+@media(max-width:600px){.content{padding:90px 20px 60px;}nav{padding:0 20px;}footer{padding:24px 20px;flex-direction:column;text-align:center;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div class="nav-r">
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</nav>
+
+<div class="content" id="page-content">
+  <!-- JS loads content based on page -->
+</div>
+
+<footer>
+  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
+  <p>© 2024 VoomComix · All Rights Reserved</p>
+  <div class="foot-links">
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About</a>
+    <a href="terms.html">Terms</a>
+  </div>
+</footer>
+
+<script>
+const page = location.pathname.includes('terms') ? 'terms' : 'about';
+document.title = (page==='terms'?'Terms & Conditions':'About') + ' — VoomComix';
+
+const content = {
+  about: `
+    <h1>ABOUT <span>VOOMCOMIX</span></h1>
+    <div class="sub">Who we are · What we do</div>
+    <p>VoomComix is an independent creative platform dedicated to original storytelling. Founded with one simple belief — <strong style="color:var(--white)">great stories should be free to read.</strong></p>
+    <p>We write in Hindi and English, across genres — action, fantasy, romance, thriller, mystery. No templates. No formulas. Just raw, honest storytelling from the heart.</p>
+    <div class="highlight">Every story on VoomComix is 100% original — written, edited, and published by the VoomComix creator. No AI-generated content. Real stories, real emotions.</div>
+    <h2>OUR MISSION</h2>
+    <p>To build a space where readers can discover compelling original stories without paywalls, subscriptions, or ads. A place where stories come first.</p>
+    <h2>WHAT WE OFFER</h2>
+    <ul>
+      <li>📚 Original webnovels in Hindi & English</li>
+      <li>⚔️ Multiple genres — action, fantasy, romance, thriller and more</li>
+      <li>📖 Clean, distraction-free reading experience</li>
+      <li>🆓 Everything is completely free to read</li>
+      <li>🔄 Regular chapter updates</li>
+    </ul>
+    <h2>CONTACT</h2>
+    <p>Have a suggestion, feedback, or just want to say hi? Reach out at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
+    <p>You can also visit our site at <a href="https://voomcomix.in" style="color:var(--red);">voomcomix.in</a></p>
+  `,
+  terms: `
+    <h1>TERMS & <span>CONDITIONS</span></h1>
+    <div class="sub">Last updated: January 2024</div>
+    <div class="highlight">By accessing and using VoomComix (voomcomix.in), you agree to the following terms and conditions. Please read them carefully.</div>
+    <h2>1. ACCEPTANCE OF TERMS</h2>
+    <p>By visiting, reading, or using any part of VoomComix, you confirm that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree, please do not use this website.</p>
+    <h2>2. CONTENT OWNERSHIP</h2>
+    <p>All stories, chapters, characters, plots, and creative content published on VoomComix are the exclusive intellectual property of VoomComix and its creator. All rights are reserved.</p>
+    <ul>
+      <li>You may not copy, reproduce, republish, or distribute any content without written permission.</li>
+      <li>You may not claim any VoomComix story or content as your own.</li>
+      <li>Sharing links to our stories is encouraged — copying the actual content is not allowed.</li>
+    </ul>
+    <h2>3. FREE TO READ</h2>
+    <p>All content on VoomComix is provided free of charge for personal reading enjoyment. We do not charge readers for access to any story or chapter.</p>
+    <h2>4. USER CONDUCT</h2>
+    <p>When using this website, you agree to:</p>
+    <ul>
+      <li>Use the site for lawful purposes only.</li>
+      <li>Not attempt to hack, disrupt, or damage the website or its systems.</li>
+      <li>Not scrape, copy, or redistribute content without permission.</li>
+      <li>Respect the creative work of the author.</li>
+    </ul>
+    <h2>5. CONTENT DISCLAIMER</h2>
+    <p>Some stories may contain themes suitable for mature readers including violence, dark themes, or romance. Reader discretion is advised. VoomComix stories are works of fiction — any resemblance to real persons or events is purely coincidental.</p>
+    <h2>6. PRIVACY</h2>
+    <p>VoomComix does not collect personal data from readers. We do not require registration or login to read stories. We may use basic analytics to understand site traffic (no personal information is stored).</p>
+    <h2>7. CHANGES TO TERMS</h2>
+    <p>VoomComix reserves the right to update these Terms at any time. Continued use of the website after changes are posted constitutes acceptance of the updated terms.</p>
+    <h2>8. CONTACT</h2>
+    <p>For any questions regarding these terms, please contact us at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
+  `
+};
+
+document.getElementById('page-content').innerHTML = content[page];
+</script>
+</body>
+</html>

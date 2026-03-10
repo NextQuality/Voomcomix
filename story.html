@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Story — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0f14;--card:#141420;--card2:#1a1a28;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+a{text-decoration:none;color:inherit;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
+.logo span{color:var(--red);}
+.nav-r a{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
+.nav-r a:hover{color:var(--white);}
+
+/* STORY HERO */
+.story-hero{padding:90px 40px 0;background:linear-gradient(180deg,rgba(230,48,34,.04) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.story-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:200px 1fr;gap:40px;padding-bottom:40px;}
+.story-cover-big{width:200px;height:280px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:5rem;flex-shrink:0;border:2px solid var(--border);box-shadow:8px 8px 0 var(--red);}
+.story-info h1{font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.04em;line-height:1.1;margin-bottom:10px;}
+.story-meta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.meta-badge{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);}
+.meta-genre{color:var(--gold);border-color:rgba(240,165,0,.2);}
+.meta-status-ongoing{color:var(--red);border-color:rgba(230,48,34,.3);}
+.meta-status-complete{color:#00a651;border-color:rgba(0,166,81,.3);}
+.meta-lang{color:var(--muted);}
+.story-desc{font-size:.9rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:20px;max-width:600px;}
+.story-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.s-tag{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);}
+.story-stats{display:flex;gap:24px;margin-bottom:24px;}
+.s-stat{text-align:center;}
+.s-stat-n{font-family:'Bebas Neue';font-size:1.6rem;line-height:1;}
+.s-stat-l{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.btn-start{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 28px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);display:inline-block;transition:all .2s;cursor:pointer;}
+.btn-start:hover{background:var(--gold);color:#000;}
+
+/* CHAPTERS */
+.chapters-section{max-width:960px;margin:0 auto;padding:40px;}
+.ch-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.ch-header h2{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.05em;}
+.ch-header h2 span{color:var(--red);}
+.ch-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(230,48,34,.4),transparent);}
+.ch-count{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+
+.chapter-list{display:flex;flex-direction:column;gap:2px;}
+.chapter-row{background:var(--card);border:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .2s;position:relative;}
+.chapter-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transition:transform .2s;transform-origin:center;}
+.chapter-row:hover{border-color:rgba(230,48,34,.3);background:var(--card2);padding-left:26px;}
+.chapter-row:hover::before{transform:scaleY(1);}
+.ch-num{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.05em;color:var(--red);min-width:40px;}
+.ch-title{font-family:'Rajdhani';font-size:.9rem;font-weight:600;letter-spacing:.05em;flex:1;}
+.ch-meta{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);text-align:right;}
+.ch-words{display:block;}
+.ch-date{display:block;}
+.ch-read{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-left:16px;}
+
+footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
+.foot-logo span{color:var(--red);}
+footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
+
+@media(max-width:700px){
+  nav{padding:0 20px;}
+  .story-inner{grid-template-columns:1fr;gap:20px;}
+  .story-cover-big{width:140px;height:200px;font-size:3.5rem;}
+  .story-hero,.chapters-section{padding-left:20px;padding-right:20px;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div class="nav-r">
+    <a href="stories.html">← All Stories</a>
+  </div>
+</nav>
+
+<div id="story-page">
+  <!-- Loaded by JS -->
+</div>
+
+<footer>
+  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
+  <p>© 2024 VoomComix · All Rights Reserved</p>
+</footer>
+
+<script src="stories-data.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const storyId = params.get('id');
+const stories = loadData();
+const story = stories.find(s=>s.id===storyId);
+
+if(!story){
+  document.getElementById('story-page').innerHTML = '<div style="text-align:center;padding:200px 20px;font-family:Rajdhani;font-size:1rem;letter-spacing:.2em;color:#6a6478;text-transform:uppercase;">Story not found. <a href="stories.html" style="color:#e63022;">Back to Stories →</a></div>';
+} else {
+  document.title = story.title + ' — VoomComix';
+  const statusClass = `meta-status-${story.status}`;
+  const statusText = story.status.charAt(0).toUpperCase()+story.status.slice(1);
+
+  const chaptersHTML = story.chapters.map((ch,i)=>`
+  <div class="chapter-row" onclick="location.href='chapter.html?story=${story.id}&ch=${ch.id}'">
+    <span class="ch-num">CH ${ch.id}</span>
+    <span class="ch-title">${ch.title}</span>
+    <span class="ch-meta">
+      <span class="ch-words">${(ch.wordCount||0).toLocaleString()} words</span>
+      <span class="ch-date">${ch.date}</span>
+    </span>
+    <span class="ch-read">Read →</span>
+  </div>`).join('');
+
+  document.getElementById('story-page').innerHTML = `
+  <div class="story-hero">
+    <div class="story-inner">
+      <div class="story-cover-big" style="background:${story.coverColor}">${story.cover}</div>
+      <div class="story-info">
+        <h1>${story.title}</h1>
+        <div class="story-meta-row">
+          <span class="meta-badge meta-genre">${story.genre}</span>
+          <span class="meta-badge ${statusClass}">${statusText}</span>
+          <span class="meta-badge meta-lang">${story.language}</span>
+        </div>
+        <div class="story-desc">${story.description}</div>
+        <div class="story-tags">${(story.tags||[]).map(t=>`<span class="s-tag">${t}</span>`).join('')}</div>
+        <div class="story-stats">
+          <div class="s-stat"><div class="s-stat-n">${story.chapters.length}</div><div class="s-stat-l">Chapters</div></div>
+          <div class="s-stat"><div class="s-stat-n">${story.views}</div><div class="s-stat-l">Views</div></div>
+          <div class="s-stat"><div class="s-stat-n">⭐${story.rating}</div><div class="s-stat-l">Rating</div></div>
+        </div>
+        <a href="chapter.html?story=${story.id}&ch=1" class="btn-start">📖 Start Reading</a>
+      </div>
+    </div>
+  </div>
+  <div class="chapters-section">
+    <div class="ch-header">
+      <h2>CHAPTER <span>LIST</span></h2>
+      <div class="ch-line"></div>
+      <span class="ch-count">${story.chapters.length} chapters</span>
+    </div>
+    <div class="chapter-list">${chaptersHTML}</div>
+  </div>`;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Chapter — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0f0f14;--card:#141420;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);--reading-bg:#0f0f14;--reading-text:#ddd5c5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--reading-bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+a{text-decoration:none;color:inherit;}
+
+/* PROGRESS BAR */
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;z-index:200;transition:width .1s;box-shadow:0 0 8px var(--red);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.15);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.1em;}
+.logo span{color:var(--red);}
+.nav-center{font-family:'Rajdhani';font-size:.78rem;letter-spacing:.12em;color:var(--muted);text-align:center;}
+.nav-r{display:flex;align-items:center;gap:16px;}
+.nav-r a,.nav-r button{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .2s;padding:0;}
+.nav-r a:hover,.nav-r button:hover,.nav-r button.active{color:var(--white);}
+
+/* CHAPTER CONTENT */
+.chapter-wrap{max-width:720px;margin:0 auto;padding:90px 24px 60px;}
+.ch-breadcrumb{font-family:'Rajdhani';font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.ch-breadcrumb a:hover{color:var(--red);}
+.ch-number{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.ch-title-big{font-family:'Bebas Neue';font-size:2.5rem;letter-spacing:.04em;margin-bottom:6px;line-height:1.1;}
+.ch-meta-row{font-family:'Rajdhani';font-size:.72rem;color:var(--muted);letter-spacing:.1em;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);display:flex;gap:16px;}
+
+/* READING TEXT */
+.chapter-body{font-size:1.1rem;line-height:2;color:var(--reading-text);}
+.chapter-body p{margin-bottom:1.6em;}
+.chapter-body h2,.chapter-body h3{font-family:'Bebas Neue';color:var(--red);letter-spacing:.05em;margin:2em 0 .8em;font-size:1.5rem;}
+
+/* FONT SIZE CONTROL */
+body.font-sm .chapter-body{font-size:.95rem;}
+body.font-lg .chapter-body{font-size:1.25rem;}
+body.font-xl .chapter-body{font-size:1.4rem;}
+body.theme-sepia{--reading-bg:#1a1510;--reading-text:#d4c9a8;}
+body.theme-white{--reading-bg:#f5f0e8;--reading-text:#1a1510;}
+body.theme-white nav{--border:rgba(0,0,0,.1);background:rgba(245,240,232,0.97);}
+body.theme-white .logo{color:#1a1510;}
+body.theme-white{color:#1a1510;}
+
+/* SETTINGS PANEL */
+.settings-panel{position:fixed;top:56px;right:0;width:260px;background:var(--card);border-left:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px;z-index:99;display:none;}
+.settings-panel.open{display:block;}
+.sp-label{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:16px;}
+.sp-label:first-child{margin-top:0;}
+.sp-row{display:flex;gap:8px;}
+.sp-btn{flex:1;font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.1em;padding:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.sp-btn:hover,.sp-btn.active{border-color:var(--red);color:var(--red);background:rgba(230,48,34,.06);}
+.theme-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:border-color .2s;}
+.theme-dot:hover,.theme-dot.active{border-color:var(--red);}
+
+/* CHAPTER NAV */
+.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:30px 0;margin-top:40px;border-top:1px solid var(--border);}
+.ch-nav-btn{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .2s;}
+.ch-nav-btn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
+.ch-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.ch-nav-center{font-family:'Rajdhani';font-size:.72rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+
+/* CHAPTER INDEX POPUP */
+.ch-index{position:fixed;bottom:70px;right:20px;background:var(--card);border:1px solid var(--border);width:280px;max-height:400px;overflow-y:auto;z-index:99;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+.ch-index.open{display:block;}
+.ch-index-item{padding:10px 16px;font-family:'Rajdhani';font-size:.8rem;font-weight:600;letter-spacing:.06em;cursor:pointer;border-bottom:1px solid var(--border);transition:all .2s;display:flex;gap:10px;align-items:center;}
+.ch-index-item:hover{background:var(--card);color:var(--red);}
+.ch-index-item.current{color:var(--red);}
+.ch-index-num{font-family:'Bebas Neue';font-size:.95rem;color:var(--red);min-width:28px;}
+
+/* FLOAT BUTTONS */
+.float-btns{position:fixed;bottom:24px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:100;}
+.float-btn{width:40px;height:40px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.float-btn:hover{border-color:var(--red);color:var(--red);}
+
+footer{border-top:1px solid var(--border);padding:24px 40px;text-align:center;font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
+
+@media(max-width:600px){
+  nav{padding:0 16px;}
+  .nav-center{display:none;}
+  .chapter-wrap{padding:76px 18px 60px;}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div class="nav-center" id="nav-title">Loading...</div>
+  <div class="nav-r">
+    <a href="#" id="back-to-story">← Story</a>
+    <button onclick="toggleSettings()" id="settings-btn">⚙ Settings</button>
+  </div>
+</nav>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settings-panel">
+  <div class="sp-label">Font Size</div>
+  <div class="sp-row">
+    <button class="sp-btn" onclick="setFont('')">A</button>
+    <button class="sp-btn" onclick="setFont('font-sm')">A-</button>
+    <button class="sp-btn" onclick="setFont('font-lg')">A+</button>
+    <button class="sp-btn" onclick="setFont('font-xl')">A++</button>
+  </div>
+  <div class="sp-label">Theme</div>
+  <div class="sp-row" style="gap:10px;">
+    <div class="theme-dot active" style="background:#0f0f14;" onclick="setTheme('')" title="Dark"></div>
+    <div class="theme-dot" style="background:#1a1510;" onclick="setTheme('theme-sepia')" title="Sepia"></div>
+    <div class="theme-dot" style="background:#f5f0e8;border-color:#ccc;" onclick="setTheme('theme-white')" title="Light"></div>
+  </div>
+</div>
+
+<!-- CHAPTER CONTENT -->
+<div class="chapter-wrap">
+  <div class="ch-breadcrumb">
+    <a href="stories.html">Stories</a> › <a href="#" id="story-link">Story</a> › Chapter
+  </div>
+  <div class="ch-number" id="ch-number">Chapter 1</div>
+  <div class="ch-title-big" id="ch-title">Loading...</div>
+  <div class="ch-meta-row">
+    <span id="ch-words">— words</span>
+    <span id="ch-date">—</span>
+  </div>
+  <div class="chapter-body" id="chapter-body">
+    <p>Loading chapter content...</p>
+  </div>
+  <div class="chapter-nav">
+    <button class="ch-nav-btn" id="prev-btn" onclick="goChapter(-1)">← Prev Chapter</button>
+    <span class="ch-nav-center" id="ch-position">Ch 1 / 1</span>
+    <button class="ch-nav-btn" id="next-btn" onclick="goChapter(1)">Next Chapter →</button>
+  </div>
+</div>
+
+<!-- CHAPTER INDEX -->
+<div class="ch-index" id="ch-index"></div>
+
+<!-- FLOAT BUTTONS -->
+<div class="float-btns">
+  <button class="float-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">↑</button>
+  <button class="float-btn" onclick="toggleIndex()" title="Chapters">☰</button>
+</div>
+
+<footer>© 2024 VoomComix — Free to Read, Always</footer>
+
+<script src="stories-data.js"></script>
+<script>
+const p = new URLSearchParams(location.search);
+const storyId = p.get('story');
+const chId = parseInt(p.get('ch'));
+const stories = loadData();
+const story = stories.find(s=>s.id===storyId);
+
+if(story){
+  const chIdx = story.chapters.findIndex(c=>c.id===chId);
+  const ch = story.chapters[chIdx];
+  document.title = `Ch ${ch.id}: ${ch.title} — ${story.title}`;
+  document.getElementById('nav-title').textContent = story.title + ' · Ch ' + ch.id;
+  document.getElementById('back-to-story').href = 'story.html?id='+storyId;
+  document.getElementById('story-link').href = 'story.html?id='+storyId;
+  document.getElementById('story-link').textContent = story.title;
+  document.getElementById('ch-number').textContent = 'Chapter ' + ch.id;
+  document.getElementById('ch-title').textContent = ch.title;
+  document.getElementById('ch-words').textContent = (ch.wordCount||'?').toLocaleString() + ' words';
+  document.getElementById('ch-date').textContent = ch.date;
+  document.getElementById('ch-position').textContent = `Ch ${chIdx+1} / ${story.chapters.length}`;
+
+  // Render content — split paragraphs
+  const raw = ch.content || '';
+  const html = raw.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
+  document.getElementById('chapter-body').innerHTML = html || `<p>${raw}</p>`;
+
+  // Prev/Next
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  if(chIdx===0) prevBtn.disabled=true;
+  else prevBtn.onclick=()=>location.href=`chapter.html?story=${storyId}&ch=${story.chapters[chIdx-1].id}`;
+  if(chIdx===story.chapters.length-1) nextBtn.disabled=true;
+  else nextBtn.onclick=()=>location.href=`chapter.html?story=${storyId}&ch=${story.chapters[chIdx+1].id}`;
+
+  // Chapter index
+  const idx = document.getElementById('ch-index');
+  idx.innerHTML = story.chapters.map(c=>`
+  <div class="ch-index-item ${c.id===chId?'current':''}" onclick="location.href='chapter.html?story=${storyId}&ch=${c.id}'">
+    <span class="ch-index-num">${c.id}</span>
+    <span>${c.title}</span>
+  </div>`).join('');
+}
+
+// Reading progress
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
+  document.getElementById('progress').style.width=pct+'%';
+});
+
+function toggleSettings(){
+  document.getElementById('settings-panel').classList.toggle('open');
+  document.getElementById('ch-index').classList.remove('open');
+}
+function toggleIndex(){
+  document.getElementById('ch-index').classList.toggle('open');
+  document.getElementById('settings-panel').classList.remove('open');
+}
+
+const fontClasses=['font-sm','font-lg','font-xl'];
+function setFont(cls){
+  fontClasses.forEach(c=>document.body.classList.remove(c));
+  if(cls) document.body.classList.add(cls);
+  localStorage.setItem('vc-font',cls);
+}
+const themeClasses=['theme-sepia','theme-white'];
+function setTheme(cls){
+  themeClasses.forEach(c=>document.body.classList.remove(c));
+  if(cls) document.body.classList.add(cls);
+  localStorage.setItem('vc-theme',cls);
+  document.querySelectorAll('.theme-dot').forEach((d,i)=>d.classList.toggle('active',i===['','theme-sepia','theme-white'].indexOf(cls)));
+}
+
+// Restore prefs
+const savedFont=localStorage.getItem('vc-font');
+const savedTheme=localStorage.getItem('vc-theme');
+if(savedFont) setFont(savedFont);
+if(savedTheme) setTheme(savedTheme);
+
+function goChapter(dir){} // handled by prev/next buttons above
+</script>
+</body>
+</html>

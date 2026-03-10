@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Panel — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0a10;--card:#111118;--card2:#17171f;--red:#e63022;--gold:#f0a500;--green:#00a651;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+input,textarea,select{background:var(--card2);border:1px solid var(--border);color:var(--white);padding:10px 14px;font-family:'Rajdhani';font-size:.88rem;letter-spacing:.04em;width:100%;outline:none;transition:border-color .2s;}
+input:focus,textarea:focus,select:focus{border-color:rgba(230,48,34,.5);}
+input::placeholder,textarea::placeholder{color:var(--muted);}
+label{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;}
+.field{margin-bottom:18px;}
+textarea{resize:vertical;min-height:120px;line-height:1.6;}
+
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.login-box{background:var(--card);border:1px solid var(--border);padding:48px;width:380px;}
+.login-box h1{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.08em;margin-bottom:6px;}
+.login-box h1 span{color:var(--red);}
+.login-box p{font-size:.78rem;color:var(--muted);letter-spacing:.1em;margin-bottom:32px;}
+.btn{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:11px 24px;cursor:pointer;border:none;transition:all .2s;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:#c0241a;}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:#008a44;}
+.btn-gold{background:var(--gold);color:#000;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--red);color:var(--red);}
+.btn-danger{background:transparent;border:1px solid rgba(230,48,34,.3);color:var(--red);}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-sm{padding:6px 14px;font-size:.72rem;}
+.btn-full{width:100%;}
+
+/* ADMIN LAYOUT */
+.admin-wrap{display:none;min-height:100vh;}
+.admin-wrap.show{display:flex;}
+.sidebar{width:220px;background:var(--card);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sidebar-logo{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.1em;padding:0 20px;margin-bottom:8px;}
+.sidebar-logo span{color:var(--red);}
+.sidebar-sub{font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 20px;margin-bottom:28px;}
+.nav-item{padding:10px 20px;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--white);background:rgba(255,255,255,.03);}
+.nav-item.active{color:var(--red);border-left-color:var(--red);background:rgba(230,48,34,.04);}
+.sidebar-footer{padding:20px;margin-top:auto;border-top:1px solid var(--border);}
+.sidebar-footer a{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.sidebar-footer a:hover{color:var(--red);}
+
+.main-content{flex:1;padding:32px;overflow-y:auto;}
+.page-title{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.06em;margin-bottom:6px;}
+.page-title span{color:var(--red);}
+.page-sub{font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;}
+
+/* PANELS */
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* DASHBOARD */
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px;margin-bottom:32px;}
+.dash-stat{background:var(--card);border:1px solid var(--border);padding:20px;border-left:3px solid var(--red);}
+.ds-n{font-family:'Bebas Neue';font-size:2.2rem;line-height:1;color:var(--white);}
+.ds-l{font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* STORY LIST */
+.story-list-item{background:var(--card);border:1px solid var(--border);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:16px;transition:border-color .2s;}
+.story-list-item:hover{border-color:rgba(230,48,34,.3);}
+.sli-cover{width:40px;height:56px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.sli-info{flex:1;min-width:0;}
+.sli-title{font-size:.95rem;font-weight:700;letter-spacing:.05em;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sli-meta{font-size:.68rem;color:var(--muted);letter-spacing:.08em;}
+.sli-actions{display:flex;gap:8px;flex-shrink:0;}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;}
+.dot-ongoing{background:var(--red);}
+.dot-complete{background:var(--green);}
+.dot-hiatus{background:#888;}
+
+/* CHAPTER LIST in admin */
+.ch-admin-item{background:var(--card2);border:1px solid var(--border);padding:12px 16px;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
+.ch-admin-item:hover{border-color:rgba(230,48,34,.2);}
+.ch-num-badge{font-family:'Bebas Neue';font-size:.9rem;color:var(--red);min-width:28px;}
+.ch-admin-title{flex:1;font-size:.85rem;font-weight:600;letter-spacing:.04em;}
+.ch-admin-meta{font-size:.65rem;color:var(--muted);}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-head h3{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.06em;}
+.modal-head h3 span{color:var(--red);}
+.modal-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;padding:0;}
+.modal-close:hover{color:var(--red);}
+.modal-body{padding:24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:12px 24px;z-index:300;opacity:0;transition:all .3s;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--red);}
+
+/* ABOUT/TERMS editor */
+.page-editor textarea{min-height:300px;font-size:.9rem;line-height:1.7;}
+
+@media(max-width:700px){
+  .sidebar{display:none;}
+  .main-content{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <h1>VOOM<span>COMIX</span></h1>
+    <p>Admin Panel · Enter password to continue</p>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="pw-input" placeholder="Enter admin password" onkeyup="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn btn-red btn-full" onclick="doLogin()">Login →</button>
+    <p style="margin-top:12px;font-size:.65rem;color:var(--muted);">Default password: <strong style="color:var(--gold);">voomcomix2024</strong> (change in settings)</p>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div class="admin-wrap" id="admin-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">VOOM<span>COMIX</span></div>
+    <div class="sidebar-sub">Admin Panel</div>
+    <div class="nav-item active" onclick="showPanel('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-item" onclick="showPanel('stories',this)">📚 Stories</div>
+    <div class="nav-item" onclick="showPanel('add-story',this)">➕ Add Story</div>
+    <div class="nav-item" onclick="showPanel('settings',this)">⚙ Settings</div>
+    <div style="margin-top:auto;padding:20px;border-top:1px solid var(--border);margin-top:40px;">
+      <a href="index.html" target="_blank" style="font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);">View Site →</a><br/><br/>
+      <span onclick="logout()" style="font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);cursor:pointer;">Logout</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="page-title">DASH<span>BOARD</span></div>
+      <div class="page-sub">Welcome back, VoomComix Admin</div>
+      <div class="dash-stats" id="dash-stats"></div>
+      <div class="page-title" style="font-size:1.4rem;margin-bottom:16px;">RECENT <span>STORIES</span></div>
+      <div id="dash-recent"></div>
+    </div>
+
+    <!-- STORIES PANEL -->
+    <div class="panel" id="panel-stories">
+      <div class="page-title">MANAGE <span>STORIES</span></div>
+      <div class="page-sub" id="stories-sub">All stories</div>
+      <div id="stories-list"></div>
+    </div>
+
+    <!-- ADD STORY -->
+    <div class="panel" id="panel-add-story">
+      <div class="page-title" id="story-form-title">ADD NEW <span>STORY</span></div>
+      <div class="page-sub">Fill in story details</div>
+      <input type="hidden" id="edit-story-id"/>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="field" style="grid-column:1/-1">
+          <label>Story Title *</label>
+          <input type="text" id="f-title" placeholder="e.g. The Dark Kingdom"/>
+        </div>
+        <div class="field">
+          <label>Genre</label>
+          <input type="text" id="f-genre" placeholder="e.g. Fantasy · Action"/>
+        </div>
+        <div class="field">
+          <label>Language</label>
+          <select id="f-lang">
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Hindi + English">Hindi + English</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="ongoing">Ongoing</option>
+            <option value="complete">Complete</option>
+            <option value="hiatus">Hiatus</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Cover Emoji</label>
+          <input type="text" id="f-cover" placeholder="e.g. ⚔️ or 🔥 or 📕"/>
+        </div>
+        <div class="field">
+          <label>Cover Color (CSS gradient)</label>
+          <input type="text" id="f-color" placeholder="linear-gradient(135deg,#1a0a0a,#2d1515)"/>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="f-tags" placeholder="Action, Dark, Romance, Fantasy"/>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label>Description *</label>
+          <textarea id="f-desc" placeholder="Write a compelling story description..."></textarea>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-green" onclick="saveStory()">💾 Save Story</button>
+        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel" id="panel-settings">
+      <div class="page-title">SITE <span>SETTINGS</span></div>
+      <div class="page-sub">Manage site configuration</div>
+      <div class="field" style="max-width:400px;">
+        <label>Change Admin Password</label>
+        <input type="password" id="new-pw" placeholder="Enter new password"/>
+      </div>
+      <button class="btn btn-gold" onclick="changePw()">Update Password</button>
+      <hr style="border-color:var(--border);margin:32px 0;"/>
+      <div class="field" style="max-width:400px;">
+        <label>Site Tagline</label>
+        <input type="text" id="site-tagline" value="Stories That Hit Different"/>
+      </div>
+      <hr style="border-color:var(--border);margin:32px 0;"/>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:16px;letter-spacing:.06em;">⚠️ Danger Zone</p>
+      <button class="btn btn-danger" onclick="if(confirm('Reset ALL data?'))resetAll()">Reset All Data</button>
+    </div>
+
+  </div><!-- end main-content -->
+</div><!-- end admin-wrap -->
+
+<!-- ADD CHAPTER MODAL -->
+<div class="modal-bg" id="ch-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>ADD <span>CHAPTER</span></h3>
+      <button class="modal-close" onclick="closeChModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ch-story-id"/>
+      <input type="hidden" id="ch-edit-id"/>
+      <div class="field">
+        <label>Chapter Number</label>
+        <input type="number" id="ch-num" placeholder="e.g. 4" min="1"/>
+      </div>
+      <div class="field">
+        <label>Chapter Title *</label>
+        <input type="text" id="ch-title-input" placeholder="e.g. The First Battle"/>
+      </div>
+      <div class="field">
+        <label>Content * (write your full chapter here)</label>
+        <textarea id="ch-content" style="min-height:300px;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7;" placeholder="Write chapter content here...&#10;&#10;Use blank line to separate paragraphs.&#10;&#10;Each paragraph will be displayed separately."></textarea>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="field">
+          <label>Word Count (auto or manual)</label>
+          <input type="number" id="ch-words-input" placeholder="Leave blank to auto-count"/>
+        </div>
+        <div class="field">
+          <label>Publish Date</label>
+          <input type="date" id="ch-date"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeChModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveChapter()">💾 Save Chapter</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="stories-data.js"></script>
+<script>
+// === AUTH ===
+const DEFAULT_PW = 'voomcomix2024';
+function doLogin(){
+  const pw = document.getElementById('pw-input').value;
+  const stored = localStorage.getItem('vc-admin-pw') || DEFAULT_PW;
+  if(pw===stored){
+    localStorage.setItem('vc-admin-auth','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-wrap').classList.add('show');
+    initAdmin();
+  } else {
+    toast('Wrong password!','error');
+  }
+}
+function logout(){
+  localStorage.removeItem('vc-admin-auth');
+  location.reload();
+}
+function changePw(){
+  const np=document.getElementById('new-pw').value.trim();
+  if(!np||np.length<4){toast('Min 4 characters','error');return;}
+  localStorage.setItem('vc-admin-pw',np);
+  toast('Password updated!');
+}
+// Auto-login if already auth
+if(localStorage.getItem('vc-admin-auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-wrap').classList.add('show');
+  document.addEventListener('DOMContentLoaded',initAdmin);
+}
+
+// === INIT ===
+function initAdmin(){
+  renderDashboard();
+  renderStoriesList();
+  document.getElementById('ch-date').value = new Date().toISOString().split('T')[0];
+}
+
+function getStories(){ return loadData(); }
+function setStories(s){ localStorage.setItem('voomcomix_stories',JSON.stringify(s)); }
+
+// === PANELS ===
+function showPanel(name,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+// === DASHBOARD ===
+function renderDashboard(){
+  const stories=getStories();
+  const totalCh=stories.reduce((a,s)=>a+s.chapters.length,0);
+  document.getElementById('dash-stats').innerHTML=`
+  <div class="dash-stat"><div class="ds-n">${stories.length}</div><div class="ds-l">Stories</div></div>
+  <div class="dash-stat"><div class="ds-n">${totalCh}</div><div class="ds-l">Chapters</div></div>
+  <div class="dash-stat"><div class="ds-n">${stories.filter(s=>s.status==='ongoing').length}</div><div class="ds-l">Ongoing</div></div>
+  <div class="dash-stat"><div class="ds-n">${stories.filter(s=>s.status==='complete').length}</div><div class="ds-l">Complete</div></div>`;
+  document.getElementById('dash-recent').innerHTML = stories.slice(0,3).map(s=>`
+  <div class="story-list-item">
+    <div class="sli-cover" style="background:${s.coverColor}">${s.cover}</div>
+    <div class="sli-info">
+      <div class="sli-title">${s.title}</div>
+      <div class="sli-meta"><span class="status-dot dot-${s.status}"></span>${s.status} · ${s.chapters.length} chapters · ${s.language}</div>
+    </div>
+    <div class="sli-actions">
+      <button class="btn btn-ghost btn-sm" onclick="openStoryChapters('${s.id}')">Chapters</button>
+    </div>
+  </div>`).join('');
+}
+
+// === STORIES LIST ===
+function renderStoriesList(){
+  const stories=getStories();
+  document.getElementById('stories-sub').textContent=`${stories.length} total stories`;
+  document.getElementById('stories-list').innerHTML = stories.length===0
+    ? '<p style="color:var(--muted);font-size:.85rem;letter-spacing:.1em;">No stories yet. Add your first story!</p>'
+    : stories.map(s=>`
+  <div class="story-list-item">
+    <div class="sli-cover" style="background:${s.coverColor}">${s.cover}</div>
+    <div class="sli-info">
+      <div class="sli-title">${s.title}</div>
+      <div class="sli-meta"><span class="status-dot dot-${s.status}"></span>${s.status} · ${s.genre} · ${s.chapters.length} chapters · ${s.language}</div>
+    </div>
+    <div class="sli-actions">
+      <button class="btn btn-ghost btn-sm" onclick="openStoryChapters('${s.id}')">📖 Chapters</button>
+      <button class="btn btn-ghost btn-sm" onclick="editStory('${s.id}')">✏ Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteStory('${s.id}')">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+// === STORY CHAPTERS VIEW ===
+function openStoryChapters(storyId){
+  const stories=getStories();
+  const s=stories.find(x=>x.id===storyId);
+  document.getElementById('panel-stories').innerHTML=`
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+    <button class="btn btn-ghost btn-sm" onclick="showPanel('stories');renderStoriesList();">← Back</button>
+    <div>
+      <div class="page-title" style="font-size:1.4rem;margin-bottom:0;">${s.title}</div>
+      <div class="page-sub" style="margin-bottom:0;">${s.chapters.length} chapters</div>
+    </div>
+    <button class="btn btn-green btn-sm" style="margin-left:auto;" onclick="openChModal('${storyId}')">+ Add Chapter</button>
+  </div>
+  <div id="ch-list-${storyId}"></div>`;
+  renderChapterList(storyId);
+}
+
+function renderChapterList(storyId){
+  const stories=getStories();
+  const s=stories.find(x=>x.id===storyId);
+  const cont=document.getElementById('ch-list-'+storyId);
+  if(!cont) return;
+  cont.innerHTML = s.chapters.length===0
+    ? '<p style="color:var(--muted);font-size:.85rem;">No chapters yet. Add your first chapter!</p>'
+    : s.chapters.map(ch=>`
+  <div class="ch-admin-item">
+    <span class="ch-num-badge">${ch.id}</span>
+    <span class="ch-admin-title">${ch.title}</span>
+    <span class="ch-admin-meta">${(ch.wordCount||0).toLocaleString()} words · ${ch.date}</span>
+    <div style="display:flex;gap:8px;margin-left:12px;">
+      <button class="btn btn-ghost btn-sm" onclick="editChapter('${storyId}',${ch.id})">✏ Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteChapter('${storyId}',${ch.id})">🗑</button>
+    </div>
+  </div>`).join('');
+}
+
+// === ADD/EDIT STORY ===
+function saveStory(){
+  const id=document.getElementById('edit-story-id').value;
+  const title=document.getElementById('f-title').value.trim();
+  const desc=document.getElementById('f-desc').value.trim();
+  if(!title||!desc){toast('Title and description required!','error');return;}
+  const stories=getStories();
+  const story={
+    id: id||'story-'+Date.now(),
+    title,
+    author:'VoomComix',
+    genre:document.getElementById('f-genre').value||'General',
+    tags:document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    status:document.getElementById('f-status').value,
+    language:document.getElementById('f-lang').value,
+    cover:document.getElementById('f-cover').value||'📖',
+    coverColor:document.getElementById('f-color').value||'linear-gradient(135deg,#0a0a1a,#1a0d2e)',
+    description:desc,
+    totalChapters:0,
+    views:'0',
+    rating:4.5,
+    dateAdded:new Date().toISOString().split('T')[0],
+    chapters: id? (stories.find(s=>s.id===id)||{}).chapters||[] : []
+  };
+  if(id){
+    const idx=stories.findIndex(s=>s.id===id);
+    if(idx>-1) stories[idx]={...stories[idx],...story};
+  } else {
+    stories.push(story);
+  }
+  setStories(stories);
+  clearForm();
+  renderDashboard();
+  renderStoriesList();
+  toast(id?'Story updated!':'Story added!');
+}
+function editStory(id){
+  const s=getStories().find(x=>x.id===id);
+  document.getElementById('edit-story-id').value=s.id;
+  document.getElementById('f-title').value=s.title;
+  document.getElementById('f-genre').value=s.genre;
+  document.getElementById('f-lang').value=s.language;
+  document.getElementById('f-status').value=s.status;
+  document.getElementById('f-cover').value=s.cover;
+  document.getElementById('f-color').value=s.coverColor;
+  document.getElementById('f-tags').value=(s.tags||[]).join(', ');
+  document.getElementById('f-desc').value=s.description;
+  document.getElementById('story-form-title').innerHTML='EDIT <span>STORY</span>';
+  showPanel('add-story');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+}
+function deleteStory(id){
+  if(!confirm('Delete this story and all its chapters?')) return;
+  const stories=getStories().filter(s=>s.id!==id);
+  setStories(stories);
+  renderDashboard();
+  renderStoriesList();
+  toast('Story deleted');
+}
+function clearForm(){
+  ['edit-story-id','f-title','f-genre','f-cover','f-color','f-tags','f-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-status').value='ongoing';
+  document.getElementById('f-lang').value='English';
+  document.getElementById('story-form-title').innerHTML='ADD NEW <span>STORY</span>';
+}
+
+// === CHAPTER MODAL ===
+function openChModal(storyId,chId=null){
+  document.getElementById('ch-story-id').value=storyId;
+  document.getElementById('ch-edit-id').value=chId||'';
+  if(chId){
+    const s=getStories().find(x=>x.id===storyId);
+    const ch=s.chapters.find(c=>c.id===chId);
+    document.getElementById('ch-num').value=ch.id;
+    document.getElementById('ch-title-input').value=ch.title;
+    document.getElementById('ch-content').value=ch.content||'';
+    document.getElementById('ch-words-input').value=ch.wordCount||'';
+    document.getElementById('ch-date').value=ch.date;
+  } else {
+    const s=getStories().find(x=>x.id===storyId);
+    document.getElementById('ch-num').value=s.chapters.length+1;
+    document.getElementById('ch-title-input').value='';
+    document.getElementById('ch-content').value='';
+    document.getElementById('ch-words-input').value='';
+    document.getElementById('ch-date').value=new Date().toISOString().split('T')[0];
+  }
+  document.getElementById('ch-modal').classList.add('open');
+}
+function closeChModal(){document.getElementById('ch-modal').classList.remove('open');}
+function editChapter(storyId,chId){openChModal(storyId,chId);}
+function saveChapter(){
+  const storyId=document.getElementById('ch-story-id').value;
+  const editId=document.getElementById('ch-edit-id').value;
+  const title=document.getElementById('ch-title-input').value.trim();
+  const content=document.getElementById('ch-content').value.trim();
+  if(!title||!content){toast('Title and content required!','error');return;}
+  const wordCount=parseInt(document.getElementById('ch-words-input').value)||content.split(/\s+/).length;
+  const ch={
+    id:parseInt(document.getElementById('ch-num').value)||1,
+    title,content,wordCount,
+    date:document.getElementById('ch-date').value
+  };
+  const stories=getStories();
+  const s=stories.find(x=>x.id===storyId);
+  if(editId){
+    const idx=s.chapters.findIndex(c=>c.id===parseInt(editId));
+    if(idx>-1) s.chapters[idx]=ch;
+  } else {
+    s.chapters.push(ch);
+    s.totalChapters=s.chapters.length;
+  }
+  setStories(stories);
+  closeChModal();
+  renderChapterList(storyId);
+  renderDashboard();
+  toast(editId?'Chapter updated!':'Chapter added!');
+}
+function deleteChapter(storyId,chId){
+  if(!confirm('Delete this chapter?')) return;
+  const stories=getStories();
+  const s=stories.find(x=>x.id===storyId);
+  s.chapters=s.chapters.filter(c=>c.id!==chId);
+  s.totalChapters=s.chapters.length;
+  setStories(stories);
+  renderChapterList(storyId);
+  renderDashboard();
+  toast('Chapter deleted');
+}
+
+// === UTILS ===
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast '+(type==='error'?'error':'')+' show';
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function resetAll(){
+  localStorage.removeItem('voomcomix_stories');
+  localStorage.removeItem('vc-admin-auth');
+  location.reload();
+}
+</script>
+</body>
+</html>
