@@ -3,637 +3,421 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Admin — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<title>VoomComix — Stories That Hit Different</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0e0b08;--card:#141008;--card2:#1a1410;--red:#c0392b;--gold:#d4820a;--green:#0a7c6e;--teal:#0d9488;--white:#f5efe6;--muted:#6a5a4a;--border:rgba(245,239,230,0.08);}
+:root{
+  --bg:#f5efe6;
+  --bg2:#ede5d8;
+  --bg3:#e4d9c8;
+  --card:#ffffff;
+  --card2:#faf5ee;
+  --ink:#1a1410;
+  --ink2:#3a2e24;
+  --red:#c0392b;
+  --red2:#e74c3c;
+  --gold:#d4820a;
+  --gold2:#f0a500;
+  --teal:#0a7c6e;
+  --muted:#8a7a6a;
+  --border:#d4c4b0;
+  --border2:#c4b09a;
+  --shadow:rgba(60,40,20,0.12);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;min-height:100vh;}
+body{background:var(--bg);color:var(--ink);font-family:'Libre Baskerville',serif;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
-input,textarea,select{background:var(--card2);border:1px solid var(--border);color:var(--white);padding:9px 12px;font-family:'Rajdhani';font-size:.86rem;letter-spacing:.04em;width:100%;outline:none;transition:border-color .2s;}
-input:focus,textarea:focus,select:focus{border-color:rgba(192,57,43,.5);}
-input::placeholder,textarea::placeholder{color:var(--muted);}
-label{font-size:.66rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;}
-.field{margin-bottom:16px;}
-textarea{resize:vertical;min-height:110px;line-height:1.6;}
+img{display:block;}
 
-.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;}
-.login-box{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--red);padding:44px;width:360px;}
-.login-box h1{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.08em;margin-bottom:4px;}
-.login-box h1 span{color:var(--red);}
-.login-box p{font-size:.72rem;color:var(--muted);letter-spacing:.1em;margin-bottom:24px;}
+/* ===== NAVBAR ===== */
+nav{background:var(--ink);border-bottom:3px solid var(--red);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
+.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;color:#f5efe6;display:flex;align-items:center;}
+.logo .v{color:var(--red);}
+.logo .c{color:var(--gold2);}
+.nav-tags{display:flex;gap:6px;}
+.nav-tag{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);transition:all .2s;}
+.nav-tag:hover{border-color:var(--gold2);color:var(--gold2);}
+.nav-r{display:flex;align-items:center;gap:20px;}
+.nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);transition:color .2s;}
+.nav-r a:hover{color:#f5efe6;}
+.nav-cta{background:var(--red)!important;color:#fff!important;padding:8px 20px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
 
-.btn{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:9px 20px;cursor:pointer;border:none;transition:all .2s;}
-.btn-red{background:var(--red);color:#fff;}
-.btn-red:hover{background:#a0291e;}
-.btn-green{background:var(--green);color:#fff;}
-.btn-green:hover{background:#085f55;}
-.btn-gold{background:var(--gold);color:#000;}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
-.btn-ghost:hover{border-color:var(--red);color:var(--red);}
-.btn-danger{background:transparent;border:1px solid rgba(192,57,43,.3);color:var(--red);}
-.btn-danger:hover{background:var(--red);color:#fff;}
-.btn-sm{padding:5px 10px;font-size:.65rem;}
-.btn-full{width:100%;}
+/* ===== TRENDING HERO ===== */
+.hero{position:relative;overflow:hidden;border-bottom:2px solid var(--border);background:var(--ink);}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.15;filter:blur(3px);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,20,16,.98) 0%,rgba(26,20,16,.75) 55%,rgba(26,20,16,.2) 100%);}
+.hero-inner{position:relative;z-index:1;padding:60px 48px;display:grid;grid-template-columns:1fr 360px;gap:60px;align-items:center;min-height:440px;}
+.hero-label{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red2);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.hero-label::before{content:'';width:20px;height:2px;background:var(--red2);}
+.fire{animation:flick .8s ease-in-out infinite alternate;}
+@keyframes flick{from{transform:scale(1)}to{transform:scale(1.1) rotate(3deg)}}
+.hero h1{font-family:'Bebas Neue';font-size:clamp(2.8rem,5vw,5rem);line-height:.95;letter-spacing:.04em;color:#f5efe6;margin-bottom:18px;}
+.hero h1 .red{color:var(--red2);}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.hm{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.12em;padding:3px 10px;border:1px solid;}
+.hm.genre{color:var(--gold2);border-color:rgba(240,165,0,.3);}
+.hm.views{color:#5dd6c8;border-color:rgba(93,214,200,.3);}
+.hm.status{color:var(--red2);border-color:rgba(231,76,60,.3);}
+.hero-desc{font-size:.88rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:500px;margin-bottom:26px;}
+.hero-btns{display:flex;gap:12px;}
+.btn-red{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:11px 26px;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn-red:hover{background:var(--gold);transform:translateY(-2px);}
+.btn-outline{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:#f5efe6;padding:10px 24px;border:1px solid rgba(245,239,230,.3);transition:all .2s;display:inline-block;}
+.btn-outline:hover{border-color:#f5efe6;}
+/* Hero book cover */
+.hero-cover-wrap{display:flex;justify-content:center;align-items:center;}
+.hero-book{width:220px;height:310px;position:relative;box-shadow:20px 20px 60px rgba(0,0,0,.7);transform:perspective(600px) rotateY(-8deg);transition:transform .4s;}
+.hero-book:hover{transform:perspective(600px) rotateY(-2deg);}
+.hero-book img,.hero-book .book-fb{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;}
+.hero-book .book-fb{display:flex;align-items:center;justify-content:center;font-size:5rem;}
+.hero-book::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:16px;background:linear-gradient(90deg,#333,#555);border-radius:2px 0 0 2px;}
+.hero-trending-badge{position:absolute;top:-10px;right:-10px;background:var(--red);color:#fff;font-family:'Bebas Neue';font-size:.95rem;letter-spacing:.1em;padding:7px 12px;}
+.hero-rank{position:absolute;bottom:-10px;left:16px;background:var(--ink);border:1px solid rgba(255,255,255,.15);padding:6px 14px;}
+.hero-rank span{font-family:'Bebas Neue';font-size:1.3rem;color:var(--gold2);}
+.hero-rank small{font-family:'Rajdhani';font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-top:-4px;}
+.hero-dots{position:absolute;bottom:16px;left:48px;display:flex;gap:8px;z-index:2;}
+.hdot{width:22px;height:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;}
+.hdot.active{width:40px;background:var(--red);}
 
-.admin-wrap{display:none;min-height:100vh;}
-.admin-wrap.show{display:flex;}
-.sidebar{width:210px;background:var(--card);border-right:1px solid var(--border);flex-shrink:0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto;}
-.sidebar-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;padding:20px 18px 4px;}
-.sidebar-logo .v{color:var(--red);}
-.sidebar-sub{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 18px 20px;}
-.nav-group{font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,239,230,.2);padding:12px 18px 4px;}
-.nav-item{padding:9px 18px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;border-left:3px solid transparent;display:flex;align-items:center;gap:8px;}
-.nav-item:hover{color:var(--white);background:rgba(255,255,255,.03);}
-.nav-item.active{color:var(--red);border-left-color:var(--red);background:rgba(192,57,43,.05);}
-.sidebar-foot{padding:16px 18px;margin-top:auto;border-top:1px solid var(--border);}
-.sidebar-foot a,.sidebar-foot span{display:block;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;cursor:pointer;transition:color .2s;}
-.sidebar-foot a{color:var(--teal);}
-.sidebar-foot a:hover{color:var(--white);}
-.sidebar-foot span{color:var(--red);}
+/* ===== CONTINUE READING ===== */
+.continue-section{padding:32px 48px;background:var(--ink2);border-bottom:2px solid rgba(255,255,255,.06);}
+.continue-section h3{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.06em;color:#f5efe6;margin-bottom:16px;}
+.continue-section h3 span{color:var(--gold2);}
+.continue-grid{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.continue-grid::-webkit-scrollbar{display:none;}
+.continue-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:12px 14px;display:flex;gap:12px;align-items:center;min-width:260px;max-width:280px;flex-shrink:0;cursor:pointer;transition:all .2s;}
+.continue-card:hover{border-color:rgba(240,165,0,.4);background:rgba(255,255,255,.08);}
+.cc-cover{width:36px;height:50px;border-radius:2px 4px 4px 2px;object-fit:cover;flex-shrink:0;}
+.cc-cover-fb{width:36px;height:50px;border-radius:2px 4px 4px 2px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+.cc-info{flex:1;min-width:0;}
+.cc-title{font-family:'Rajdhani';font-size:.82rem;font-weight:700;color:#f5efe6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cc-progress{font-family:'Rajdhani';font-size:.65rem;color:rgba(245,239,230,.45);margin-top:2px;}
+.cc-bar{height:2px;background:rgba(255,255,255,.1);margin-top:6px;border-radius:2px;}
+.cc-bar-fill{height:100%;background:var(--gold2);border-radius:2px;}
+.cc-type{font-family:'Rajdhani';font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;background:rgba(192,57,43,.3);color:var(--red2);margin-top:4px;display:inline-block;}
 
-.main-content{flex:1;padding:28px;overflow-y:auto;max-width:880px;}
-.page-title{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;margin-bottom:3px;}
-.page-title span{color:var(--red);}
-.page-sub{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
-.panel{display:none;}
-.panel.active{display:block;}
+/* ===== SECTION COMMON ===== */
+.sec{padding:60px 48px;}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+.sec-head h2{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.05em;white-space:nowrap;color:var(--ink);}
+.sec-head h2 span{color:var(--red);}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+.sec-link{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);white-space:nowrap;}
 
-/* DASHBOARD */
-.dash-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:24px;}
-.dash-stat{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);padding:16px;}
-.ds-n{font-family:'Bebas Neue';font-size:2rem;line-height:1;}
-.ds-l{font-size:.6rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+/* ===== BOOK CARDS ===== */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:22px;}
+.book-card{cursor:pointer;transition:transform .3s;}
+.book-card:hover{transform:translateY(-5px);}
+.book-cover-wrap{position:relative;width:100%;aspect-ratio:2/3;margin-bottom:10px;box-shadow:4px 6px 20px var(--shadow);border-radius:3px 6px 6px 3px;}
+.book-cover-wrap img,.book-cover-fb{width:100%;height:100%;object-fit:cover;border-radius:3px 6px 6px 3px;}
+.book-cover-fb{display:flex;align-items:center;justify-content:center;font-size:2.6rem;}
+.book-cover-wrap::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:10px;background:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,.08));border-radius:3px 0 0 3px;z-index:1;}
+.book-cover-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.15) 0%,transparent 50%);border-radius:3px 6px 6px 3px;z-index:2;pointer-events:none;}
+.b-badge{position:absolute;top:7px;left:7px;font-family:'Rajdhani';font-size:.52rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 7px;z-index:3;}
+.b-type{position:absolute;bottom:7px;right:7px;font-family:'Rajdhani';font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;background:rgba(26,20,16,.75);color:rgba(245,239,230,.8);z-index:3;}
+.badge-ongoing{background:var(--red);color:#fff;}
+.badge-complete{background:#0a7c6e;color:#fff;}
+.book-title{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.03em;line-height:1.3;color:var(--ink);margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.book-genre{font-family:'Rajdhani';font-size:.62rem;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
+.book-meta{font-family:'Rajdhani';font-size:.6rem;color:var(--muted);display:flex;gap:8px;align-items:center;}
+/* Like button on card */
+.book-like{background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--muted);font-family:'Rajdhani';font-weight:700;letter-spacing:.05em;padding:0;transition:color .2s;display:flex;align-items:center;gap:3px;}
+.book-like:hover,.book-like.liked{color:var(--red);}
 
-/* STORY LIST */
-.sli{background:var(--card);border:1px solid var(--border);padding:12px 16px;margin-bottom:7px;display:flex;align-items:center;gap:12px;transition:border-color .2s;}
-.sli:hover{border-color:rgba(192,57,43,.25);}
-.sli-cover{width:32px;height:46px;flex-shrink:0;object-fit:cover;border-radius:2px 4px 4px 2px;}
-.sli-cover-fb{width:32px;height:46px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border-radius:2px;}
-.sli-info{flex:1;min-width:0;}
-.sli-title{font-size:.86rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sli-meta{font-size:.62rem;color:var(--muted);margin-top:2px;}
-.sli-actions{display:flex;gap:5px;flex-shrink:0;}
-.type-badge{display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 7px;margin-right:5px;}
-.tb-novel{background:rgba(13,148,136,.2);color:#0d9488;}
-.tb-manga{background:rgba(139,92,246,.2);color:#a78bfa;}
-.tb-comic{background:rgba(245,158,11,.2);color:#fbbf24;}
+/* ===== TOP 10 RANKINGS ===== */
+.rankings-sec{padding:60px 48px;background:var(--bg2);}
+.rankings-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid var(--border);}
+.rtab{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.rtab.active{color:var(--red);border-bottom-color:var(--red);}
+.ranking-list{display:none;grid-template-columns:1fr 1fr;gap:10px;}
+.ranking-list.active{display:grid;}
+.rank-item{background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
+.rank-item:hover{border-color:var(--border2);box-shadow:0 4px 16px var(--shadow);}
+.rank-num{font-family:'Bebas Neue';font-size:1.6rem;min-width:32px;line-height:1;}
+.rank-num.top1{color:var(--gold);}
+.rank-num.top2{color:var(--muted);}
+.rank-num.top3{color:#b87333;}
+.rank-num.rest{color:var(--border2);}
+.rank-cover{width:32px;height:44px;border-radius:2px 4px 4px 2px;object-fit:cover;flex-shrink:0;}
+.rank-cover-fb{width:32px;height:44px;border-radius:2px 4px 4px 2px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.rank-info{flex:1;min-width:0;}
+.rank-title{font-family:'Rajdhani';font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
+.rank-meta{font-family:'Rajdhani';font-size:.62rem;color:var(--muted);margin-top:2px;}
+.rank-views{font-family:'Rajdhani';font-size:.68rem;font-weight:700;color:var(--teal);text-align:right;white-space:nowrap;}
 
-/* CHAPTER LIST */
-.chi{background:var(--card2);border:1px solid var(--border);padding:10px 12px;margin-bottom:4px;display:flex;align-items:center;gap:10px;}
-.chi-num{font-family:'Bebas Neue';font-size:.88rem;color:var(--red);min-width:24px;}
-.chi-title{flex:1;font-size:.8rem;font-weight:600;}
-.chi-meta{font-size:.6rem;color:var(--muted);}
+/* ===== SOCIAL SECTION ===== */
+.social-strip{background:var(--ink);padding:40px 48px;display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;border-top:3px solid var(--red);}
+.social-strip p{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,239,230,.4);}
+.soc-btn{display:flex;align-items:center;gap:8px;font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:10px 22px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);transition:all .2s;}
+.soc-btn:hover{color:#fff;border-color:rgba(255,255,255,.4);}
+.soc-btn.ig:hover{border-color:#e1306c;color:#e1306c;}
+.soc-btn.fb:hover{border-color:#1877f2;color:#1877f2;}
+.soc-btn.yt:hover{border-color:#ff0000;color:#ff0000;}
+.soc-icon{width:20px;height:20px;object-fit:contain;}
 
-/* COVER UPLOAD */
-.cover-upload-area{border:2px dashed var(--border);padding:18px;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;}
-.cover-upload-area:hover{border-color:rgba(192,57,43,.4);}
-.cover-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.cover-preview{width:90px;height:126px;object-fit:cover;border-radius:2px 5px 5px 2px;margin:0 auto 8px;display:none;}
-.cover-preview.show{display:block;}
+/* ===== FOOTER ===== */
+footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,255,255,.05);}
+.footer-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:48px;margin-bottom:32px;}
+.f-logo{font-family:'Bebas Neue';font-size:1.7rem;letter-spacing:.1em;color:#f5efe6;margin-bottom:8px;}
+.f-logo .v{color:var(--red);}
+.f-logo .c{color:var(--gold2);}
+.f-desc{font-family:'Rajdhani';font-size:.75rem;line-height:1.6;color:rgba(245,239,230,.4);max-width:220px;}
+.f-owner{font-family:'Rajdhani';font-size:.7rem;color:rgba(245,239,230,.3);margin-top:10px;}
+.f-owner strong{color:var(--gold2);}
+.f-col h4{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(245,239,230,.3);margin-bottom:12px;}
+.f-col a{display:block;font-family:'Rajdhani';font-size:.75rem;font-weight:600;color:rgba(245,239,230,.45);margin-bottom:7px;transition:color .2s;}
+.f-col a:hover{color:var(--red);}
+.f-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.f-bottom p{font-family:'Rajdhani';font-size:.68rem;color:rgba(245,239,230,.25);letter-spacing:.06em;}
 
-/* PAGE UPLOAD GRID */
-.pages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:12px;}
-.page-slot{position:relative;background:var(--card2);border:1px solid var(--border);aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;overflow:hidden;}
-.page-slot:hover{border-color:rgba(192,57,43,.4);}
-.page-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.page-slot img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.page-slot-num{font-family:'Bebas Neue';font-size:1.2rem;color:rgba(245,239,230,.15);}
-.page-slot-label{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,239,230,.2);margin-top:4px;}
-.page-slot .del-page{position:absolute;top:4px;right:4px;background:rgba(192,57,43,.8);color:#fff;border:none;width:18px;height:18px;font-size:.65rem;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;}
-.page-slot:hover .del-page{display:flex;}
-
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
-.modal-bg.open{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border);width:100%;max-width:700px;max-height:92vh;overflow-y:auto;}
-.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.modal-head h3{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.06em;}
-.modal-head h3 span{color:var(--red);}
-.modal-close{background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;}
-.modal-close:hover{color:var(--red);}
-.modal-body{padding:20px;}
-.modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
-
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:10px 20px;z-index:300;opacity:0;transition:all .3s;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.toast.err{background:var(--red);}
-
-.reading-list{background:var(--card);border:1px solid var(--border);padding:16px;margin-bottom:8px;}
-.rl-title{font-size:.82rem;font-weight:700;margin-bottom:4px;}
-.rl-meta{font-size:.65rem;color:var(--muted);}
-
-@media(max-width:700px){.sidebar{display:none;}.main-content{padding:14px;}}
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-tags{display:none;}
+  .hero-inner{grid-template-columns:1fr;padding:40px 20px;min-height:auto;gap:24px;}
+  .hero-book{width:160px;height:220px;}
+  .hero-cover-wrap{justify-content:flex-start;}
+  .continue-section,.sec,.rankings-sec{padding-left:20px;padding-right:20px;}
+  .books-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+  .ranking-list{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  footer{padding:30px 20px;}
+  .social-strip{padding:30px 20px;}
+}
 </style>
 </head>
 <body>
 
-<div class="login-screen" id="login-screen">
-  <div class="login-box">
-    <h1>VOOM<span>COMIX</span></h1>
-    <p>Admin Panel · Enter password</p>
-    <div class="field"><label>Password</label><input type="password" id="pw-input" placeholder="Enter admin password" onkeyup="if(event.key==='Enter')doLogin()"/></div>
-    <button class="btn btn-red btn-full" onclick="doLogin()">Login →</button>
-    <p style="margin-top:10px;font-size:.6rem;color:var(--muted);">Default: <strong style="color:var(--gold)">voomcomix2024</strong></p>
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="c">C</span>OMIX</a>
+  <div class="nav-tags">
+    <span class="nav-tag">📚 Comic Hindi</span>
+    <span class="nav-tag">🎌 Manga Hindi</span>
   </div>
+  <div class="nav-r">
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About</a>
+    <a href="stories.html" class="nav-cta">📖 Read Now</a>
+  </div>
+</nav>
+
+<!-- TRENDING HERO -->
+<div class="hero" id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-label"><span class="fire">🔥</span> Trending Now</div>
+      <h1 id="hero-title">LOADING<br/><span class="red">STORY</span></h1>
+      <div class="hero-meta" id="hero-meta"></div>
+      <div class="hero-desc" id="hero-desc">Loading...</div>
+      <div class="hero-btns">
+        <a href="#" id="hero-btn" class="btn-red">📖 Start Reading</a>
+        <a href="stories.html" class="btn-outline">Browse All</a>
+      </div>
+    </div>
+    <div class="hero-cover-wrap">
+      <div class="hero-book" id="hero-book">
+        <div class="book-fb" id="hero-book-inner" style="background:#2a1a10;font-size:5rem;">📖</div>
+        <div class="hero-trending-badge">🔥 TRENDING</div>
+        <div class="hero-rank"><span>#1</span><small>This Week</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots" id="hero-dots"></div>
 </div>
 
-<div class="admin-wrap" id="admin-wrap">
-  <div class="sidebar">
-    <div class="sidebar-logo"><span class="v">V</span>OOMCOMIX</div>
-    <div class="sidebar-sub">Admin Panel</div>
-    <div class="nav-group">Main</div>
-    <div class="nav-item active" onclick="showPanel('dashboard',this)">📊 Dashboard</div>
-    <div class="nav-group">Content</div>
-    <div class="nav-item" onclick="showPanel('stories',this)">📚 All Stories</div>
-    <div class="nav-item" onclick="addNew('novel')">📖 Add Novel</div>
-    <div class="nav-item" onclick="addNew('manga')">🎌 Add Manga</div>
-    <div class="nav-item" onclick="addNew('comic')">📚 Add Comic</div>
-    <div class="nav-group">Readers</div>
-    <div class="nav-item" onclick="showPanel('reading-lists',this)">❤️ Reading Lists</div>
-    <div class="nav-item" onclick="showPanel('comments',this)">💬 Comments</div>
-    <div class="nav-group">Site</div>
-    <div class="nav-item" onclick="showPanel('settings',this)">⚙ Settings</div>
-    <div class="sidebar-foot">
-      <a href="index.html" target="_blank">🌐 View Site →</a>
-      <span onclick="logout()">🚪 Logout</span>
-    </div>
-  </div>
-
-  <div class="main-content">
-
-    <!-- DASHBOARD -->
-    <div class="panel active" id="panel-dashboard">
-      <div class="page-title">DASH<span>BOARD</span></div>
-      <div class="page-sub" id="dash-greeting"></div>
-      <div class="dash-stats" id="dash-stats"></div>
-      <div class="page-title" style="font-size:1.2rem;margin-bottom:10px;">RECENT <span>CONTENT</span></div>
-      <div id="dash-recent"></div>
-    </div>
-
-    <!-- ALL STORIES -->
-    <div class="panel" id="panel-stories">
-      <div class="page-title">ALL <span>STORIES</span></div>
-      <div class="page-sub" id="stories-sub"></div>
-      <div id="stories-list"></div>
-    </div>
-
-    <!-- ADD / EDIT STORY -->
-    <div class="panel" id="panel-add-story">
-      <div class="page-title" id="form-title">ADD NEW <span>STORY</span></div>
-      <div class="page-sub" id="form-sub">Fill in details</div>
-      <input type="hidden" id="edit-id"/>
-      <input type="hidden" id="edit-type"/>
-
-      <div style="display:grid;grid-template-columns:170px 1fr;gap:20px;align-items:start;margin-bottom:16px;">
-        <div>
-          <label>Book Cover Image</label>
-          <div class="cover-upload-area" onclick="document.getElementById('cover-file').click()">
-            <input type="file" id="cover-file" accept="image/*" onchange="previewCover(this)" style="display:none"/>
-            <img id="cover-preview" class="cover-preview" alt=""/>
-            <div id="cover-up-text"><div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">📷 Upload</div><div style="font-size:.62rem;color:var(--muted);margin-top:4px;">JPG/PNG · 2:3</div></div>
-          </div>
-          <input type="hidden" id="f-cover-data"/>
-          <div class="field" style="margin-top:8px;"><label>Emoji fallback</label><input type="text" id="f-emoji" placeholder="⚔️ 🎌 📕"/></div>
-        </div>
-        <div>
-          <div class="field"><label>Story Title *</label><input type="text" id="f-title" placeholder="Enter title"/></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div class="field"><label>Genre</label><input type="text" id="f-genre" placeholder="Fantasy · Action"/></div>
-            <div class="field"><label>Language</label><select id="f-lang"><option>English</option><option>Hindi</option><option>Hindi + English</option></select></div>
-            <div class="field"><label>Status</label><select id="f-status"><option value="ongoing">Ongoing</option><option value="complete">Complete</option><option value="hiatus">Hiatus</option></select></div>
-            <div class="field"><label>Trending?</label><select id="f-trending"><option value="false">No</option><option value="true">Yes — Hero Banner</option></select></div>
-          </div>
-          <div class="field"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Action, Dark, Romance"/></div>
-        </div>
-      </div>
-      <div class="field"><label>Cover Color (fallback gradient)</label><input type="text" id="f-color" placeholder="linear-gradient(135deg,#1a0a0a,#2d1515)"/></div>
-      <div class="field"><label>Description *</label><textarea id="f-desc" placeholder="Write story description..."></textarea></div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-green" onclick="saveStory()">💾 Save Story</button>
-        <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
-      </div>
-    </div>
-
-    <!-- READING LISTS -->
-    <div class="panel" id="panel-reading-lists">
-      <div class="page-title">READING <span>LISTS</span></div>
-      <div class="page-sub">Stories readers are following</div>
-      <div id="rl-content"></div>
-    </div>
-
-    <!-- COMMENTS -->
-    <div class="panel" id="panel-comments">
-      <div class="page-title">ALL <span>COMMENTS</span></div>
-      <div class="page-sub">Reader comments across all stories</div>
-      <div id="comments-content"></div>
-    </div>
-
-    <!-- SETTINGS -->
-    <div class="panel" id="panel-settings">
-      <div class="page-title">SITE <span>SETTINGS</span></div>
-      <div class="page-sub">Social links & configuration</div>
-      <div class="page-title" style="font-size:1.1rem;margin:0 0 12px;">SOCIAL <span>LINKS</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-        <div class="field"><label>📷 Instagram URL</label><input type="text" id="s-ig" placeholder="https://instagram.com/yourhandle"/></div>
-        <div class="field"><label>📘 Facebook URL</label><input type="text" id="s-fb" placeholder="https://facebook.com/yourpage"/></div>
-        <div class="field"><label>▶ YouTube URL</label><input type="text" id="s-yt" placeholder="https://youtube.com/@yourchannel"/></div>
-        <div class="field"><label>📧 Contact Email</label><input type="text" id="s-email" placeholder="voomcomix@gmail.com"/></div>
-      </div>
-      <button class="btn btn-gold" onclick="saveSocial()">💾 Save Social Links</button>
-      <hr style="border-color:var(--border);margin:24px 0;"/>
-      <div class="page-title" style="font-size:1.1rem;margin:0 0 12px;">CHANGE <span>PASSWORD</span></div>
-      <div class="field" style="max-width:320px;"><label>New Password</label><input type="password" id="new-pw" placeholder="Min 4 chars"/></div>
-      <button class="btn btn-gold" onclick="changePw()">Update Password</button>
-      <hr style="border-color:var(--border);margin:24px 0;"/>
-      <button class="btn btn-danger" onclick="if(confirm('Reset ALL data?'))resetAll()">⚠ Reset All Story Data</button>
-    </div>
-
-  </div>
+<!-- CONTINUE READING -->
+<div class="continue-section" id="continue-sec" style="display:none;">
+  <h3>CONTINUE <span>READING</span></h3>
+  <div class="continue-grid" id="continue-grid"></div>
 </div>
 
-<!-- CHAPTER MODAL -->
-<div class="modal-bg" id="ch-modal">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>CHAPTER <span>EDITOR</span></h3>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="m-story-id"/>
-      <input type="hidden" id="m-ch-id"/>
-      <input type="hidden" id="m-story-type"/>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div class="field"><label>Chapter Number</label><input type="number" id="m-num" min="1"/></div>
-        <div class="field"><label>Publish Date</label><input type="date" id="m-date"/></div>
-      </div>
-      <div class="field"><label>Chapter Title *</label><input type="text" id="m-title" placeholder="e.g. The First Battle"/></div>
-
-      <!-- NOVEL: text content -->
-      <div id="m-text-section">
-        <div class="field"><label>Content (Novel text)</label><textarea id="m-content" style="min-height:260px;font-family:'Courier New',monospace;font-size:.8rem;line-height:1.7;" placeholder="Write chapter content here...&#10;&#10;Blank line = new paragraph."></textarea></div>
-      </div>
-
-      <!-- MANGA/COMIC: page image upload -->
-      <div id="m-pages-section" style="display:none;">
-        <label>Pages (Max 20) — Click any slot to upload image</label>
-        <div class="pages-grid" id="pages-grid"></div>
-        <p style="font-size:.65rem;color:var(--muted);margin-top:8px;letter-spacing:.08em;">Tip: Upload JPG/PNG. Images are stored as base64 in your browser. For best quality use 800×1200px images.</p>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-green" onclick="saveChapter()">💾 Save Chapter</button>
-    </div>
+<!-- FEATURED STORIES -->
+<section class="sec">
+  <div class="sec-head">
+    <h2>FEATURED <span>STORIES</span></h2>
+    <div class="sec-line"></div>
+    <a href="stories.html" class="sec-link">View All →</a>
   </div>
+  <div class="books-grid" id="books-grid"></div>
+</section>
+
+<!-- TOP 10 RANKINGS -->
+<section class="rankings-sec">
+  <div class="sec-head">
+    <h2>TOP 10 <span>RANKINGS</span></h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="rankings-tabs">
+    <div class="rtab active" onclick="showRank('novel',this)">📖 Novels</div>
+    <div class="rtab" onclick="showRank('manga',this)">🎌 Manga</div>
+    <div class="rtab" onclick="showRank('comic',this)">📚 Comics</div>
+  </div>
+  <div class="ranking-list active" id="rank-novel"></div>
+  <div class="ranking-list" id="rank-manga"></div>
+  <div class="ranking-list" id="rank-comic"></div>
+</section>
+
+<!-- SOCIAL -->
+<div class="social-strip">
+  <p>Follow Us —</p>
+  <a href="https://instagram.com/voomcomix" target="_blank" class="soc-btn ig">
+    <svg class="soc-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    Instagram
+  </a>
+  <a href="https://facebook.com/voomcomix" target="_blank" class="soc-btn fb">
+    <svg class="soc-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    Facebook
+  </a>
+  <a href="https://youtube.com/@voomcomix" target="_blank" class="soc-btn yt">
+    <svg class="soc-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+    YouTube
+  </a>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="f-logo"><span class="v">V</span>OOM<span class="c">C</span>OMIX</div>
+      <div class="f-desc">Original webnovels, manga & comics in Hindi & English. Free to read, always.</div>
+      <div class="f-owner">Created & owned by<br/><strong>Mr. Imtiyaz Sheikh</strong></div>
+    </div>
+    <div class="f-col">
+      <h4>Navigate</h4>
+      <a href="index.html">Home</a>
+      <a href="stories.html">All Stories</a>
+      <a href="manga-reader.html">Manga Reader</a>
+      <a href="comic-reader.html">Comic Reader</a>
+      <a href="about.html">About Us</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="f-col">
+      <h4>Genres</h4>
+      <a href="stories.html">Action</a>
+      <a href="stories.html">Fantasy</a>
+      <a href="stories.html">Romance</a>
+      <a href="stories.html">Thriller</a>
+      <a href="stories.html">Hindi Stories</a>
+    </div>
+  </div>
+  <div class="f-bottom">
+    <p>© 2024 VoomComix — Mr. Imtiyaz Sheikh. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;">
+      <a href="terms.html" style="font-family:Rajdhani;font-size:.65rem;color:rgba(245,239,230,.25);letter-spacing:.12em;text-transform:uppercase;">Terms</a>
+      <a href="about.html" style="font-family:Rajdhani;font-size:.65rem;color:rgba(245,239,230,.25);letter-spacing:.12em;text-transform:uppercase;">About</a>
+    </div>
+  </div>
+</footer>
 
 <script src="stories-data.js"></script>
 <script>
-const DEF_PW='voomcomix2024';
-function doLogin(){
-  const pw=document.getElementById('pw-input').value;
-  const stored=localStorage.getItem('vc-pw')||DEF_PW;
-  if(pw===stored){localStorage.setItem('vc-auth','1');location.reload();}
-  else toast('Wrong password!','err');
+const stories = loadData();
+
+// ===== HERO =====
+const trending = [...stories].sort((a,b)=>(b.isTrending?1:0)-(a.isTrending?1:0));
+let hIdx=0;
+function renderHero(i){
+  const s=trending[i]||trending[0];if(!s)return;
+  const words=s.title.split(' ');
+  const half=Math.ceil(words.length/2);
+  document.getElementById('hero-title').innerHTML=words.slice(0,half).join(' ')+'<br/><span class="red">'+words.slice(half).join(' ')+'</span>';
+  document.getElementById('hero-meta').innerHTML=`<span class="hm genre">${s.genre}</span><span class="hm views">👁 ${s.views}</span><span class="hm status">${s.status.toUpperCase()}</span>`;
+  document.getElementById('hero-desc').textContent=s.description;
+  const readUrl = s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
+  document.getElementById('hero-btn').href=readUrl;
+  const bi=document.getElementById('hero-book-inner');
+  if(s.cover&&s.cover.trim()){bi.innerHTML=`<img src="${s.cover}" style="width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;"/>`;bi.style.background='';}
+  else{bi.style.background=s.coverColor||'#2a1a10';bi.innerHTML=`<span style="font-size:5rem">${s.coverEmoji||'📖'}</span>`;}
+  if(s.cover){document.getElementById('hero-bg').style.backgroundImage=`url(${s.cover})`;}
+  else document.getElementById('hero-bg').style.backgroundImage='';
+  document.querySelectorAll('.hdot').forEach((d,j)=>d.classList.toggle('active',j===i));
 }
-function logout(){localStorage.removeItem('vc-auth');location.reload();}
-function changePw(){const p=document.getElementById('new-pw').value.trim();if(p.length<4){toast('Too short','err');return;}localStorage.setItem('vc-pw',p);toast('Password updated!');}
+const dotsEl=document.getElementById('hero-dots');
+trending.slice(0,5).forEach((_,i)=>{
+  const d=document.createElement('div');d.className='hdot'+(i===0?' active':'');
+  d.onclick=()=>{hIdx=i;renderHero(i);};dotsEl.appendChild(d);
+});
+if(trending.length) renderHero(0);
+setInterval(()=>{hIdx=(hIdx+1)%Math.min(trending.length||1,5);renderHero(hIdx);},5000);
 
-if(localStorage.getItem('vc-auth')==='1'){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('admin-wrap').classList.add('show');
-  init();
-}
-
-function init(){
-  const now=new Date();
-  const h=now.getHours();
-  const greet=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
-  document.getElementById('dash-greeting').textContent=`${greet}, Mr. Imtiyaz Sheikh`;
-  renderDash();renderList();loadSocial();
-}
-function gs(){return loadData();}
-function ss(d){localStorage.setItem('voomcomix_stories',JSON.stringify(d));}
-
-function showPanel(n,el){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-  document.getElementById('panel-'+n).classList.add('active');
-  if(el)el.classList.add('active');
-  if(n==='reading-lists')renderRL();
-  if(n==='comments')renderComments();
-}
-
-function typeClass(t){return t==='manga'?'tb-manga':t==='comic'?'tb-comic':'tb-novel';}
-function typeEmoji(t){return t==='manga'?'🎌':t==='comic'?'📚':'📖';}
-
-function renderDash(){
-  const d=gs();
-  const tc=d.reduce((a,s)=>a+(s.chapters||[]).length,0);
-  const follows=JSON.parse(localStorage.getItem('vc-follow-list')||'[]');
-  document.getElementById('dash-stats').innerHTML=`
-  <div class="dash-stat"><div class="ds-n">${d.length}</div><div class="ds-l">Stories</div></div>
-  <div class="dash-stat"><div class="ds-n">${tc}</div><div class="ds-l">Chapters</div></div>
-  <div class="dash-stat"><div class="ds-n">${d.filter(s=>s.status==='ongoing').length}</div><div class="ds-l">Ongoing</div></div>
-  <div class="dash-stat"><div class="ds-n">${follows.length}</div><div class="ds-l">Followers</div></div>
-  <div class="dash-stat"><div class="ds-n">${d.filter(s=>s.type==='manga').length}</div><div class="ds-l">Manga</div></div>
-  <div class="dash-stat"><div class="ds-n">${d.filter(s=>s.type==='comic').length}</div><div class="ds-l">Comics</div></div>`;
-  document.getElementById('dash-recent').innerHTML=d.slice(0,5).map(s=>sliHTML(s)).join('');
-}
-
-function renderList(){
-  const d=gs();
-  document.getElementById('stories-sub').textContent=`${d.length} total`;
-  document.getElementById('stories-list').innerHTML=d.length?d.map(s=>sliHTML(s)).join(''):'<p style="color:var(--muted);font-size:.82rem;">No stories yet.</p>';
-}
-
-function sliHTML(s){
-  const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" class="sli-cover" alt=""/>`:`<div class="sli-cover-fb" style="background:${s.coverColor||'#2a1a10'}">${s.coverEmoji||'📖'}</div>`;
-  const tc=s.type||'novel';
-  return `<div class="sli">${cover}
-  <div class="sli-info">
-    <div class="sli-title"><span class="type-badge ${typeClass(tc)}">${typeEmoji(tc)} ${tc}</span>${s.isTrending?'🔥 ':''}${s.title}</div>
-    <div class="sli-meta">${s.status} · ${s.genre} · ${(s.chapters||[]).length} ch · ${s.language}</div>
-  </div>
-  <div class="sli-actions">
-    <button class="btn btn-ghost btn-sm" onclick="openChapters('${s.id}')">📖 Chapters</button>
-    <button class="btn btn-ghost btn-sm" onclick="editStory('${s.id}')">✏</button>
-    <button class="btn btn-danger btn-sm" onclick="delStory('${s.id}')">🗑</button>
-  </div></div>`;
-}
-
-function addNew(type){
-  clearForm();
-  document.getElementById('edit-type').value=type;
-  document.getElementById('form-title').innerHTML=`ADD ${typeEmoji(type)} <span>${type.toUpperCase()}</span>`;
-  document.getElementById('form-sub').textContent=`Fill in ${type} details`;
-  showPanel('add-story');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-}
-
-function previewCover(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const prev=document.getElementById('cover-preview');
-    prev.src=e.target.result;prev.classList.add('show');
-    document.getElementById('cover-up-text').style.display='none';
-    document.getElementById('f-cover-data').value=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function saveStory(){
-  const id=document.getElementById('edit-id').value;
-  const title=document.getElementById('f-title').value.trim();
-  const desc=document.getElementById('f-desc').value.trim();
-  const type=document.getElementById('edit-type').value||'novel';
-  if(!title||!desc){toast('Title and description required!','err');return;}
-  const d=gs();
-  const existing=id?d.find(s=>s.id===id):null;
-  const s={
-    id:id||'story-'+Date.now(),
-    type,title,author:'VoomComix',
-    genre:document.getElementById('f-genre').value||'General',
-    tags:document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
-    status:document.getElementById('f-status').value,
-    language:document.getElementById('f-lang').value,
-    cover:document.getElementById('f-cover-data').value||'',
-    coverEmoji:document.getElementById('f-emoji').value||typeEmoji(type),
-    coverColor:document.getElementById('f-color').value||'linear-gradient(135deg,#1a0a10,#2a1020)',
-    description:desc,
-    isTrending:document.getElementById('f-trending').value==='true',
-    views:'0',rating:4.5,likes:0,
-    dateAdded:new Date().toISOString().split('T')[0],
-    chapters:existing?existing.chapters||[]:[],
-  };
-  if(id){const i=d.findIndex(x=>x.id===id);if(i>-1)d[i]={...d[i],...s};}
-  else d.push(s);
-  ss(d);clearForm();renderDash();renderList();
-  toast(id?'Story updated!':'Story added! 🎉');
-}
-
-function editStory(id){
-  const s=gs().find(x=>x.id===id);
-  document.getElementById('edit-id').value=s.id;
-  document.getElementById('edit-type').value=s.type||'novel';
-  document.getElementById('f-title').value=s.title;
-  document.getElementById('f-genre').value=s.genre;
-  document.getElementById('f-lang').value=s.language;
-  document.getElementById('f-status').value=s.status;
-  document.getElementById('f-emoji').value=s.coverEmoji||'';
-  document.getElementById('f-color').value=s.coverColor||'';
-  document.getElementById('f-tags').value=(s.tags||[]).join(', ');
-  document.getElementById('f-desc').value=s.description;
-  document.getElementById('f-trending').value=s.isTrending?'true':'false';
-  if(s.cover&&s.cover.trim()){
-    document.getElementById('cover-preview').src=s.cover;
-    document.getElementById('cover-preview').classList.add('show');
-    document.getElementById('cover-up-text').style.display='none';
-    document.getElementById('f-cover-data').value=s.cover;
-  }
-  const t=s.type||'novel';
-  document.getElementById('form-title').innerHTML=`EDIT ${typeEmoji(t)} <span>${t.toUpperCase()}</span>`;
-  document.getElementById('form-sub').textContent='Edit story details';
-  showPanel('add-story');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-}
-
-function delStory(id){if(!confirm('Delete story?'))return;ss(gs().filter(s=>s.id!==id));renderDash();renderList();toast('Deleted');}
-
-function clearForm(){
-  ['edit-id','f-title','f-genre','f-emoji','f-color','f-tags','f-desc','f-cover-data'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('edit-type').value='novel';
-  document.getElementById('f-status').value='ongoing';
-  document.getElementById('f-lang').value='English';
-  document.getElementById('f-trending').value='false';
-  document.getElementById('cover-preview').src='';
-  document.getElementById('cover-preview').classList.remove('show');
-  document.getElementById('cover-up-text').style.display='';
-  document.getElementById('form-title').innerHTML='ADD NEW <span>STORY</span>';
-}
-
-// CHAPTERS
-function openChapters(sid){
-  const d=gs();const s=d.find(x=>x.id===sid);
-  const tc=s.type||'novel';
-  document.getElementById('panel-stories').innerHTML=`
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-    <button class="btn btn-ghost btn-sm" onclick="showPanel('stories');renderList()">← Back</button>
-    <div style="flex:1"><div class="page-title" style="font-size:1.2rem;margin:0">${typeEmoji(tc)} ${s.title}</div>
-    <div class="page-sub" style="margin:0">${(s.chapters||[]).length} chapters · ${tc}</div></div>
-    <button class="btn btn-green btn-sm" onclick="openModal('${sid}')">+ Add Chapter</button>
-  </div>
-  <div id="chlist-${sid}"></div>`;
-  renderChList(sid);
-}
-
-function renderChList(sid){
-  const s=gs().find(x=>x.id===sid);if(!s)return;
-  const el=document.getElementById('chlist-'+sid);if(!el)return;
-  el.innerHTML=(s.chapters||[]).length?(s.chapters||[]).map(ch=>{
-    const pgCount=(ch.pages||[]).filter(p=>p&&p.image).length;
-    return `<div class="chi">
-    <span class="chi-num">${ch.id}</span>
-    <span class="chi-title">${ch.title}</span>
-    <span class="chi-meta">${s.type!=='novel'?`${pgCount} pages`:((ch.wordCount||0).toLocaleString()+' words')} · ${ch.date}</span>
-    <div style="display:flex;gap:5px;margin-left:8px;">
-      <button class="btn btn-ghost btn-sm" onclick="openModal('${sid}',${ch.id})">✏</button>
-      <button class="btn btn-danger btn-sm" onclick="delCh('${sid}',${ch.id})">🗑</button>
-    </div></div>`;
-  }).join(''):'<p style="color:var(--muted);font-size:.8rem;">No chapters yet.</p>';
-}
-
-let pageImages={};
-
-function openModal(sid,cid=null){
-  document.getElementById('m-story-id').value=sid;
-  document.getElementById('m-ch-id').value=cid||'';
-  const s=gs().find(x=>x.id===sid);
-  const tc=s?s.type||'novel':'novel';
-  document.getElementById('m-story-type').value=tc;
-  pageImages={};
-
-  // Show/hide text vs pages
-  const isVisual=tc==='manga'||tc==='comic';
-  document.getElementById('m-text-section').style.display=isVisual?'none':'block';
-  document.getElementById('m-pages-section').style.display=isVisual?'block':'none';
-
-  if(cid&&s){
-    const ch=s.chapters.find(c=>c.id===cid);
-    document.getElementById('m-num').value=ch.id;
-    document.getElementById('m-title').value=ch.title;
-    document.getElementById('m-content').value=ch.content||'';
-    document.getElementById('m-date').value=ch.date;
-    if(isVisual){(ch.pages||[]).forEach((p,i)=>{if(p&&p.image)pageImages[i]=p.image;});}
-  }else{
-    const chLen=(s?s.chapters||[]:[]). length;
-    document.getElementById('m-num').value=chLen+1;
-    document.getElementById('m-title').value='';
-    document.getElementById('m-content').value='';
-    document.getElementById('m-date').value=new Date().toISOString().split('T')[0];
-  }
-  if(isVisual) buildPageGrid(tc);
-  document.getElementById('ch-modal').classList.add('open');
-}
-
-function buildPageGrid(type){
-  const grid=document.getElementById('pages-grid');
-  grid.innerHTML='';
-  for(let i=0;i<20;i++){
-    const slot=document.createElement('div');
-    slot.className='page-slot';
-    slot.dataset.idx=i;
-    const inp=document.createElement('input');
-    inp.type='file';inp.accept='image/*';
-    inp.onchange=function(e){uploadPageImg(e,i);};
-    const num=document.createElement('div');num.className='page-slot-num';num.textContent=i+1;
-    const lbl=document.createElement('div');lbl.className='page-slot-label';lbl.textContent='tap to upload';
-    const del=document.createElement('button');del.className='del-page';del.textContent='✕';del.onclick=function(e){e.stopPropagation();delete pageImages[i];buildPageGrid(type);};
-    slot.appendChild(inp);slot.appendChild(num);slot.appendChild(lbl);slot.appendChild(del);
-    if(pageImages[i]){
-      const img=document.createElement('img');img.src=pageImages[i];
-      slot.appendChild(img);num.style.display='none';lbl.style.display='none';
-    }
-    grid.appendChild(slot);
-  }
-}
-
-function uploadPageImg(e,idx){
-  const file=e.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    pageImages[idx]=ev.target.result;
-    const sid=document.getElementById('m-story-id').value;
-    const s=gs().find(x=>x.id===sid);
-    buildPageGrid(s?s.type||'novel':'novel');
-  };
-  reader.readAsDataURL(file);
-}
-
-function closeModal(){document.getElementById('ch-modal').classList.remove('open');pageImages={};}
-
-function saveChapter(){
-  const sid=document.getElementById('m-story-id').value;
-  const eid=document.getElementById('m-ch-id').value;
-  const title=document.getElementById('m-title').value.trim();
-  const tc=document.getElementById('m-story-type').value;
-  const isVisual=tc==='manga'||tc==='comic';
-  const content=isVisual?'':document.getElementById('m-content').value.trim();
-  if(!title){toast('Title required!','err');return;}
-  if(!isVisual&&!content){toast('Content required!','err');return;}
-  const pages=isVisual?Array.from({length:20},(_,i)=>pageImages[i]?{image:pageImages[i]}:null):[];
-  const ch={
-    id:parseInt(document.getElementById('m-num').value)||1,
-    title,content,
-    wordCount:content?content.split(/\s+/).length:0,
-    date:document.getElementById('m-date').value,
-    pages
-  };
-  const d=gs();const s=d.find(x=>x.id===sid);
-  if(eid){const i=s.chapters.findIndex(c=>c.id===parseInt(eid));if(i>-1)s.chapters[i]=ch;}
-  else{if(!s.chapters)s.chapters=[];s.chapters.push(ch);}
-  s.totalChapters=(s.chapters||[]).length;
-  ss(d);closeModal();renderChList(sid);renderDash();
-  toast(eid?'Chapter updated!':'Chapter published! 🎉');
-}
-
-function delCh(sid,cid){if(!confirm('Delete chapter?'))return;
-  const d=gs();const s=d.find(x=>x.id===sid);
-  s.chapters=(s.chapters||[]).filter(c=>c.id!==cid);s.totalChapters=s.chapters.length;
-  ss(d);renderChList(sid);renderDash();toast('Deleted');
-}
-
-// READING LISTS
-function renderRL(){
-  const follows=JSON.parse(localStorage.getItem('vc-follow-list')||'[]');
-  const d=gs();
-  const el=document.getElementById('rl-content');
-  if(!follows.length){el.innerHTML='<p style="color:var(--muted);font-size:.82rem;letter-spacing:.08em;">No followers yet.</p>';return;}
-  el.innerHTML=follows.map(sid=>{
-    const s=d.find(x=>x.id===sid);if(!s)return '';
-    return `<div class="reading-list"><div class="rl-title">${s.title}</div><div class="rl-meta">${s.genre} · ${(s.chapters||[]).length} chapters</div></div>`;
+// ===== CONTINUE READING =====
+function renderContinue(){
+  const history=JSON.parse(localStorage.getItem('vc-history')||'[]');
+  if(!history.length) return;
+  document.getElementById('continue-sec').style.display='block';
+  const grid=document.getElementById('continue-grid');
+  grid.innerHTML=history.slice(0,6).map(h=>{
+    const s=stories.find(x=>x.id===h.storyId);if(!s)return '';
+    const pct=Math.min(100,Math.round((h.chIdx/(s.chapters.length||1))*100));
+    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" class="cc-cover" alt=""/>`:`<div class="cc-cover-fb" style="background:${s.coverColor||'#2a1a10'}">${s.coverEmoji||'📖'}</div>`;
+    const url=s.type==='manga'?`manga-reader.html?id=${s.id}&ch=${h.chId}`:s.type==='comic'?`comic-reader.html?id=${s.id}&ch=${h.chId}`:`chapter.html?story=${s.id}&ch=${h.chId}`;
+    return `<div class="continue-card" onclick="location.href='${url}'">${cover}<div class="cc-info"><div class="cc-title">${s.title}</div><div class="cc-progress">Ch ${h.chId} · ${pct}% read</div><div class="cc-bar"><div class="cc-bar-fill" style="width:${pct}%"></div></div><span class="cc-type">${s.type||'novel'}</span></div></div>`;
   }).join('');
 }
+renderContinue();
 
-// COMMENTS
-function renderComments(){
-  const d=gs();
-  const el=document.getElementById('comments-content');
-  let html='';
-  d.forEach(s=>{
-    const comments=JSON.parse(localStorage.getItem('vc-comments-'+s.id)||'[]');
-    if(comments.length){
-      html+=`<div style="margin-bottom:20px;"><div style="font-family:'Bebas Neue';font-size:1rem;letter-spacing:.06em;margin-bottom:8px;color:var(--gold)">${s.title}</div>`;
-      html+=comments.map(c=>`<div class="chi"><span style="font-size:.7rem;color:var(--gold);font-weight:700;">${c.user}</span><span class="chi-title" style="font-size:.78rem;">${c.text}</span><span class="chi-meta">${c.time}</span></div>`).join('');
-      html+='</div>';
-    }
-  });
-  el.innerHTML=html||'<p style="color:var(--muted);font-size:.82rem;">No comments yet.</p>';
+// ===== BOOKS GRID =====
+const grid=document.getElementById('books-grid');
+const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+stories.forEach((s,i)=>{
+  const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" alt="${s.title}"/>`:`<div class="book-cover-fb" style="background:${s.coverColor||'#e4d9c8'}">${s.coverEmoji||'📖'}</div>`;
+  const isLiked=likes[s.id];
+  const readUrl=s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
+  grid.innerHTML+=`<div class="book-card" style="animation:fadeUp .4s ease ${i*.07}s both">
+    <div class="book-cover-wrap" onclick="location.href='${readUrl}'">${cover}
+      <span class="b-badge badge-${s.status}">${s.status.charAt(0).toUpperCase()+s.status.slice(1)}</span>
+      <span class="b-type">${(s.type||'novel').toUpperCase()}</span>
+    </div>
+    <div class="book-title" onclick="location.href='${readUrl}'">${s.title}</div>
+    <div class="book-genre">${s.genre}</div>
+    <div class="book-meta">
+      <span>📖 ${s.chapters?s.chapters.length:0} Ch</span>
+      <button class="book-like ${isLiked?'liked':''}" onclick="toggleLike('${s.id}',this)">♥ <span id="lc-${s.id}">${s.likes||0}</span></button>
+    </div>
+  </div>`;
+});
+
+function toggleLike(id,btn){
+  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+  const d=loadData();const s=d.find(x=>x.id===id);if(!s)return;
+  if(likes[id]){delete likes[id];s.likes=Math.max(0,(s.likes||1)-1);btn.classList.remove('liked');}
+  else{likes[id]=1;s.likes=(s.likes||0)+1;btn.classList.add('liked');}
+  localStorage.setItem('vc-likes',JSON.stringify(likes));
+  localStorage.setItem('voomcomix_stories',JSON.stringify(d));
+  document.getElementById('lc-'+id).textContent=s.likes;
 }
 
-// SOCIAL SETTINGS
-function saveSocial(){
-  const soc={ig:document.getElementById('s-ig').value,fb:document.getElementById('s-fb').value,yt:document.getElementById('s-yt').value,email:document.getElementById('s-email').value};
-  localStorage.setItem('vc-social',JSON.stringify(soc));toast('Social links saved!');
+// ===== TOP 10 RANKINGS =====
+function rankHTML(list){
+  return list.slice(0,10).map((s,i)=>{
+    const nc=i===0?'top1':i===1?'top2':i===2?'top3':'rest';
+    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" class="rank-cover" alt=""/>`:`<div class="rank-cover-fb" style="background:${s.coverColor||'#e4d9c8'}">${s.coverEmoji||'📖'}</div>`;
+    const readUrl=s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
+    return `<div class="rank-item" onclick="location.href='${readUrl}'">${cover}
+    <span class="rank-num ${nc}">${i+1}</span>
+    <div class="rank-info"><div class="rank-title">${s.title}</div><div class="rank-meta">${s.genre} · ${s.chapters?s.chapters.length:0} Ch</div></div>
+    <div class="rank-views">👁 ${s.views||'0'}</div></div>`;
+  }).join('');
 }
-function loadSocial(){
-  const soc=JSON.parse(localStorage.getItem('vc-social')||'{}');
-  if(soc.ig)document.getElementById('s-ig').value=soc.ig;
-  if(soc.fb)document.getElementById('s-fb').value=soc.fb;
-  if(soc.yt)document.getElementById('s-yt').value=soc.yt;
-  if(soc.email)document.getElementById('s-email').value=soc.email;
+const novels=stories.filter(s=>!s.type||s.type==='novel');
+const mangas=stories.filter(s=>s.type==='manga');
+const comics=stories.filter(s=>s.type==='comic');
+document.getElementById('rank-novel').innerHTML=novels.length?rankHTML(novels):'<p style="font-family:Rajdhani;color:var(--muted);font-size:.82rem;padding:20px;grid-column:1/-1;">No novels yet</p>';
+document.getElementById('rank-manga').innerHTML=mangas.length?rankHTML(mangas):'<p style="font-family:Rajdhani;color:var(--muted);font-size:.82rem;padding:20px;grid-column:1/-1;">No manga yet</p>';
+document.getElementById('rank-comic').innerHTML=comics.length?rankHTML(comics):'<p style="font-family:Rajdhani;color:var(--muted);font-size:.82rem;padding:20px;grid-column:1/-1;">No comics yet</p>';
+
+function showRank(type,el){
+  document.querySelectorAll('.ranking-list').forEach(r=>r.classList.remove('active'));
+  document.querySelectorAll('.rtab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('rank-'+type).classList.add('active');
+  el.classList.add('active');
 }
 
-function toast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast '+(type==='err'?'err ':'')+' show';
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-function resetAll(){localStorage.removeItem('voomcomix_stories');localStorage.removeItem('vc-auth');location.reload();}
+const style=document.createElement('style');
+style.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
 </script>
 </body>
 </html>
