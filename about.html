@@ -6,37 +6,69 @@
 <title>About — VoomComix</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0f14;--card:#141420;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
+:root{--bg:#0c0c10;--card:#16161e;--red:#e8312a;--gold:#f5a623;--teal:#00c4b4;--white:#f5f0e8;--muted:#7a7080;--border:rgba(255,255,255,0.07);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
 a{text-decoration:none;color:inherit;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
-.logo span{color:var(--red);}
-.nav-r a{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,12,16,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(232,49,42,0.15);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;}
+.logo .v{color:var(--red);}
+.nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
 .nav-r a:hover{color:var(--white);}
-.content{max-width:800px;margin:0 auto;padding:110px 40px 80px;}
-h1{font-family:'Bebas Neue';font-size:3rem;letter-spacing:.05em;margin-bottom:8px;}
-h1 span{color:var(--red);}
-.sub{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
-h2{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;color:var(--gold);margin:40px 0 12px;}
-p{font-size:.95rem;line-height:1.9;color:rgba(253,250,244,.65);margin-bottom:16px;}
-ul{padding-left:24px;margin-bottom:16px;}
-li{font-size:.93rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:6px;}
+
+/* HERO */
+.about-hero{padding:100px 48px 60px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(232,49,42,.04) 0%,transparent 100%);}
+.about-hero-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 280px;gap:60px;align-items:center;}
+.hero-tag{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.hero-tag::before{content:'';width:20px;height:2px;background:var(--red);}
+.about-hero h1{font-family:'Bebas Neue';font-size:3.5rem;letter-spacing:.05em;line-height:1;margin-bottom:20px;}
+.about-hero h1 span{color:var(--red);}
+.about-hero p{font-size:.95rem;line-height:1.85;color:rgba(245,240,232,.65);margin-bottom:14px;}
+/* Founder Card */
+.founder-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);padding:28px 24px;text-align:center;}
+.founder-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--gold));display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;box-shadow:0 0 30px rgba(232,49,42,.2);}
+.founder-name{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;color:var(--gold);margin-bottom:4px;}
+.founder-title{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.founder-desc{font-family:'Rajdhani';font-size:.78rem;line-height:1.6;color:rgba(245,240,232,.5);}
+.founder-badge{display:inline-block;font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:4px 12px;border:1px solid rgba(245,166,35,.3);color:var(--gold);margin-top:12px;}
+
+/* CONTENT */
+.about-content{max-width:900px;margin:0 auto;padding:60px 48px;}
+h2{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;color:var(--gold);margin:40px 0 14px;}
+h2:first-child{margin-top:0;}
+p{font-size:.93rem;line-height:1.85;color:rgba(245,240,232,.62);margin-bottom:14px;}
+ul{padding-left:20px;margin-bottom:14px;}
+li{font-size:.9rem;line-height:1.8;color:rgba(245,240,232,.58);margin-bottom:6px;}
+.highlight{background:rgba(232,49,42,.06);border-left:3px solid var(--red);padding:16px 20px;margin:20px 0;font-size:.9rem;color:rgba(245,240,232,.72);line-height:1.7;}
 .divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
-.highlight{background:rgba(230,48,34,.08);border-left:3px solid var(--red);padding:16px 20px;margin:24px 0;font-size:.9rem;color:rgba(253,250,244,.75);line-height:1.7;}
-footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
-.foot-logo span{color:var(--red);}
-footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
-.foot-links a{font-family:'Rajdhani';font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:16px;transition:color .2s;}
+
+/* SOCIAL SECTION */
+.social-section{background:var(--card);border:1px solid var(--border);padding:32px;margin:40px 0;}
+.social-section h3{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;margin-bottom:6px;}
+.social-section h3 span{color:var(--red);}
+.social-section p{font-family:'Rajdhani';font-size:.78rem;color:var(--muted);margin-bottom:20px;}
+.social-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.soc-btn{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;border:1px solid var(--border);color:var(--muted);display:flex;align-items:center;gap:8px;transition:all .2s;}
+.soc-btn.ig:hover{border-color:#e1306c;color:#e1306c;}
+.soc-btn.fb:hover{border-color:#1877f2;color:#1877f2;}
+.soc-btn.yt:hover{border-color:#ff0000;color:#ff0000;}
+
+footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;}
+.foot-logo .v{color:var(--red);}
+footer p{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);}
+.foot-links a{font-family:'Rajdhani';font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:16px;transition:color .2s;}
 .foot-links a:hover{color:var(--red);}
-@media(max-width:600px){.content{padding:90px 20px 60px;}nav{padding:0 20px;}footer{padding:24px 20px;flex-direction:column;text-align:center;}}
+@media(max-width:768px){
+  nav,.about-hero,.about-content,footer{padding-left:20px;padding-right:20px;}
+  .about-hero-inner{grid-template-columns:1fr;}
+  .about-hero h1{font-size:2.5rem;}
+}
 </style>
 </head>
 <body>
 <nav>
-  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="v">C</span>OMIX</a>
   <div class="nav-r">
     <a href="stories.html">Stories</a>
     <a href="about.html">About</a>
@@ -44,80 +76,68 @@ footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
   </div>
 </nav>
 
-<div class="content" id="page-content">
-  <!-- JS loads content based on page -->
+<div class="about-hero">
+  <div class="about-hero-inner">
+    <div>
+      <div class="hero-tag">Our Story</div>
+      <h1>ABOUT <span>VOOMCOMIX</span></h1>
+      <p>VoomComix is an independent creative platform built on one simple belief — <strong style="color:var(--white)">great stories should be free to read.</strong></p>
+      <p>Born from a passion for storytelling, VoomComix brings original webnovels to readers in Hindi and English — raw, real, and written without a filter.</p>
+      <div class="highlight">Every story on VoomComix is 100% original — personally written, edited, and published. No AI-generated content. Real stories. Real emotions.</div>
+    </div>
+    <div class="founder-card">
+      <div class="founder-avatar">👑</div>
+      <div class="founder-name">Imtiyaz Sheikh</div>
+      <div class="founder-title">Founder & Creator</div>
+      <div class="founder-desc">VoomComix was created and is fully owned by Mr. Imtiyaz Sheikh, who manages all creative content, publishing, and platform development.</div>
+      <span class="founder-badge">✦ VoomComix Owner</span>
+    </div>
+  </div>
+</div>
+
+<div class="about-content">
+  <h2>WHO IS BEHIND VOOMCOMIX?</h2>
+  <p><strong style="color:var(--gold)">Mr. Imtiyaz Sheikh</strong> is the sole creator, writer, and owner of VoomComix. Every story you read on this platform — from concept to final chapter — is crafted personally by him.</p>
+  <p>His vision: a space where original Indian storytelling gets the spotlight it deserves. Stories that are bold, culturally rooted, and completely free for readers everywhere.</p>
+
+  <h2>OUR MISSION</h2>
+  <p>To build a home for original stories — without paywalls, without subscriptions, without ads. A platform where the story always comes first.</p>
+
+  <h2>WHAT WE OFFER</h2>
+  <ul>
+    <li>📚 Original webnovels in Hindi & English</li>
+    <li>⚔️ Multiple genres — action, fantasy, romance, thriller and more</li>
+    <li>📖 Clean, distraction-free reading experience</li>
+    <li>🆓 100% free — always</li>
+    <li>🔄 Regular chapter updates</li>
+    <li>🎌 Manga & comic reading style stories in Hindi</li>
+  </ul>
+
+  <hr class="divider"/>
+
+  <div class="social-section">
+    <h3>FOLLOW <span>VOOMCOMIX</span></h3>
+    <p>Stay updated with new chapters, story launches, and announcements</p>
+    <div class="social-btns">
+      <a href="https://instagram.com/voomcomix" target="_blank" class="soc-btn ig">📷 Instagram</a>
+      <a href="https://facebook.com/voomcomix" target="_blank" class="soc-btn fb">📘 Facebook</a>
+      <a href="https://youtube.com/@voomcomix" target="_blank" class="soc-btn yt">▶ YouTube</a>
+    </div>
+  </div>
+
+  <h2>CONTACT</h2>
+  <p>For collaborations, feedback, or just to say hi — reach out at:<br/>
+  <strong style="color:var(--gold)">📧 voomcomix@gmail.com</strong></p>
+  <p>Or visit: <a href="https://voomcomix.in" style="color:var(--red);">voomcomix.in</a></p>
 </div>
 
 <footer>
-  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
-  <p>© 2024 VoomComix · All Rights Reserved</p>
+  <a href="index.html" class="foot-logo"><span class="v">V</span>OOMCOMIX</a>
+  <p>© 2024 VoomComix · Created & owned by Mr. Imtiyaz Sheikh</p>
   <div class="foot-links">
     <a href="stories.html">Stories</a>
-    <a href="about.html">About</a>
     <a href="terms.html">Terms</a>
   </div>
 </footer>
-
-<script>
-const page = location.pathname.includes('terms') ? 'terms' : 'about';
-document.title = (page==='terms'?'Terms & Conditions':'About') + ' — VoomComix';
-
-const content = {
-  about: `
-    <h1>ABOUT <span>VOOMCOMIX</span></h1>
-    <div class="sub">Who we are · What we do</div>
-    <p>VoomComix is an independent creative platform dedicated to original storytelling. Founded with one simple belief — <strong style="color:var(--white)">great stories should be free to read.</strong></p>
-    <p>We write in Hindi and English, across genres — action, fantasy, romance, thriller, mystery. No templates. No formulas. Just raw, honest storytelling from the heart.</p>
-    <div class="highlight">Every story on VoomComix is 100% original — written, edited, and published by the VoomComix creator. No AI-generated content. Real stories, real emotions.</div>
-    <h2>OUR MISSION</h2>
-    <p>To build a space where readers can discover compelling original stories without paywalls, subscriptions, or ads. A place where stories come first.</p>
-    <h2>WHAT WE OFFER</h2>
-    <ul>
-      <li>📚 Original webnovels in Hindi & English</li>
-      <li>⚔️ Multiple genres — action, fantasy, romance, thriller and more</li>
-      <li>📖 Clean, distraction-free reading experience</li>
-      <li>🆓 Everything is completely free to read</li>
-      <li>🔄 Regular chapter updates</li>
-    </ul>
-    <h2>CONTACT</h2>
-    <p>Have a suggestion, feedback, or just want to say hi? Reach out at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
-    <p>You can also visit our site at <a href="https://voomcomix.in" style="color:var(--red);">voomcomix.in</a></p>
-  `,
-  terms: `
-    <h1>TERMS & <span>CONDITIONS</span></h1>
-    <div class="sub">Last updated: January 2024</div>
-    <div class="highlight">By accessing and using VoomComix (voomcomix.in), you agree to the following terms and conditions. Please read them carefully.</div>
-    <h2>1. ACCEPTANCE OF TERMS</h2>
-    <p>By visiting, reading, or using any part of VoomComix, you confirm that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree, please do not use this website.</p>
-    <h2>2. CONTENT OWNERSHIP</h2>
-    <p>All stories, chapters, characters, plots, and creative content published on VoomComix are the exclusive intellectual property of VoomComix and its creator. All rights are reserved.</p>
-    <ul>
-      <li>You may not copy, reproduce, republish, or distribute any content without written permission.</li>
-      <li>You may not claim any VoomComix story or content as your own.</li>
-      <li>Sharing links to our stories is encouraged — copying the actual content is not allowed.</li>
-    </ul>
-    <h2>3. FREE TO READ</h2>
-    <p>All content on VoomComix is provided free of charge for personal reading enjoyment. We do not charge readers for access to any story or chapter.</p>
-    <h2>4. USER CONDUCT</h2>
-    <p>When using this website, you agree to:</p>
-    <ul>
-      <li>Use the site for lawful purposes only.</li>
-      <li>Not attempt to hack, disrupt, or damage the website or its systems.</li>
-      <li>Not scrape, copy, or redistribute content without permission.</li>
-      <li>Respect the creative work of the author.</li>
-    </ul>
-    <h2>5. CONTENT DISCLAIMER</h2>
-    <p>Some stories may contain themes suitable for mature readers including violence, dark themes, or romance. Reader discretion is advised. VoomComix stories are works of fiction — any resemblance to real persons or events is purely coincidental.</p>
-    <h2>6. PRIVACY</h2>
-    <p>VoomComix does not collect personal data from readers. We do not require registration or login to read stories. We may use basic analytics to understand site traffic (no personal information is stored).</p>
-    <h2>7. CHANGES TO TERMS</h2>
-    <p>VoomComix reserves the right to update these Terms at any time. Continued use of the website after changes are posted constitutes acceptance of the updated terms.</p>
-    <h2>8. CONTACT</h2>
-    <p>For any questions regarding these terms, please contact us at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
-  `
-};
-
-document.getElementById('page-content').innerHTML = content[page];
-</script>
 </body>
 </html>
