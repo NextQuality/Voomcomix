@@ -13,7 +13,7 @@ const VOOMCOMIX_DATA = {
       tags: ["Romance", "Dark", "Thriller"],
       status: "ongoing",
       language: "English",
-      cover: "", // image path jaise "covers/story1.jpg"
+      cover: "",
       coverEmoji: "📕",
       coverColor: "linear-gradient(135deg,#1a0a0a,#2d1515)",
       description: "A powerful CEO, a dangerous secret, and a love that could destroy everything. When Aanya accepts a mysterious contract, she doesn't know she's signing away her heart.",
@@ -78,9 +78,15 @@ const VOOMCOMIX_DATA = {
 function saveData() {
   localStorage.setItem('voomcomix_stories', JSON.stringify(VOOMCOMIX_DATA.stories));
 }
+
+// ✅ FIXED: Ab nayi story properly save hogi
 function loadData() {
   const saved = localStorage.getItem('voomcomix_stories');
-  if (saved) VOOMCOMIX_DATA.stories = JSON.parse(saved);
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  // Pehli baar: default data localStorage mein save karo
+  localStorage.setItem('voomcomix_stories', JSON.stringify(VOOMCOMIX_DATA.stories));
   return VOOMCOMIX_DATA.stories;
 }
 
