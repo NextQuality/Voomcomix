@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Comic Reader — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#1a1410;--card:#211c17;--red:#c0392b;--gold:#d4820a;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+
+#read-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;z-index:200;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,20,16,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.logo{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.1em;}
+.logo .v{color:var(--red);}
+.nav-center{font-size:.75rem;font-weight:600;letter-spacing:.1em;color:var(--muted);text-align:center;}
+.nav-r{display:flex;align-items:center;gap:10px;}
+.nav-btn{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;cursor:pointer;transition:all .2s;}
+.nav-btn:hover{border-color:var(--red);color:var(--red);}
+.nav-btn.back{color:var(--white);border-color:rgba(245,239,230,.2);}
+
+/* CHAPTER HEADER */
+.ch-header{padding:74px 20px 20px;text-align:center;background:var(--card);border-bottom:1px solid var(--border);}
+.ch-type-badge{font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:4px 12px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);color:var(--red);display:inline-block;margin-bottom:8px;}
+.ch-story-title{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;margin-bottom:4px;}
+.ch-num{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+
+/* CHAPTER NAV */
+.ch-nav{display:flex;justify-content:center;align-items:center;gap:10px;padding:12px 24px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:54px;z-index:90;flex-wrap:wrap;}
+.ch-select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);padding:6px 12px;font-family:'Rajdhani';font-size:.78rem;font-weight:600;cursor:pointer;outline:none;}
+.ch-nav-btn{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);padding:6px 14px;cursor:pointer;transition:all .2s;}
+.ch-nav-btn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
+.ch-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ===== BOOK VIEWER ===== */
+.book-viewer{padding:30px 20px 20px;display:flex;flex-direction:column;align-items:center;}
+
+/* Page spread (2 pages side by side like real comic) */
+.page-spread{display:flex;gap:0;box-shadow:0 20px 60px rgba(0,0,0,.7);margin-bottom:24px;cursor:pointer;position:relative;max-width:900px;width:100%;}
+.page-spread .page-left,.page-spread .page-right{flex:1;position:relative;}
+.page-left{border-right:3px solid rgba(0,0,0,.8);background:#111;}
+.page-right{border-left:2px solid rgba(0,0,0,.4);background:#111;}
+
+/* Book spine center shadow */
+.page-spread::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:20px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,rgba(0,0,0,.6),rgba(0,0,0,.8),rgba(0,0,0,.6),transparent);z-index:2;pointer-events:none;}
+
+.comic-page-img{width:100%;height:auto;display:block;min-height:300px;object-fit:cover;}
+.comic-page-empty{width:100%;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);}
+.comic-page-empty .pg-num{font-family:'Bebas Neue';font-size:4rem;color:rgba(245,239,230,.04);}
+.comic-page-empty p{font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,239,230,.12);margin-top:8px;}
+
+.page-num-badge{position:absolute;bottom:8px;right:10px;font-family:'Bebas Neue';font-size:.8rem;color:rgba(245,239,230,.3);background:rgba(0,0,0,.5);padding:1px 8px;z-index:3;}
+
+/* PAGE CONTROLS */
+.page-controls{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.pgbtn{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 22px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.pgbtn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
+.pgbtn:disabled{opacity:.3;cursor:not-allowed;}
+.page-indicator{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.1em;color:var(--muted);min-width:100px;text-align:center;}
+
+/* THUMBNAIL STRIP */
+.thumb-strip{display:flex;gap:6px;overflow-x:auto;padding:12px 0;max-width:900px;width:100%;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.thumb-strip::-webkit-scrollbar{height:3px;}
+.thumb-strip::-webkit-scrollbar-thumb{background:var(--border);}
+.thumb{width:60px;height:80px;flex-shrink:0;cursor:pointer;border:2px solid transparent;transition:border-color .2s;object-fit:cover;background:var(--card);}
+.thumb:hover,.thumb.active{border-color:var(--red);}
+.thumb-empty{width:60px;height:80px;flex-shrink:0;border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue';font-size:.7rem;color:rgba(245,239,230,.2);background:var(--card);cursor:pointer;}
+.thumb-empty:hover,.thumb-empty.active{border-color:var(--red);}
+
+/* Single page mode toggle */
+.view-toggle{display:flex;gap:6px;margin-bottom:16px;}
+.vtbtn{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 12px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
+.vtbtn.active{border-color:var(--gold);color:var(--gold);}
+
+/* SINGLE PAGE MODE */
+.single-page-view{display:none;max-width:700px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);}
+.single-page-view img{width:100%;height:auto;display:block;}
+.single-page-view .comic-page-empty{min-height:600px;}
+
+/* CHAPTER END */
+.chapter-end{text-align:center;padding:50px 20px;border-top:1px solid var(--border);max-width:900px;width:100%;}
+.chapter-end h3{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.06em;margin-bottom:8px;}
+.chapter-end h3 span{color:var(--red);}
+.chapter-end p{font-size:.8rem;color:var(--muted);margin-bottom:22px;letter-spacing:.08em;}
+.end-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-r{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;background:var(--red);color:#fff;border:none;cursor:pointer;transition:background .2s;}
+.btn-r:hover{background:var(--gold);}
+.btn-g{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;background:transparent;color:var(--white);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+.btn-g:hover{border-color:var(--white);}
+
+/* INTERACT */
+.interact-section{max-width:900px;width:100%;padding:32px 0 60px;}
+.interact-row{display:flex;gap:10px;align-items:center;margin-bottom:24px;flex-wrap:wrap;}
+.like-btn,.follow-btn,.share-btn{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;letter-spacing:.1em;padding:8px 18px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
+.like-btn:hover,.like-btn.liked{border-color:var(--red);color:var(--red);background:rgba(192,57,43,.08);}
+.follow-btn:hover,.follow-btn.following{border-color:var(--gold);color:var(--gold);background:rgba(212,130,10,.08);}
+.share-btn:hover{border-color:rgba(245,239,230,.3);color:var(--white);}
+.comments-head{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;margin-bottom:14px;}
+.comments-head span{color:var(--red);}
+.comment-form{display:flex;gap:0;margin-bottom:20px;}
+.comment-form input{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--border);border-right:none;color:var(--white);padding:9px 14px;font-family:'Rajdhani';font-size:.82rem;outline:none;}
+.comment-form input:focus{border-color:rgba(192,57,43,.4);}
+.comment-form input::placeholder{color:rgba(245,239,230,.18);}
+.comment-form button{background:var(--red);color:#fff;border:none;padding:9px 16px;font-family:'Rajdhani';font-size:.76rem;font-weight:700;letter-spacing:.1em;cursor:pointer;}
+.comment-list{display:flex;flex-direction:column;gap:10px;}
+.comment-item{background:rgba(255,255,255,.03);border:1px solid var(--border);padding:11px 14px;}
+.comment-user{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:var(--gold);margin-bottom:3px;}
+.comment-text{font-size:.82rem;line-height:1.5;color:rgba(245,239,230,.65);}
+.comment-time{font-size:.6rem;color:rgba(245,239,230,.2);margin-top:3px;}
+.no-comments{font-size:.75rem;color:rgba(245,239,230,.18);letter-spacing:.1em;text-align:center;padding:18px;}
+
+@media(max-width:700px){
+  .page-spread{flex-direction:column;}
+  .page-left{border-right:none;border-bottom:2px solid rgba(0,0,0,.6);}
+  .page-right{border-left:none;}
+  .page-spread::before{display:none;}
+}
+</style>
+</head>
+<body>
+<div id="read-progress"></div>
+
+<nav>
+  <a href="index.html" class="logo"><span class="v">V</span>OOMCOMIX</a>
+  <div class="nav-center" id="nav-title">Comic Reader</div>
+  <div class="nav-r">
+    <a href="#" id="back-btn" class="nav-btn back">← Back</a>
+  </div>
+</nav>
+
+<div id="comic-main"></div>
+
+<script src="stories-data.js"></script>
+<script>
+const p=new URLSearchParams(location.search);
+const storyId=p.get('id');
+let chId=parseInt(p.get('ch'))||1;
+let currentSpread=0; // 0 = pages 1-2, 1 = pages 3-4, etc.
+let viewMode='spread'; // 'spread' or 'single'
+let singlePage=0;
+
+const stories=loadData();
+const story=stories.find(s=>s.id===storyId);
+
+if(!story){
+  document.getElementById('comic-main').innerHTML='<div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">Story not found. <a href="stories.html" style="color:#c0392b;">Back →</a></div>';
+} else {
+  document.title=story.title+' — VoomComix Comic';
+  document.getElementById('back-btn').href='story.html?id='+storyId;
+
+  function getChapter(id){return story.chapters.find(c=>c.id===id)||story.chapters[0];}
+
+  function renderPageContent(pg, pgNum){
+    if(pg && pg.image){
+      return `<img class="comic-page-img" src="${pg.image}" alt="Page ${pgNum}" loading="lazy"/>`;
+    }
+    return `<div class="comic-page-empty"><div class="pg-num">${pgNum}</div><p>Page ${pgNum}</p></div>`;
+  }
+
+  function renderComic(cid){
+    chId=cid;
+    const ch=getChapter(cid);
+    if(!ch)return;
+    const chIdx=story.chapters.findIndex(c=>c.id===cid);
+    const pages=ch.pages||[];
+    const totalPages=Math.max(pages.length,1);
+    const totalSpreads=Math.ceil(totalPages/2);
+    currentSpread=0;
+    singlePage=0;
+
+    document.getElementById('nav-title').textContent=story.title+' · Ch '+cid;
+
+    // Save history
+    const hist=JSON.parse(localStorage.getItem('vc-history')||'[]');
+    const existing=hist.findIndex(h=>h.storyId===storyId);
+    const entry={storyId,chId:cid,chIdx:chIdx+1,time:Date.now()};
+    if(existing>-1)hist[existing]=entry; else hist.unshift(entry);
+    localStorage.setItem('vc-history',JSON.stringify(hist.slice(0,20)));
+
+    const chOptions=story.chapters.map(c=>`<option value="${c.id}" ${c.id===cid?'selected':''}>${c.id}. ${c.title}</option>`).join('');
+    const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+    const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
+    const isLiked=likes[storyId];
+    const isFollowing=follows[storyId];
+    const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
+
+    // Build thumbnail strip
+    let thumbsHTML='';
+    for(let i=0;i<Math.max(totalPages,4);i++){
+      const pg=pages[i];
+      if(pg&&pg.image) thumbsHTML+=`<img class="thumb ${i===0?'active':''}" src="${pg.image}" data-pg="${i}" onclick="goToPage(${i})" title="Page ${i+1}"/>`;
+      else thumbsHTML+=`<div class="thumb-empty ${i===0?'active':''}" data-pg="${i}" onclick="goToPage(${i})">${i+1}</div>`;
+    }
+
+    document.getElementById('comic-main').innerHTML=`
+    <div class="ch-header">
+      <span class="ch-type-badge">📚 Comic</span>
+      <div class="ch-story-title">${story.title}</div>
+      <div class="ch-num">Chapter ${cid} — ${ch.title}</div>
+    </div>
+
+    <div class="ch-nav">
+      <button class="ch-nav-btn" ${chIdx===0?'disabled':''} onclick="renderComic(${story.chapters[chIdx-1]?.id})">← Prev Chapter</button>
+      <select class="ch-select" onchange="renderComic(parseInt(this.value))">${chOptions}</select>
+      <span style="font-size:.7rem;letter-spacing:.1em;color:var(--muted);">${totalPages} pages</span>
+      <button class="ch-nav-btn" ${chIdx===story.chapters.length-1?'disabled':''} onclick="renderComic(${story.chapters[chIdx+1]?.id})">Next Chapter →</button>
+    </div>
+
+    <div class="book-viewer">
+      <div class="view-toggle">
+        <button class="vtbtn ${viewMode==='spread'?'active':''}" onclick="setView('spread',this)">📖 Spread (2 pages)</button>
+        <button class="vtbtn ${viewMode==='single'?'active':''}" onclick="setView('single',this)">📄 Single Page</button>
+      </div>
+
+      <!-- SPREAD VIEW -->
+      <div id="spread-view">
+        <div class="page-spread" id="page-spread-el"></div>
+        <div class="page-controls">
+          <button class="pgbtn" id="prev-spread" onclick="changeSpread(-1)">← Prev</button>
+          <div class="page-indicator" id="spread-indicator">1 – 2</div>
+          <button class="pgbtn" id="next-spread" onclick="changeSpread(1)">Next →</button>
+        </div>
+      </div>
+
+      <!-- SINGLE VIEW -->
+      <div id="single-view" style="display:none;display:flex;flex-direction:column;align-items:center;">
+        <div class="single-page-view" id="single-page-el"></div>
+        <div class="page-controls" style="margin-top:16px;">
+          <button class="pgbtn" id="prev-single" onclick="changeSingle(-1)">← Prev</button>
+          <div class="page-indicator" id="single-indicator">1 / ${totalPages}</div>
+          <button class="pgbtn" id="next-single" onclick="changeSingle(1)">Next →</button>
+        </div>
+      </div>
+
+      <!-- THUMBNAIL STRIP -->
+      <div class="thumb-strip" id="thumb-strip">${thumbsHTML}</div>
+
+      <div class="chapter-end">
+        <h3>CHAPTER <span>${cid}</span> COMPLETE</h3>
+        <p>${chIdx===story.chapters.length-1?'New chapter coming soon!':'Ready for the next chapter?'}</p>
+        <div class="end-btns">
+          ${chIdx<story.chapters.length-1?`<button class="btn-r" onclick="renderComic(${story.chapters[chIdx+1].id})">Next Chapter →</button>`:''}
+          <button class="btn-g" onclick="location.href='story.html?id=${storyId}'">Chapter List</button>
+        </div>
+      </div>
+
+      <div class="interact-section">
+        <div class="interact-row">
+          <button class="like-btn ${isLiked?'liked':''}" onclick="toggleLike(this)">♥ <span id="like-count">${story.likes||0}</span> Likes</button>
+          <button class="follow-btn ${isFollowing?'following':''}" onclick="toggleFollow(this)">${isFollowing?'✓ Following':'+ Follow'}</button>
+          <button class="share-btn" onclick="copyLink()">🔗 Share</button>
+        </div>
+        <div class="comments-head">COMMENTS <span>(${comments.length})</span></div>
+        <div class="comment-form">
+          <input type="text" id="comment-input" placeholder="Name: your comment..." maxlength="200"/>
+          <button onclick="postComment()">Post</button>
+        </div>
+        <div class="comment-list" id="comment-list">
+          ${comments.length?comments.map(c=>`<div class="comment-item"><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div></div>`).join(''):'<div class="no-comments">Be the first to comment!</div>'}
+        </div>
+      </div>
+    </div>`;
+
+    updateSpread();
+    updateSingle();
+    applyView();
+  }
+
+  function getPages(){
+    const ch=getChapter(chId);
+    return ch?ch.pages||[]:[];
+  }
+  function getTotalPages(){return Math.max(getPages().length,1);}
+
+  function updateSpread(){
+    const pages=getPages();
+    const tot=Math.max(pages.length,1);
+    const totSpreads=Math.ceil(tot/2);
+    const l=currentSpread*2; // left page index (0-based)
+    const r=l+1;
+    const leftPg=pages[l];
+    const rightPg=pages[r];
+    const el=document.getElementById('page-spread-el');
+    if(!el)return;
+    el.innerHTML=`
+      <div class="page-left">
+        ${renderPageContent(leftPg,l+1)}
+        <span class="page-num-badge">${l+1}</span>
+      </div>
+      <div class="page-right">
+        ${r<tot?renderPageContent(rightPg,r+1):`<div class="comic-page-empty" style="min-height:300px;"><div class="pg-num">—</div></div>`}
+        ${r<tot?`<span class="page-num-badge">${r+1}</span>`:''}
+      </div>`;
+    const ind=document.getElementById('spread-indicator');
+    if(ind) ind.textContent=`${l+1} – ${Math.min(r+1,tot)}`;
+    const pp=document.getElementById('prev-spread');
+    const np=document.getElementById('next-spread');
+    if(pp) pp.disabled=currentSpread===0;
+    if(np) np.disabled=currentSpread>=totSpreads-1;
+    // Update progress bar
+    document.getElementById('read-progress').style.width=((currentSpread/(totSpreads-1||1))*100)+'%';
+    // Update thumb
+    updateThumbActive(l);
+  }
+
+  function updateSingle(){
+    const pages=getPages();
+    const tot=Math.max(pages.length,1);
+    const pg=pages[singlePage];
+    const el=document.getElementById('single-page-el');
+    if(!el)return;
+    el.innerHTML=renderPageContent(pg,singlePage+1)+`<span class="page-num-badge">${singlePage+1}</span>`;
+    const ind=document.getElementById('single-indicator');
+    if(ind) ind.textContent=`${singlePage+1} / ${tot}`;
+    const pp=document.getElementById('prev-single');
+    const np=document.getElementById('next-single');
+    if(pp) pp.disabled=singlePage===0;
+    if(np) np.disabled=singlePage>=tot-1;
+    document.getElementById('read-progress').style.width=((singlePage/(tot-1||1))*100)+'%';
+    updateThumbActive(singlePage);
+  }
+
+  function updateThumbActive(idx){
+    document.querySelectorAll('.thumb,.thumb-empty').forEach(t=>{
+      t.classList.toggle('active',parseInt(t.dataset.pg)===idx);
+    });
+  }
+
+  function changeSpread(dir){
+    const tot=Math.max(getPages().length,1);
+    const totSpreads=Math.ceil(tot/2);
+    currentSpread=Math.max(0,Math.min(totSpreads-1,currentSpread+dir));
+    singlePage=currentSpread*2;
+    updateSpread();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function changeSingle(dir){
+    const tot=Math.max(getPages().length,1);
+    singlePage=Math.max(0,Math.min(tot-1,singlePage+dir));
+    currentSpread=Math.floor(singlePage/2);
+    updateSingle();
+    window.scrollTo({top:document.querySelector('.book-viewer').offsetTop-60,behavior:'smooth'});
+  }
+
+  function goToPage(idx){
+    singlePage=idx;
+    currentSpread=Math.floor(idx/2);
+    if(viewMode==='spread') updateSpread();
+    else updateSingle();
+    updateThumbActive(idx);
+  }
+
+  function setView(mode,btn){
+    viewMode=mode;
+    document.querySelectorAll('.vtbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    applyView();
+  }
+
+  function applyView(){
+    const sv=document.getElementById('spread-view');
+    const snv=document.getElementById('single-view');
+    if(!sv||!snv)return;
+    if(viewMode==='spread'){sv.style.display='block';snv.style.display='none';}
+    else{sv.style.display='none';snv.style.display='flex';}
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){viewMode==='spread'?changeSpread(1):changeSingle(1);}
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){viewMode==='spread'?changeSpread(-1):changeSingle(-1);}
+  });
+
+  renderComic(chId);
+}
+
+function toggleLike(btn){
+  const d=loadData();const s=d.find(x=>x.id===storyId);if(!s)return;
+  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+  if(likes[storyId]){delete likes[storyId];s.likes=Math.max(0,(s.likes||1)-1);btn.classList.remove('liked');}
+  else{likes[storyId]=1;s.likes=(s.likes||0)+1;btn.classList.add('liked');}
+  localStorage.setItem('vc-likes',JSON.stringify(likes));
+  localStorage.setItem('voomcomix_stories',JSON.stringify(d));
+  document.getElementById('like-count').textContent=s.likes;
+}
+
+function toggleFollow(btn){
+  const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
+  const fl=JSON.parse(localStorage.getItem('vc-follow-list')||'[]');
+  if(follows[storyId]){delete follows[storyId];const i=fl.indexOf(storyId);if(i>-1)fl.splice(i,1);btn.classList.remove('following');btn.textContent='+ Follow';}
+  else{follows[storyId]=1;if(!fl.includes(storyId))fl.push(storyId);btn.classList.add('following');btn.textContent='✓ Following';}
+  localStorage.setItem('vc-follows',JSON.stringify(follows));
+  localStorage.setItem('vc-follow-list',JSON.stringify(fl));
+}
+
+function postComment(){
+  const inp=document.getElementById('comment-input');
+  const val=inp.value.trim();if(!val)return;
+  const parts=val.split(':');
+  const user=parts.length>1?parts[0].trim():'Reader';
+  const text=parts.length>1?parts.slice(1).join(':').trim():val;
+  const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
+  comments.unshift({user,text,time:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})});
+  localStorage.setItem('vc-comments-'+storyId,JSON.stringify(comments.slice(0,50)));
+  inp.value='';
+  const cl=document.getElementById('comment-list');
+  cl.innerHTML=`<div class="comment-item"><div class="comment-user">${user}</div><div class="comment-text">${text}</div><div class="comment-time">Just now</div></div>`+cl.innerHTML.replace('<div class="no-comments">Be the first to comment!</div>','');
+}
+
+function copyLink(){navigator.clipboard.writeText(location.href).then(()=>alert('Link copied!')).catch(()=>alert(location.href));}
+</script>
+</body>
+</html>
