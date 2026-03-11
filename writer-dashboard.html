@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Writer Dashboard — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:wght@400;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#f5efe6;--white:#fff;--ink:#1a1410;--red:#c0392b;--gold:#d4820a;--teal:#0a7c6e;--muted:#8a7a6a;--border:#e0d4c0;--card:#fff;--sidebar:#1a1410;}
+body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;font-size:14px;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'Rajdhani';}
+input,textarea,select{font-family:'Rajdhani';}
+
+.app{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--sidebar);min-height:100vh;position:fixed;left:0;top:0;bottom:0;display:flex;flex-direction:column;z-index:50;overflow-y:auto;}
+.sb-logo{padding:20px 20px 4px;font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.1em;color:#fff;}
+.sb-logo span{color:#ef4444;}
+.sb-tagline{padding:0 20px 16px;font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.sb-user{margin:0 12px 12px;background:rgba(255,255,255,.06);border-radius:10px;padding:12px;}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.sb-uname{font-size:.8rem;font-weight:700;color:#fff;}
+.sb-role{font-size:.62rem;color:rgba(255,255,255,.3);margin-top:1px;}
+.sb-section{padding:0 12px;margin-bottom:4px;}
+.sb-lbl{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.2);padding:8px 8px 4px;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:8px;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.45);cursor:pointer;transition:all .15s;margin-bottom:1px;}
+.sb-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.sb-item.active{background:rgba(192,57,43,.2);color:#fff;}
+.sb-item.active .sb-ic{color:#ef4444;}
+.sb-ic{font-size:15px;width:18px;text-align:center;}
+.sb-foot{margin-top:auto;padding:14px 20px;border-top:1px solid rgba(255,255,255,.06);}
+.sb-foot a,.sb-foot span{display:flex;align-items:center;gap:7px;font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:6px;cursor:pointer;transition:color .2s;}
+.sb-foot a{color:#0d9488;}
+.sb-foot a:hover,.sb-foot span:hover{color:#fff;}
+
+/* MAIN */
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.tb-title{font-size:1rem;font-weight:700;letter-spacing:.03em;color:var(--ink);}
+.tb-back{display:none;align-items:center;gap:6px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--white);transition:all .2s;}
+.tb-back:hover{border-color:var(--ink);color:var(--ink);}
+.tb-back.show{display:flex;}
+.content{padding:24px;flex:1;}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
+.stat{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.stat-ic{font-size:1.5rem;margin-bottom:8px;}
+.stat-v{font-family:'Bebas Neue';font-size:2rem;line-height:1;color:var(--ink);}
+.stat-l{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:.85rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);}
+
+/* STORY ROWS */
+.srow{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--border);transition:background .15s;}
+.srow:last-child{border-bottom:none;}
+.srow:hover{background:var(--bg);}
+.srow-cover{width:36px;height:52px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.srow-cover-fb{width:36px;height:52px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;background:var(--bg);}
+.srow-info{flex:1;min-width:0;}
+.srow-title{font-size:.86rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.srow-meta{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.srow-actions{display:flex;gap:6px;flex-shrink:0;}
+.status-pill{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;}
+.sp-pending{background:#fef3c7;color:#92400e;}
+.sp-approved{background:#d1fae5;color:#065f46;}
+.sp-rejected{background:#fee2e2;color:#991b1b;}
+.sp-ongoing{background:#dbeafe;color:#1e40af;}
+
+/* CHAPTER ROWS */
+.crow{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--border);transition:background .15s;}
+.crow:last-child{border-bottom:none;}
+.crow:hover{background:var(--bg);}
+.crow-num{font-family:'Bebas Neue';font-size:.9rem;color:var(--red);min-width:28px;}
+.crow-title{flex:1;font-size:.82rem;font-weight:600;}
+.crow-meta{font-size:.65rem;color:var(--muted);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid transparent;transition:all .15s;cursor:pointer;white-space:nowrap;font-family:'Rajdhani';}
+.btn-dark{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn-dark:hover{background:var(--red);border-color:var(--red);}
+.btn-outline{background:var(--white);color:var(--ink);border-color:var(--border);}
+.btn-outline:hover{border-color:var(--ink);}
+.btn-danger{background:#fee2e2;color:var(--red);border-color:rgba(192,57,43,.2);}
+.btn-danger:hover{background:var(--red);color:#fff;}
+.btn-teal{background:#d1fae5;color:var(--teal);border-color:rgba(10,124,110,.2);}
+.btn-teal:hover{background:var(--teal);color:#fff;}
+.btn-gold{background:#fef3c7;color:var(--gold);border-color:rgba(212,130,10,.2);}
+.btn-lg{padding:10px 20px;font-size:.82rem;}
+.btn-ic{padding:6px 10px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* FORMS */
+.form-sec{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px;}
+.form-sec-title{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;outline:none;transition:all .2s;background:#fdfaf7;color:var(--ink);}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.08);}
+.fg textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+/* COVER UPLOAD */
+.cover-wrap{display:flex;gap:18px;align-items:flex-start;}
+.cover-box{width:110px;height:154px;border-radius:10px;border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;flex-shrink:0;background:var(--bg);transition:border-color .2s;}
+.cover-box:hover{border-color:var(--red);}
+.cover-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.cover-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;}
+.cover-ic{font-size:1.6rem;margin-bottom:4px;}
+.cover-txt{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;}
+
+/* PAGE GRID */
+.pages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:8px;margin-top:10px;}
+.pslot{position:relative;background:var(--bg);border:2px dashed var(--border);border-radius:8px;aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;overflow:hidden;}
+.pslot:hover{border-color:var(--red);}
+.pslot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.pslot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px;}
+.pslot-n{font-size:1rem;font-weight:700;color:var(--border);}
+.pslot-uploaded{border-color:var(--teal);border-style:solid;}
+.pslot-del{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:.6rem;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5;}
+.pslot:hover .pslot-del{display:flex;}
+
+/* REVENUE */
+.rev-bar{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px;}
+.rev-month{font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.rev-amount{font-family:'Bebas Neue';font-size:1.8rem;color:var(--teal);}
+.rev-views{font-size:.72rem;color:var(--muted);margin-top:2px;}
+.rev-status{display:inline-block;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-top:6px;}
+.rs-pending{background:#fef3c7;color:#92400e;}
+.rs-paid{background:#d1fae5;color:#065f46;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--white);border-radius:16px;width:100%;max-width:660px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-hd{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--white);z-index:5;border-radius:16px 16px 0 0;}
+.modal-title{font-size:.95rem;font-weight:700;letter-spacing:.04em;}
+.modal-x{background:none;border:none;font-size:1.1rem;color:var(--muted);cursor:pointer;width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.modal-x:hover{background:var(--bg);color:var(--ink);}
+.modal-body{padding:22px;}
+.modal-ft{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;position:sticky;bottom:0;background:var(--white);border-radius:0 0 16px 16px;}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--muted);}
+.empty-ic{font-size:2.5rem;margin-bottom:10px;}
+.empty-t{font-size:.9rem;font-weight:600;}
+.empty-s{font-size:.78rem;margin-top:4px;}
+
+/* PENDING NOTICE */
+.notice{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid rgba(212,130,10,.3);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;}
+.notice-ic{font-size:1.4rem;flex-shrink:0;}
+.notice-title{font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:2px;}
+.notice-text{font-size:.75rem;color:var(--muted);line-height:1.5;}
+
+@media(max-width:700px){.sidebar{display:none;}.main{margin-left:0;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sb-logo">VOOM<span>COMIX</span></div>
+    <div class="sb-tagline">Writer Studio</div>
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">?</div>
+      <div class="sb-uname" id="sb-uname">Loading...</div>
+      <div class="sb-role">✍️ Writer</div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-lbl">Studio</div>
+      <div class="sb-item active" onclick="goPanel('dashboard',this)"><span class="sb-ic">📊</span>Dashboard</div>
+      <div class="sb-item" onclick="goPanel('my-stories',this)"><span class="sb-ic">📚</span>My Stories</div>
+      <div class="sb-item" onclick="startAddStory()"><span class="sb-ic">➕</span>New Story</div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-lbl">Income</div>
+      <div class="sb-item" onclick="goPanel('revenue',this)"><span class="sb-ic">💰</span>Revenue</div>
+      <div class="sb-item" onclick="goPanel('settings',this)"><span class="sb-ic">⚙️</span>Settings</div>
+    </div>
+    <div class="sb-foot">
+      <a href="index.html" target="_blank"><span>🌐</span>View Site →</a>
+      <span onclick="navLogout()"><span>🚪</span>Logout</span>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="tb-back" id="tb-back" onclick="handleBack()">← Back</button>
+        <div class="tb-title" id="tb-title">Dashboard</div>
+      </div>
+      <a href="index.html" target="_blank" style="font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);padding:6px 12px;border:1px solid rgba(10,124,110,.3);border-radius:8px;">🌐 View Site</a>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div id="pending-notice"></div>
+        <div class="stats-row" id="writer-stats"></div>
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title">My Stories</span>
+            <button class="btn btn-dark" onclick="startAddStory()">+ New Story</button>
+          </div>
+          <div id="dash-stories"></div>
+        </div>
+      </div>
+
+      <!-- MY STORIES -->
+      <div class="panel" id="panel-my-stories">
+        <div class="card">
+          <div class="card-hd">
+            <span class="card-title" id="my-stories-count">My Stories</span>
+            <button class="btn btn-dark" onclick="startAddStory()">+ New Story</button>
+          </div>
+          <div id="my-stories-list"></div>
+        </div>
+      </div>
+
+      <!-- ADD/EDIT STORY -->
+      <div class="panel" id="panel-add-story">
+        <input type="hidden" id="edit-id"/>
+        <input type="hidden" id="edit-type"/>
+
+        <div class="form-sec">
+          <div class="form-sec-title">Cover Image</div>
+          <div class="cover-wrap">
+            <div class="cover-box" onclick="document.getElementById('cover-file').click()">
+              <input type="file" id="cover-file" accept="image/*" onchange="previewCover(this)" style="display:none"/>
+              <img id="cover-preview-img" style="display:none"/>
+              <div id="cover-placeholder"><div class="cover-ic">📷</div><div class="cover-txt">Upload Cover</div></div>
+            </div>
+            <input type="hidden" id="f-cover-url"/>
+            <div style="flex:1">
+              <div class="fg"><label>Story Title *</label><input type="text" id="f-title" placeholder="Enter story title"/></div>
+              <div class="grid2">
+                <div class="fg"><label>Type</label>
+                  <select id="f-type">
+                    <option value="novel">📖 Novel</option>
+                    <option value="manga">🎌 Manga</option>
+                    <option value="comic">🗂️ Comic</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Genre</label><input type="text" id="f-genre" placeholder="Fantasy, Action..."/></div>
+                <div class="fg"><label>Language</label>
+                  <select id="f-lang">
+                    <option>English</option><option>Hindi</option><option>Hindi + English</option>
+                  </select>
+                </div>
+                <div class="fg"><label>Status</label>
+                  <select id="f-status">
+                    <option value="ongoing">Ongoing</option>
+                    <option value="complete">Complete</option>
+                    <option value="hiatus">Hiatus</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-sec">
+          <div class="form-sec-title">Details</div>
+          <div class="fg"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Action, Dark, Romance"/></div>
+          <div class="fg"><label>Description *</label><textarea id="f-desc" placeholder="Write a compelling description..." style="min-height:120px;"></textarea></div>
+        </div>
+
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-dark btn-lg" onclick="saveStory()" id="btn-save-story">💾 Submit for Review</button>
+          <button class="btn btn-outline btn-lg" onclick="goPanel('my-stories')">Cancel</button>
+          <span style="font-size:.7rem;color:var(--muted);margin-left:8px;">Stories are reviewed by admin before publishing</span>
+        </div>
+      </div>
+
+      <!-- CHAPTERS -->
+      <div class="panel" id="panel-chapters">
+        <div class="card">
+          <div class="card-hd" id="ch-header"></div>
+          <div id="ch-list"></div>
+        </div>
+      </div>
+
+      <!-- REVENUE -->
+      <div class="panel" id="panel-revenue">
+        <div class="notice">
+          <div class="notice-ic">💡</div>
+          <div>
+            <div class="notice-title">How Revenue Works</div>
+            <div class="notice-text">VoomComix earns from Google AdSense. Each month, earnings are divided based on your story views. Your share is transferred via UPI. Make sure your UPI ID is set in Settings.</div>
+          </div>
+        </div>
+        <div class="stats-row" id="rev-stats"></div>
+        <div class="card">
+          <div class="card-hd"><span class="card-title">Monthly Revenue History</span></div>
+          <div id="rev-list"></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="panel" id="panel-settings">
+        <div class="form-sec">
+          <div class="form-sec-title">Profile</div>
+          <div class="grid2">
+            <div class="fg"><label>Display Name</label><input type="text" id="s-name" placeholder="Your name"/></div>
+            <div class="fg"><label>Username</label><input type="text" id="s-username" placeholder="username" disabled style="opacity:.6;"/></div>
+          </div>
+          <div class="fg"><label>Bio</label><textarea id="s-bio" placeholder="Tell readers about yourself..." style="min-height:80px;"></textarea></div>
+          <button class="btn btn-dark" onclick="saveProfile()">Save Profile</button>
+        </div>
+        <div class="form-sec">
+          <div class="form-sec-title">💰 Payment Details</div>
+          <div class="notice" style="margin-bottom:14px;">
+            <div class="notice-ic">⚠️</div>
+            <div>
+              <div class="notice-title">Required for Revenue Payout</div>
+              <div class="notice-text">Add your UPI ID so we can send monthly revenue payments directly to your account.</div>
+            </div>
+          </div>
+          <div class="fg" style="max-width:320px;"><label>UPI ID</label><input type="text" id="s-upi" placeholder="yourname@upi or 9876543210@paytm"/></div>
+          <button class="btn btn-gold" onclick="savePayment()">💾 Save UPI</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CHAPTER MODAL -->
+<div class="modal-bg" id="ch-modal">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title" id="modal-title">Add Chapter</div>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="m-sid"/>
+      <input type="hidden" id="m-cid"/>
+      <input type="hidden" id="m-type"/>
+      <div class="grid2" style="margin-bottom:14px;">
+        <div class="fg"><label>Chapter No.</label><input type="number" id="m-num" min="1"/></div>
+        <div class="fg"><label>Date</label><input type="date" id="m-date"/></div>
+      </div>
+      <div class="fg" style="margin-bottom:14px;"><label>Chapter Title *</label><input type="text" id="m-title" placeholder="e.g. The First Battle"/></div>
+      <div id="m-novel"><div class="fg"><label>Content *</label><textarea id="m-content" style="min-height:300px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;" placeholder="Write your chapter here...&#10;&#10;Leave a blank line between paragraphs."></textarea><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Blank line = paragraph break</div></div></div>
+      <div id="m-pages" style="display:none;">
+        <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Pages (Max 20)</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px;">Click any slot to upload a page image</div>
+        <div class="pages-grid" id="pages-grid"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-dark" onclick="saveChapter()" id="btn-save-ch">💾 Save Chapter</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
+<script>
+const sb = getSupabase();
+let profile = null;
+let prevPanel = null;
+let currentSid = null;
+let pageImages = {};
+
+// ===== INIT =====
+async function init() {
+  const user = await requireAuth('login.html');
+  if (!user) return;
+  profile = await getCurrentProfile();
+  if (!profile) return;
+
+  // Admin can access writer dashboard too
+  if (profile.role !== 'writer' && profile.role !== 'admin') {
+    // Check if pending application
+    const { data: app } = await sb.from('writer_applications').select('*').eq('user_id', user.id).single();
+    if (app && app.status === 'pending') {
+      document.getElementById('pending-notice').innerHTML = `
+        <div class="notice"><div class="notice-ic">⏳</div><div>
+          <div class="notice-title">Application Pending</div>
+          <div class="notice-text">Your writer application is under review. You'll be notified once approved. Meanwhile, you can explore the site.</div>
+        </div></div>`;
+    } else {
+      window.location.href = 'become-writer.html';
+      return;
+    }
+  }
+
+  // Set sidebar info
+  document.getElementById('sb-uname').textContent = profile.display_name || profile.username;
+  document.getElementById('sb-avatar').textContent = (profile.display_name || profile.username || 'U')[0].toUpperCase();
+
+  renderDash();
+  loadSettings();
+}
+
+// ===== NAVIGATION =====
+function goPanel(name, sbEl) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(x => x.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (sbEl) sbEl.classList.add('active');
+  const titles = { dashboard:'Dashboard','my-stories':'My Stories','add-story':'New Story',chapters:'Chapters',revenue:'Revenue',settings:'Settings' };
+  document.getElementById('tb-title').textContent = titles[name] || name;
+  const back = document.getElementById('tb-back');
+  if (name === 'chapters' || name === 'add-story') { back.classList.add('show'); prevPanel = 'my-stories'; }
+  else { back.classList.remove('show'); prevPanel = null; }
+  if (name === 'my-stories') renderStories();
+  if (name === 'revenue') renderRevenue();
+}
+
+function handleBack() { goPanel(prevPanel || 'dashboard'); }
+
+function startAddStory() {
+  clearStoryForm();
+  document.getElementById('tb-title').textContent = 'New Story';
+  goPanel('add-story');
+}
+
+// ===== DASHBOARD =====
+async function renderDash() {
+  const { data: stories } = await sb.from('stories').select('*').eq('author_id', profile.id);
+  const totalViews = (stories || []).reduce((a, s) => a + (s.total_views || 0), 0);
+  const totalCh = (stories || []).reduce((a, s) => a + (s.total_chapters || 0), 0);
+
+  document.getElementById('writer-stats').innerHTML = [
+    { ic:'📚', v: (stories||[]).length, l:'My Stories' },
+    { ic:'📄', v: totalCh, l:'Total Chapters' },
+    { ic:'👁️', v: formatNum(totalViews), l:'Total Views' },
+    { ic:'❤️', v: (stories||[]).reduce((a,s)=>a+(s.total_followers||0),0), l:'Followers' },
+  ].map(s => `<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
+
+  document.getElementById('dash-stories').innerHTML = (stories||[]).length
+    ? (stories||[]).slice(0,5).map(s => storyRowHTML(s)).join('')
+    : `<div class="empty"><div class="empty-ic">✍️</div><div class="empty-t">No stories yet</div><div class="empty-s">Click "New Story" to publish your first!</div></div>`;
+}
+
+async function renderStories() {
+  const { data: stories } = await sb.from('stories').select('*').eq('author_id', profile.id);
+  document.getElementById('my-stories-count').textContent = `My Stories (${(stories||[]).length})`;
+  document.getElementById('my-stories-list').innerHTML = (stories||[]).length
+    ? stories.map(s => storyRowHTML(s)).join('')
+    : `<div class="empty"><div class="empty-ic">✍️</div><div class="empty-t">No stories yet</div></div>`;
+}
+
+function storyRowHTML(s) {
+  const cover = s.cover_url ? `<img src="${s.cover_url}" class="srow-cover"/>` : `<div class="srow-cover-fb">${s.cover_emoji || '📖'}</div>`;
+  const statusMap = { pending:'sp-pending', approved:'sp-approved', rejected:'sp-rejected' };
+  return `<div class="srow">${cover}
+    <div class="srow-info">
+      <div class="srow-title">${s.title}</div>
+      <div class="srow-meta">
+        <span class="status-pill ${statusMap[s.approval_status]||'sp-pending'}">${s.approval_status}</span>
+        · ${s.genre||'—'} · ${s.total_chapters||0} chapters · ${formatNum(s.total_views||0)} views
+      </div>
+    </div>
+    <div class="srow-actions">
+      <button class="btn btn-teal btn-ic" onclick="openChapters('${s.id}','${s.type||'novel'}')" title="Chapters">📖</button>
+      <button class="btn btn-outline btn-ic" onclick="editStory('${s.id}')" title="Edit">✏️</button>
+      <button class="btn btn-danger btn-ic" onclick="delStory('${s.id}')" title="Delete">🗑️</button>
+    </div></div>`;
+}
+
+// ===== STORY FORM =====
+function previewCover(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('cover-preview-img');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('cover-placeholder').style.display = 'none';
+    // Store temporarily as base64 — will upload on save
+    document.getElementById('f-cover-url').value = e.target.result;
+    document.getElementById('cover-file')._file = file;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveStory() {
+  const id = document.getElementById('edit-id').value;
+  const title = document.getElementById('f-title').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  if (!title || !desc) { showToast('Title and description required!', 'error'); return; }
+
+  const btn = document.getElementById('btn-save-story');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    // Upload cover if new file
+    let coverUrl = document.getElementById('f-cover-url').value;
+    const coverFile = document.getElementById('cover-file')._file;
+    if (coverFile && !coverUrl.startsWith('http')) {
+      try { coverUrl = await uploadImage(coverFile, 'covers', 'cover'); }
+      catch(e) { coverUrl = ''; }
+    }
+
+    const storyData = {
+      author_id: profile.id,
+      title,
+      description: desc,
+      cover_url: coverUrl && coverUrl.startsWith('http') ? coverUrl : null,
+      cover_emoji: '📖',
+      type: document.getElementById('f-type').value,
+      genre: document.getElementById('f-genre').value || 'General',
+      tags: document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+      language: document.getElementById('f-lang').value,
+      status: document.getElementById('f-status').value,
+      approval_status: id ? undefined : 'pending',
+    };
+
+    if (id) {
+      delete storyData.author_id; delete storyData.approval_status;
+      await sb.from('stories').update(storyData).eq('id', id);
+      showToast('Story updated! ✓', 'success');
+    } else {
+      await sb.from('stories').insert(storyData);
+      showToast('Story submitted for review! 🎉', 'success');
+    }
+    clearStoryForm();
+    goPanel('my-stories');
+  } catch(e) {
+    showToast(e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '💾 Submit for Review';
+}
+
+async function editStory(id) {
+  const { data: s } = await sb.from('stories').select('*').eq('id', id).single();
+  document.getElementById('edit-id').value = s.id;
+  document.getElementById('f-title').value = s.title;
+  document.getElementById('f-type').value = s.type || 'novel';
+  document.getElementById('f-genre').value = s.genre || '';
+  document.getElementById('f-lang').value = s.language || 'English';
+  document.getElementById('f-status').value = s.status || 'ongoing';
+  document.getElementById('f-tags').value = (s.tags||[]).join(', ');
+  document.getElementById('f-desc').value = s.description || '';
+  if (s.cover_url) {
+    document.getElementById('cover-preview-img').src = s.cover_url;
+    document.getElementById('cover-preview-img').style.display = 'block';
+    document.getElementById('cover-placeholder').style.display = 'none';
+    document.getElementById('f-cover-url').value = s.cover_url;
+  }
+  document.getElementById('btn-save-story').textContent = '💾 Save Changes';
+  document.getElementById('tb-title').textContent = 'Edit Story';
+  goPanel('add-story');
+}
+
+async function delStory(id) {
+  if (!confirm('Delete this story and ALL chapters?')) return;
+  await sb.from('stories').delete().eq('id', id);
+  showToast('Story deleted', 'error');
+  renderDash(); renderStories();
+}
+
+function clearStoryForm() {
+  ['edit-id','f-title','f-genre','f-tags','f-desc','f-cover-url'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('f-type').value = 'novel';
+  document.getElementById('f-status').value = 'ongoing';
+  document.getElementById('f-lang').value = 'English';
+  document.getElementById('cover-preview-img').src = '';
+  document.getElementById('cover-preview-img').style.display = 'none';
+  document.getElementById('cover-placeholder').style.display = '';
+  document.getElementById('btn-save-story').textContent = '💾 Submit for Review';
+}
+
+// ===== CHAPTERS =====
+async function openChapters(sid, type) {
+  currentSid = sid;
+  const { data: s } = await sb.from('stories').select('*').eq('id', sid).single();
+  document.getElementById('ch-header').innerHTML = `
+    <div><div class="card-title">${s.title}</div><div style="font-size:.65rem;color:var(--muted);margin-top:2px;">${s.total_chapters||0} chapters · ${s.type||'novel'}</div></div>
+    <button class="btn btn-dark" onclick="openModal('${sid}')">+ Add Chapter</button>`;
+  await renderChapters(sid);
+  goPanel('chapters');
+}
+
+async function renderChapters(sid) {
+  const { data: s } = await sb.from('stories').select('type').eq('id', sid).single();
+  const { data: chapters } = await sb.from('chapters').select('*').eq('story_id', sid).order('chapter_number');
+  const el = document.getElementById('ch-list');
+  if (!(chapters||[]).length) { el.innerHTML = '<div class="empty"><div class="empty-ic">📄</div><div class="empty-t">No chapters yet</div><div class="empty-s">Click "+ Add Chapter" to start writing!</div></div>'; return; }
+  el.innerHTML = chapters.map(ch => `<div class="crow">
+    <div class="crow-num">${ch.chapter_number}</div>
+    <div style="flex:1"><div class="crow-title">${ch.title}</div><div class="crow-meta">${s.type!=='novel'?'pages':((ch.word_count||0).toLocaleString()+' words')} · ${ch.published_at?new Date(ch.published_at).toLocaleDateString('en-IN'):''}</div></div>
+    <div style="display:flex;gap:6px;">
+      <button class="btn btn-outline btn-ic" onclick="openModal('${sid}','${ch.id}')">✏️</button>
+      <button class="btn btn-danger btn-ic" onclick="delChapter('${ch.id}','${sid}')">🗑️</button>
+    </div></div>`).join('');
+}
+
+// ===== CHAPTER MODAL =====
+async function openModal(sid, cid = null) {
+  const { data: s } = await sb.from('stories').select('type,total_chapters').eq('id', sid).single();
+  const tc = s.type || 'novel';
+  const isVisual = tc === 'manga' || tc === 'comic';
+  document.getElementById('m-sid').value = sid;
+  document.getElementById('m-cid').value = cid || '';
+  document.getElementById('m-type').value = tc;
+  document.getElementById('m-novel').style.display = isVisual ? 'none' : 'block';
+  document.getElementById('m-pages').style.display = isVisual ? 'block' : 'none';
+  pageImages = {};
+
+  if (cid) {
+    const { data: ch } = await sb.from('chapters').select('*').eq('id', cid).single();
+    document.getElementById('m-num').value = ch.chapter_number;
+    document.getElementById('m-title').value = ch.title;
+    document.getElementById('m-content').value = ch.content || '';
+    document.getElementById('m-date').value = ch.published_at ? ch.published_at.split('T')[0] : '';
+    document.getElementById('modal-title').textContent = 'Edit Chapter ' + ch.chapter_number;
+    if (isVisual) {
+      const { data: pages } = await sb.from('chapter_pages').select('*').eq('chapter_id', cid).order('page_number');
+      (pages||[]).forEach(p => { pageImages[p.page_number - 1] = p.image_url; });
+    }
+  } else {
+    document.getElementById('m-num').value = (s.total_chapters || 0) + 1;
+    document.getElementById('m-title').value = '';
+    document.getElementById('m-content').value = '';
+    document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('modal-title').textContent = 'Add Chapter';
+  }
+  if (isVisual) buildPageGrid();
+  document.getElementById('ch-modal').classList.add('open');
+}
+
+function buildPageGrid() {
+  const grid = document.getElementById('pages-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'pslot' + (pageImages[i] ? ' pslot-uploaded' : '');
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = e => uploadPageImg(e, i);
+    const num = document.createElement('div'); num.className = 'pslot-n'; num.textContent = i + 1;
+    slot.appendChild(inp);
+    if (pageImages[i]) {
+      const img = document.createElement('img'); img.src = pageImages[i]; slot.appendChild(img);
+      const del = document.createElement('button'); del.className = 'pslot-del'; del.textContent = '✕';
+      del.onclick = e => { e.stopPropagation(); delete pageImages[i]; buildPageGrid(); };
+      slot.appendChild(del);
+    } else { slot.appendChild(num); }
+    grid.appendChild(slot);
+  }
+}
+
+function uploadPageImg(e, idx) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pageImages[idx] = ev.target.result;
+    pageImages[idx + '_file'] = file;
+    buildPageGrid();
+  };
+  reader.readAsDataURL(file);
+}
+
+function closeModal() { document.getElementById('ch-modal').classList.remove('open'); pageImages = {}; }
+
+async function saveChapter() {
+  const sid = document.getElementById('m-sid').value;
+  const cid = document.getElementById('m-cid').value;
+  const title = document.getElementById('m-title').value.trim();
+  const tc = document.getElementById('m-type').value;
+  const isVisual = tc === 'manga' || tc === 'comic';
+  const content = isVisual ? '' : document.getElementById('m-content').value.trim();
+  if (!title) { showToast('Title required!', 'error'); return; }
+  if (!isVisual && !content) { showToast('Content required!', 'error'); return; }
+
+  const btn = document.getElementById('btn-save-ch');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    const chData = {
+      story_id: sid,
+      chapter_number: parseInt(document.getElementById('m-num').value) || 1,
+      title, content,
+      word_count: content ? content.split(/\s+/).length : 0,
+      published_at: document.getElementById('m-date').value || new Date().toISOString(),
+    };
+
+    let chId = cid;
+    if (cid) {
+      await sb.from('chapters').update(chData).eq('id', cid);
+    } else {
+      const { data: newCh } = await sb.from('chapters').insert(chData).select().single();
+      chId = newCh.id;
+    }
+
+    // Save pages for manga/comic
+    if (isVisual && chId) {
+      if (cid) await sb.from('chapter_pages').delete().eq('chapter_id', chId);
+      const pageRows = [];
+      for (let i = 0; i < 20; i++) {
+        if (!pageImages[i]) continue;
+        let imgUrl = pageImages[i];
+        // If it's a file (new upload), upload to storage
+        if (pageImages[i + '_file']) {
+          try { imgUrl = await uploadImage(pageImages[i + '_file'], 'pages', `ch-${chId}-p${i+1}`); }
+          catch(e) { imgUrl = pageImages[i]; } // fallback to base64
+        }
+        pageRows.push({ chapter_id: chId, page_number: i + 1, image_url: imgUrl });
+      }
+      if (pageRows.length) await sb.from('chapter_pages').insert(pageRows);
+    }
+
+    closeModal();
+    await renderChapters(sid);
+    renderDash();
+    showToast(cid ? 'Chapter updated! ✓' : 'Chapter published! 📖', 'success');
+  } catch(e) {
+    showToast(e.message, 'error');
+  }
+  btn.disabled = false; btn.textContent = '💾 Save Chapter';
+}
+
+async function delChapter(cid, sid) {
+  if (!confirm('Delete this chapter?')) return;
+  await sb.from('chapters').delete().eq('id', cid);
+  showToast('Chapter deleted', 'error');
+  renderChapters(sid);
+}
+
+// ===== REVENUE =====
+async function renderRevenue() {
+  const { data: records } = await sb.from('revenue_records').select('*').eq('author_id', profile.id).order('month', { ascending: false });
+  const totalEarned = (records||[]).reduce((a,r)=>a+(r.writer_share||0),0);
+  const totalViews = (records||[]).reduce((a,r)=>a+(r.total_views||0),0);
+  const pending = (records||[]).filter(r=>r.status==='pending').reduce((a,r)=>a+(r.writer_share||0),0);
+
+  document.getElementById('rev-stats').innerHTML = [
+    { ic:'💰', v:'₹'+totalEarned.toFixed(2), l:'Total Earned' },
+    { ic:'⏳', v:'₹'+pending.toFixed(2), l:'Pending Payout' },
+    { ic:'👁️', v:formatNum(totalViews), l:'Lifetime Views' },
+  ].map(s=>`<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
+
+  document.getElementById('rev-list').innerHTML = (records||[]).length ? records.map(r=>`
+    <div class="rev-bar">
+      <div class="rev-month">${r.month}</div>
+      <div class="rev-amount">₹${(r.writer_share||0).toFixed(2)}</div>
+      <div class="rev-views">${formatNum(r.total_views||0)} views · Your share: ${r.share_percent||70}%</div>
+      <div class="rev-status ${r.status==='paid'?'rs-paid':'rs-pending'}">${r.status==='paid'?'✓ Paid':'⏳ Pending'}</div>
+    </div>`) .join('')
+    : '<div class="empty"><div class="empty-ic">💰</div><div class="empty-t">No revenue records yet</div><div class="empty-s">Revenue is calculated monthly based on AdSense earnings</div></div>';
+}
+
+// ===== SETTINGS =====
+async function loadSettings() {
+  document.getElementById('s-name').value = profile.display_name || '';
+  document.getElementById('s-username').value = profile.username || '';
+  document.getElementById('s-bio').value = profile.bio || '';
+  document.getElementById('s-upi').value = profile.upi_id || '';
+}
+
+async function saveProfile() {
+  await sb.from('profiles').update({ display_name: document.getElementById('s-name').value, bio: document.getElementById('s-bio').value }).eq('id', profile.id);
+  showToast('Profile saved! ✓', 'success');
+}
+
+async function savePayment() {
+  const upi = document.getElementById('s-upi').value.trim();
+  if (!upi) { showToast('Please enter your UPI ID', 'error'); return; }
+  await sb.from('profiles').update({ upi_id: upi }).eq('id', profile.id);
+  showToast('UPI saved! ✓', 'success');
+}
+
+init();
+</script>
+</body>
+</html>

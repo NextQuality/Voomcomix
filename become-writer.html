@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Become a Writer — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#f5efe6;--ink:#1a1410;--red:#c0392b;--gold:#d4820a;--teal:#0a7c6e;--muted:#8a7a6a;--border:#e0d4c0;}
+body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;}
+nav{background:var(--ink);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;}
+nav .logo{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.1em;color:#fff;text-decoration:none;}
+nav .logo span{color:#ef4444;}
+nav a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+nav a:hover{color:#fff;}
+.hero{background:linear-gradient(160deg,#1a0a05,#2d1510);padding:70px 28px;text-align:center;}
+.hero-tag{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.hero-title{font-family:'Bebas Neue';font-size:3.5rem;letter-spacing:.05em;color:#fff;margin-bottom:14px;}
+.hero-title span{color:#ef4444;}
+.hero-sub{font-family:'Lora';font-size:1.1rem;color:rgba(255,255,255,.6);max-width:500px;margin:0 auto 28px;line-height:1.7;}
+.perks{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:28px;}
+.perk{text-align:center;color:rgba(255,255,255,.7);}
+.perk-ic{font-size:1.8rem;margin-bottom:6px;}
+.perk-t{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;}
+.perk-s{font-size:.72rem;margin-top:2px;line-height:1.4;}
+.form-wrap{max-width:600px;margin:40px auto;padding:0 20px 60px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
+.card-title{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;margin-bottom:4px;}
+.card-sub{font-size:.78rem;color:var(--muted);margin-bottom:22px;}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.88rem;font-family:'Rajdhani';outline:none;transition:all .2s;background:#fdfaf7;color:var(--ink);}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.08);}
+.fg textarea{min-height:110px;resize:vertical;line-height:1.6;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border-radius:10px;font-size:.88rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Rajdhani';transition:all .2s;}
+.btn-red{background:var(--red);color:#fff;width:100%;}
+.btn-red:hover{background:#a0291e;}
+.btn-red:disabled{opacity:.6;cursor:not-allowed;}
+.success-box{background:#f0fdf4;border:1px solid rgba(5,150,105,.2);border-radius:12px;padding:24px;text-align:center;}
+.success-ic{font-size:2.5rem;margin-bottom:10px;}
+.success-t{font-size:1rem;font-weight:700;color:#065f46;margin-bottom:4px;}
+.success-s{font-size:.82rem;color:var(--muted);}
+.err-msg{background:#fef2f2;border:1px solid rgba(192,57,43,.2);color:var(--red);padding:10px 14px;border-radius:8px;font-size:.8rem;margin-bottom:14px;display:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <a href="index.html">← Back to Site</a>
+</nav>
+<div class="hero">
+  <div class="hero-tag">Join the Creator Program</div>
+  <div class="hero-title">BECOME A <span>WRITER</span></div>
+  <div class="hero-sub">Share your stories with thousands of readers and earn real money from AdSense revenue sharing.</div>
+  <div class="perks">
+    <div class="perk"><div class="perk-ic">💰</div><div class="perk-t">Earn Revenue</div><div class="perk-s">Get up to 70% of<br/>AdSense earnings</div></div>
+    <div class="perk"><div class="perk-ic">📚</div><div class="perk-t">Publish Freely</div><div class="perk-s">Novels, manga<br/>& comics</div></div>
+    <div class="perk"><div class="perk-ic">👥</div><div class="perk-t">Build Audience</div><div class="perk-s">Grow followers<br/>& readers</div></div>
+    <div class="perk"><div class="perk-ic">🏆</div><div class="perk-t">Contests</div><div class="perk-s">Win prizes in<br/>weekly contests</div></div>
+  </div>
+</div>
+<div class="form-wrap">
+  <div class="card" id="apply-card">
+    <div class="card-title">Apply to be a Writer</div>
+    <div class="card-sub">Fill in the form below. Applications are usually reviewed within 24-48 hours.</div>
+    <div class="err-msg" id="err-msg"></div>
+    <div class="fg"><label>Why do you want to write on VoomComix?</label><textarea id="reason" placeholder="Tell us about yourself and what kind of stories you want to write..."></textarea></div>
+    <div class="fg"><label>Sample Writing (Optional)</label><textarea id="sample" placeholder="Paste a short excerpt of your writing (200-500 words)..."></textarea></div>
+    <div class="fg"><label>What genres will you write?</label><input type="text" id="genres" placeholder="Fantasy, Romance, Action, Horror..."/></div>
+    <button class="btn btn-red" id="apply-btn" onclick="submitApplication()">Submit Application →</button>
+  </div>
+  <div id="success-card" style="display:none;">
+    <div class="success-box">
+      <div class="success-ic">🎉</div>
+      <div class="success-t">Application Submitted!</div>
+      <div class="success-s">We'll review your application and notify you within 24-48 hours. Once approved, you'll have access to the Writer Studio to publish stories and earn revenue.</div>
+      <br/><a href="index.html" style="color:var(--red);font-weight:700;font-size:.82rem;">← Back to Site</a>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
+<script>
+const sb = getSupabase();
+async function init() {
+  const user = await requireAuth('login.html');
+  if (!user) return;
+  const profile = await getCurrentProfile();
+  if (profile?.role === 'writer' || profile?.role === 'admin') {
+    window.location.href = 'writer-dashboard.html'; return;
+  }
+  // Check if already applied
+  const { data: app } = await sb.from('writer_applications').select('*').eq('user_id', user.id).single();
+  if (app) {
+    document.getElementById('apply-card').innerHTML = `
+      <div class="success-box">
+        <div class="success-ic">${app.status==='pending'?'⏳':app.status==='approved'?'✅':'❌'}</div>
+        <div class="success-t">Application ${app.status==='pending'?'Under Review':app.status==='approved'?'Approved!':'Rejected'}</div>
+        <div class="success-s">${app.status==='pending'?'Your application is being reviewed. Please wait 24-48 hours.':app.status==='approved'?'Congratulations! You are now a writer.':'Your application was not approved. You can apply again with better writing samples.'}</div>
+        ${app.status==='approved'?`<br/><a href="writer-dashboard.html" style="color:var(--red);font-weight:700;font-size:.82rem;">Go to Writer Studio →</a>`:''}
+      </div>`;
+  }
+}
+async function submitApplication() {
+  const reason = document.getElementById('reason').value.trim();
+  const sample = document.getElementById('sample').value.trim();
+  if (!reason) { document.getElementById('err-msg').textContent='Please tell us why you want to write!'; document.getElementById('err-msg').style.display='block'; return; }
+  const btn = document.getElementById('apply-btn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+  const user = await getCurrentUser();
+  const { error } = await sb.from('writer_applications').insert({ user_id:user.id, reason, sample_writing:sample, status:'pending' });
+  if (error) { document.getElementById('err-msg').textContent = error.message; document.getElementById('err-msg').style.display='block'; btn.disabled=false; btn.textContent='Submit Application →'; return; }
+  document.getElementById('apply-card').style.display='none';
+  document.getElementById('success-card').style.display='block';
+}
+init();
+</script>
+</body>
+</html>
