@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Manga Reader — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#1a1410;--card:#211c17;--red:#c0392b;--gold:#d4820a;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+#read-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;z-index:200;transition:width .1s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,20,16,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
+.logo{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.1em;color:var(--white);}
+.logo .v{color:var(--red);}
+.nav-center{font-size:.75rem;font-weight:600;letter-spacing:.1em;color:var(--muted);text-align:center;}
+.nav-r{display:flex;align-items:center;gap:12px;}
+.nav-btn{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;cursor:pointer;transition:all .2s;}
+.nav-btn:hover{border-color:var(--red);color:var(--red);}
+.nav-btn.back{color:var(--white);border-color:rgba(245,239,230,.2);}
+
+/* CHAPTER HEADER */
+.ch-header{padding:74px 0 24px;text-align:center;border-bottom:1px solid var(--border);background:var(--card);}
+.ch-type-badge{font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:4px 12px;background:rgba(192,57,43,.2);border:1px solid rgba(192,57,43,.3);color:var(--red);display:inline-block;margin-bottom:10px;}
+.ch-story-title{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;margin-bottom:4px;}
+.ch-num{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+
+/* CHAPTER NAV BAR */
+.ch-nav{display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 32px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:54px;z-index:90;}
+.ch-select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);padding:7px 14px;font-family:'Rajdhani';font-size:.8rem;font-weight:600;letter-spacing:.06em;cursor:pointer;outline:none;}
+.ch-nav-btn{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);padding:7px 16px;cursor:pointer;transition:all .2s;}
+.ch-nav-btn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
+.ch-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.ch-page-count{font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--muted);}
+
+/* MANGA SCROLL PAGES */
+.manga-wrap{max-width:800px;margin:0 auto;padding:0 0 80px;}
+.manga-page{width:100%;display:block;position:relative;background:var(--card);}
+.manga-page img{width:100%;height:auto;display:block;}
+.manga-page .empty-page{width:100%;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid var(--border);background:var(--card);}
+.manga-page .empty-page .page-num{font-family:'Bebas Neue';font-size:3rem;color:rgba(245,239,230,.05);margin-bottom:12px;}
+.manga-page .empty-page p{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,239,230,.15);}
+
+/* PAGE NUMBER OVERLAY */
+.page-num-overlay{position:absolute;bottom:10px;right:12px;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.1em;color:rgba(245,239,230,.3);background:rgba(0,0,0,.4);padding:2px 8px;}
+
+/* CHAPTER END */
+.chapter-end{text-align:center;padding:60px 20px;border-top:1px solid var(--border);}
+.chapter-end h3{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.06em;margin-bottom:8px;}
+.chapter-end h3 span{color:var(--red);}
+.chapter-end p{font-size:.82rem;color:var(--muted);letter-spacing:.08em;margin-bottom:24px;}
+.end-btns{display:flex;gap:12px;justify-content:center;}
+.btn-r{font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;background:var(--red);color:#fff;border:none;cursor:pointer;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;}
+.btn-r:hover{background:var(--gold);}
+.btn-g{font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;background:transparent;color:var(--white);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+.btn-g:hover{border-color:var(--white);}
+
+/* LIKE / COMMENT SECTION */
+.interact-section{max-width:800px;margin:0 auto;padding:32px 20px;border-top:2px solid var(--border);}
+.interact-row{display:flex;gap:12px;align-items:center;margin-bottom:28px;}
+.like-btn{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;letter-spacing:.1em;padding:9px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
+.like-btn:hover,.like-btn.liked{border-color:var(--red);color:var(--red);background:rgba(192,57,43,.1);}
+.follow-btn{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;letter-spacing:.1em;padding:9px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
+.follow-btn:hover,.follow-btn.following{border-color:var(--gold);color:var(--gold);background:rgba(212,130,10,.1);}
+.share-btn{font-size:.78rem;font-weight:700;letter-spacing:.1em;padding:9px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
+.share-btn:hover{border-color:rgba(245,239,230,.3);color:var(--white);}
+
+/* COMMENTS */
+.comments-head{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;margin-bottom:16px;}
+.comments-head span{color:var(--red);}
+.comment-form{display:flex;gap:0;margin-bottom:24px;}
+.comment-form input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-right:none;color:var(--white);padding:10px 14px;font-family:'Rajdhani';font-size:.85rem;outline:none;}
+.comment-form input:focus{border-color:rgba(192,57,43,.4);}
+.comment-form input::placeholder{color:rgba(245,239,230,.2);}
+.comment-form button{background:var(--red);color:#fff;border:none;padding:10px 18px;font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;}
+.comment-list{display:flex;flex-direction:column;gap:12px;}
+.comment-item{background:rgba(255,255,255,.03);border:1px solid var(--border);padding:12px 16px;}
+.comment-user{font-size:.72rem;font-weight:700;letter-spacing:.1em;color:var(--gold);margin-bottom:4px;}
+.comment-text{font-size:.85rem;line-height:1.5;color:rgba(245,239,230,.7);}
+.comment-time{font-size:.62rem;color:rgba(245,239,230,.25);margin-top:4px;}
+.no-comments{font-size:.78rem;color:rgba(245,239,230,.2);letter-spacing:.1em;text-align:center;padding:20px;}
+
+/* FLOAT */
+.float-top{position:fixed;bottom:24px;right:20px;background:var(--card);border:1px solid var(--border);width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:border-color .2s;z-index:99;}
+.float-top:hover{border-color:var(--red);}
+
+@media(max-width:600px){nav{padding:0 16px;}.ch-nav{flex-wrap:wrap;gap:8px;}}
+</style>
+</head>
+<body>
+<div id="read-progress"></div>
+
+<nav>
+  <a href="index.html" class="logo"><span class="v">V</span>OOMCOMIX</a>
+  <div class="nav-center" id="nav-title">Manga Reader</div>
+  <div class="nav-r">
+    <a href="#" id="back-btn" class="nav-btn back">← Back</a>
+    <button class="nav-btn" onclick="toggleSettings()">⚙</button>
+  </div>
+</nav>
+
+<div id="manga-main">
+  <!-- Loaded by JS -->
+</div>
+
+<div class="float-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+<script src="stories-data.js"></script>
+<script>
+const p=new URLSearchParams(location.search);
+const storyId=p.get('id');
+let chId=parseInt(p.get('ch'))||1;
+const stories=loadData();
+const story=stories.find(s=>s.id===storyId);
+
+if(!story){
+  document.getElementById('manga-main').innerHTML='<div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">Story not found. <a href="stories.html" style="color:#c0392b;">Back →</a></div>';
+}else{
+  document.title=story.title+' — VoomComix Manga';
+  document.getElementById('back-btn').href='story.html?id='+storyId;
+
+  function getChapter(id){return story.chapters.find(c=>c.id===id)||story.chapters[0];}
+
+  function renderManga(cid){
+    chId=cid;
+    const ch=getChapter(cid);
+    if(!ch)return;
+    const chIdx=story.chapters.findIndex(c=>c.id===cid);
+    const pages=ch.pages||[];
+    const maxPages=20;
+
+    document.getElementById('nav-title').textContent=story.title+' · Ch '+cid;
+    document.title='Ch '+cid+': '+ch.title+' — '+story.title;
+
+    // Save reading history
+    const hist=JSON.parse(localStorage.getItem('vc-history')||'[]');
+    const existing=hist.findIndex(h=>h.storyId===storyId);
+    const entry={storyId,chId:cid,chIdx:chIdx+1,time:Date.now()};
+    if(existing>-1)hist[existing]=entry;else hist.unshift(entry);
+    localStorage.setItem('vc-history',JSON.stringify(hist.slice(0,20)));
+
+    // Chapter options
+    const chOptions=story.chapters.map(c=>`<option value="${c.id}" ${c.id===cid?'selected':''}>${c.id}. ${c.title}</option>`).join('');
+
+    // Pages HTML
+    let pagesHTML='';
+    for(let i=0;i<maxPages;i++){
+      const pg=pages[i];
+      if(pg&&pg.image){
+        pagesHTML+=`<div class="manga-page"><img src="${pg.image}" alt="Page ${i+1}" loading="lazy"/><span class="page-num-overlay">${i+1}</span></div>`;
+      }else if(i===0||pg){
+        pagesHTML+=`<div class="manga-page"><div class="empty-page"><div class="page-num">${i+1}</div><p>Page ${i+1} — Upload image in Admin</p></div><span class="page-num-overlay">${i+1}</span></div>`;
+      }
+    }
+
+    // Likes/follows/comments
+    const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+    const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
+    const isLiked=likes[storyId];
+    const isFollowing=follows[storyId];
+    const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
+
+    document.getElementById('manga-main').innerHTML=`
+    <div class="ch-header">
+      <span class="ch-type-badge">🎌 Manga</span>
+      <div class="ch-story-title">${story.title}</div>
+      <div class="ch-num">Chapter ${cid} — ${ch.title}</div>
+    </div>
+
+    <div class="ch-nav">
+      <button class="ch-nav-btn" ${chIdx===0?'disabled':''} onclick="renderManga(${story.chapters[chIdx-1]?.id})">← Prev</button>
+      <select class="ch-select" onchange="renderManga(parseInt(this.value))">${chOptions}</select>
+      <span class="ch-page-count">${pages.filter(pg=>pg&&pg.image).length}/${maxPages} pages</span>
+      <button class="ch-nav-btn" ${chIdx===story.chapters.length-1?'disabled':''} onclick="renderManga(${story.chapters[chIdx+1]?.id})">Next →</button>
+    </div>
+
+    <div class="manga-wrap">${pagesHTML}
+
+      <div class="chapter-end">
+        <h3>CHAPTER <span>${cid}</span> END</h3>
+        <p>${chIdx===story.chapters.length-1?'New chapter coming soon! Follow to get notified.':'Continue to next chapter →'}</p>
+        <div class="end-btns">
+          ${chIdx<story.chapters.length-1?`<button class="btn-r" onclick="renderManga(${story.chapters[chIdx+1].id})">Next Chapter →</button>`:''}
+          <button class="btn-g" onclick="location.href='story.html?id=${storyId}'">Chapter List</button>
+        </div>
+      </div>
+
+      <div class="interact-section">
+        <div class="interact-row">
+          <button class="like-btn ${isLiked?'liked':''}" onclick="toggleLike(this)">♥ <span id="like-count">${story.likes||0}</span> Likes</button>
+          <button class="follow-btn ${isFollowing?'following':''}" onclick="toggleFollow(this)">${isFollowing?'✓ Following':'+ Follow'}</button>
+          <button class="share-btn" onclick="copyLink()">🔗 Share</button>
+        </div>
+        <div class="comments-head">COMMENTS <span>(${comments.length})</span></div>
+        <div class="comment-form">
+          <input type="text" id="comment-input" placeholder="Write a comment... (your name: message)" maxlength="200"/>
+          <button onclick="postComment()">Post</button>
+        </div>
+        <div class="comment-list" id="comment-list">
+          ${comments.length?comments.map(c=>`<div class="comment-item"><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div></div>`).join(''):'<div class="no-comments">Be the first to comment!</div>'}
+        </div>
+      </div>
+    </div>`;
+
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  renderManga(chId);
+}
+
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('read-progress').style.width=((h.scrollTop/(h.scrollHeight-h.clientHeight))*100)+'%';
+});
+
+function toggleLike(btn){
+  const d=loadData();const s=d.find(x=>x.id===storyId);if(!s)return;
+  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
+  if(likes[storyId]){delete likes[storyId];s.likes=Math.max(0,(s.likes||1)-1);btn.classList.remove('liked');}
+  else{likes[storyId]=1;s.likes=(s.likes||0)+1;btn.classList.add('liked');}
+  localStorage.setItem('vc-likes',JSON.stringify(likes));
+  localStorage.setItem('voomcomix_stories',JSON.stringify(d));
+  document.getElementById('like-count').textContent=s.likes;
+}
+
+function toggleFollow(btn){
+  const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
+  const fl=JSON.parse(localStorage.getItem('vc-follow-list')||'[]');
+  if(follows[storyId]){delete follows[storyId];const i=fl.indexOf(storyId);if(i>-1)fl.splice(i,1);btn.classList.remove('following');btn.textContent='+ Follow';}
+  else{follows[storyId]=1;if(!fl.includes(storyId))fl.push(storyId);btn.classList.add('following');btn.textContent='✓ Following';}
+  localStorage.setItem('vc-follows',JSON.stringify(follows));
+  localStorage.setItem('vc-follow-list',JSON.stringify(fl));
+}
+
+function postComment(){
+  const inp=document.getElementById('comment-input');
+  const val=inp.value.trim();if(!val)return;
+  const parts=val.split(':');
+  const user=parts.length>1?parts[0].trim():'Reader';
+  const text=parts.length>1?parts.slice(1).join(':').trim():val;
+  const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
+  comments.unshift({user,text,time:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})});
+  localStorage.setItem('vc-comments-'+storyId,JSON.stringify(comments.slice(0,50)));
+  inp.value='';
+  const cl=document.getElementById('comment-list');
+  cl.innerHTML=`<div class="comment-item"><div class="comment-user">${user}</div><div class="comment-text">${text}</div><div class="comment-time">Just now</div></div>`+cl.innerHTML.replace('<div class="no-comments">Be the first to comment!</div>','');
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(location.href).then(()=>alert('Link copied!')).catch(()=>alert('Copy: '+location.href));
+}
+</script>
+</body>
+</html>
