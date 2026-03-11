@@ -7,150 +7,283 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--ink:#0d0d0d;--bg:#0f0f14;--card:#141420;--card2:#1a1a28;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
+:root{
+  --bg:#0c0c10;
+  --bg2:#111116;
+  --card:#16161e;
+  --card2:#1c1c26;
+  --red:#e8312a;
+  --red2:#ff4d44;
+  --gold:#f5a623;
+  --teal:#00c4b4;
+  --white:#f5f0e8;
+  --muted:#7a7080;
+  --border:rgba(255,255,255,0.07);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
+img{display:block;}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
-.logo span{color:var(--red);}
-.nav-r{display:flex;align-items:center;gap:24px;}
-.nav-r a{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+/* ===== TOP BAR ===== */
+.topbar{background:#0a0a0d;border-bottom:1px solid var(--border);padding:7px 48px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-left{font-family:'Rajdhani';font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;gap:20px;}
+.topbar-left span{display:flex;align-items:center;gap:6px;}
+.topbar-left .dot{width:5px;height:5px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.social-links{display:flex;gap:14px;align-items:center;}
+.social-links a{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:5px;transition:color .2s;padding:3px 8px;border:1px solid transparent;border-radius:2px;}
+.social-links a:hover{color:var(--white);border-color:var(--border);}
+.social-links a.ig:hover{color:#e1306c;}
+.social-links a.fb:hover{color:#1877f2;}
+.social-links a.yt:hover{color:#ff0000;}
+
+/* ===== NAV ===== */
+nav{background:rgba(12,12,16,0.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(232,49,42,0.15);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;display:flex;align-items:center;gap:2px;}
+.logo .v{color:var(--red);}
+.nav-tags{display:flex;gap:6px;}
+.nav-tag{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);color:var(--muted);transition:all .2s;}
+.nav-tag:hover{border-color:var(--teal);color:var(--teal);}
+.nav-r{display:flex;align-items:center;gap:20px;}
+.nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
 .nav-r a:hover{color:var(--white);}
-.nav-r .btn{background:var(--red);color:var(--white)!important;padding:7px 20px;font-size:.78rem;}
+.nav-cta{background:var(--red)!important;color:var(--white)!important;padding:8px 20px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
 
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%, rgba(230,48,34,.08) 0%, transparent 70%);}
-.hero-tag{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;justify-content:center;}
-.hero-tag::before,.hero-tag::after{content:'';width:24px;height:1px;background:var(--gold);}
-.hero h1{font-family:'Bebas Neue';font-size:clamp(4.5rem,10vw,9rem);line-height:.92;letter-spacing:.04em;margin-bottom:24px;}
-.hero h1 .outline{-webkit-text-stroke:2px var(--red);color:transparent;}
-.hero p{font-size:.95rem;line-height:1.8;color:rgba(253,250,244,.5);max-width:480px;margin-bottom:40px;}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
-.btn-red{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:var(--white);padding:13px 32px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;display:inline-block;}
-.btn-red:hover{background:var(--gold);transform:translateY(-2px);}
-.btn-ghost{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--white);padding:12px 30px;border:1px solid rgba(255,255,255,.2);transition:all .2s;display:inline-block;}
+/* ===== TRENDING HERO ===== */
+.trending-hero{position:relative;overflow:hidden;border-bottom:2px solid rgba(232,49,42,0.2);}
+.trending-bg{position:absolute;inset:0;z-index:0;}
+.trending-bg-img{width:100%;height:100%;object-fit:cover;opacity:.18;filter:blur(2px);}
+.trending-bg-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,12,16,0.98) 0%,rgba(12,12,16,0.7) 55%,rgba(12,12,16,0.2) 100%);}
+.trending-content{position:relative;z-index:1;padding:60px 48px;display:grid;grid-template-columns:1fr 380px;gap:60px;align-items:center;min-height:480px;}
+.trending-label{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.trending-label::before{content:'';width:20px;height:2px;background:var(--red);}
+.fire-icon{animation:flicker .8s ease-in-out infinite alternate;}
+@keyframes flicker{from{transform:scale(1)}to{transform:scale(1.1) rotate(3deg)}}
+.trending-content h1{font-family:'Bebas Neue';font-size:clamp(3rem,5vw,5.5rem);line-height:.95;letter-spacing:.04em;margin-bottom:20px;}
+.trending-content h1 .red{color:var(--red);}
+.trending-content h1 .outline{-webkit-text-stroke:2px rgba(232,49,42,0.5);color:transparent;}
+.trending-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.tmeta{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.12em;padding:4px 10px;border:1px solid var(--border);}
+.tmeta.genre{color:var(--gold);border-color:rgba(245,166,35,.2);}
+.tmeta.views{color:var(--teal);border-color:rgba(0,196,180,.2);}
+.tmeta.status{color:var(--red);border-color:rgba(232,49,42,.25);}
+.trending-desc{font-size:.92rem;line-height:1.8;color:rgba(245,240,232,.6);max-width:520px;margin-bottom:28px;}
+.trending-btns{display:flex;gap:12px;}
+.btn-red{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 28px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-red:hover{background:var(--gold);color:#000;transform:translateY(-2px);}
+.btn-ghost{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--white);padding:11px 26px;border:1px solid rgba(255,255,255,.2);transition:all .2s;display:inline-block;}
 .btn-ghost:hover{border-color:var(--white);}
 
-/* MARQUEE */
-.marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:12px 0;background:rgba(230,48,34,.03);}
-.marquee-inner{display:flex;gap:48px;animation:scroll 22s linear infinite;white-space:nowrap;}
+/* TRENDING BOOK COVER */
+.trending-cover-wrap{position:relative;display:flex;justify-content:center;}
+.trending-cover{width:240px;height:340px;position:relative;box-shadow:20px 20px 60px rgba(0,0,0,.8),-8px 0 0 rgba(0,0,0,.4);transform:perspective(600px) rotateY(-8deg);transition:transform .4s;}
+.trending-cover:hover{transform:perspective(600px) rotateY(-2deg);}
+.trending-cover img{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;}
+.trending-cover .cover-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:6rem;border-radius:2px 6px 6px 2px;}
+.trending-cover::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:18px;background:linear-gradient(90deg,#1a1a20,#2a2a35);border-radius:2px 0 0 2px;box-shadow:inset -4px 0 8px rgba(0,0,0,.4);}
+.trending-cover::after{content:'';position:absolute;left:-1px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,rgba(255,255,255,.05),transparent,rgba(255,255,255,.05));border-radius:2px 0 0 2px;}
+.trending-badge{position:absolute;top:-12px;right:-12px;background:var(--red);color:#fff;font-family:'Bebas Neue';font-size:1rem;letter-spacing:.1em;padding:8px 14px;box-shadow:0 4px 20px rgba(232,49,42,.4);}
+.trending-rank{position:absolute;bottom:-12px;left:20px;background:var(--card2);border:1px solid var(--border);padding:8px 16px;}
+.trending-rank span{font-family:'Bebas Neue';font-size:1.4rem;color:var(--red);}
+.trending-rank small{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:block;margin-top:-4px;}
+
+/* TRENDING DOTS NAV */
+.trending-dots{position:absolute;bottom:20px;left:48px;display:flex;gap:8px;z-index:2;}
+.tdot{width:24px;height:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;}
+.tdot.active{width:40px;background:var(--red);}
+
+/* ===== MARQUEE ===== */
+.marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:11px 0;background:rgba(232,49,42,.025);}
+.marquee-track{display:flex;gap:40px;animation:scroll 25s linear infinite;white-space:nowrap;}
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.m-item{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(253,250,244,.2);display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.m-item{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(245,240,232,.2);display:flex;align-items:center;gap:14px;flex-shrink:0;}
 .m-dot{width:4px;height:4px;background:var(--red);border-radius:50%;}
 
-/* SECTIONS */
-section{padding:80px 40px;}
-.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:48px;}
-.sec-head h2{font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.05em;white-space:nowrap;}
+/* ===== SECTIONS ===== */
+section.stories-sec{padding:70px 48px;}
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:36px;}
+.sec-head h2{font-family:'Bebas Neue';font-size:2.4rem;letter-spacing:.05em;white-space:nowrap;}
 .sec-head h2 span{color:var(--red);}
-.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(230,48,34,.5),transparent);}
-.sec-link{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(232,49,42,.4),transparent);}
+.sec-link{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);white-space:nowrap;}
 
-/* STORIES GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
-.story-card{background:var(--card);border:1px solid var(--border);overflow:hidden;position:relative;cursor:pointer;transition:all .3s;animation:fadeUp .5s ease both;}
+/* ===== BOOK CARDS — WebNovel Style ===== */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:20px;}
+
+.book-card{cursor:pointer;transition:transform .3s;animation:fadeUp .5s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.story-card:hover{border-color:rgba(230,48,34,.4);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.5),4px 4px 0 var(--red);}
-.story-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),var(--gold));transform:scaleX(0);transition:transform .3s;transform-origin:left;}
-.story-card:hover::after{transform:scaleX(1);}
-.s-cover{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;}
-.s-badge{position:absolute;top:10px;left:10px;font-family:'Rajdhani';font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:3px 8px;}
+.book-card:hover{transform:translateY(-6px);}
+
+.book-cover-wrap{position:relative;width:100%;aspect-ratio:2/3;margin-bottom:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);border-radius:3px 6px 6px 3px;}
+.book-cover-wrap img{width:100%;height:100%;object-fit:cover;border-radius:3px 6px 6px 3px;}
+.book-cover-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-radius:3px 6px 6px 3px;}
+/* Book spine effect */
+.book-cover-wrap::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:12px;background:linear-gradient(90deg,rgba(0,0,0,.5),rgba(0,0,0,.2));border-radius:3px 0 0 3px;z-index:1;}
+.book-cover-wrap::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(120deg,rgba(255,255,255,.06) 0%,transparent 60%);border-radius:3px 6px 6px 3px;z-index:2;pointer-events:none;}
+.book-badge{position:absolute;top:8px;left:8px;font-family:'Rajdhani';font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;z-index:3;}
 .badge-ongoing{background:var(--red);color:#fff;}
 .badge-complete{background:#00a651;color:#fff;}
-.badge-hiatus{background:#555;color:#fff;}
 .badge-new{background:var(--gold);color:#000;}
-.s-body{padding:16px 18px 18px;}
-.s-genre{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
-.s-title{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.04em;margin-bottom:6px;line-height:1.1;}
-.s-desc{font-size:.78rem;color:rgba(253,250,244,.4);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.s-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;}
-.s-meta{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);font-weight:600;}
-.s-read{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);}
 
-/* STATS BAR */
-.stats-bar{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px;display:flex;justify-content:center;gap:80px;flex-wrap:wrap;}
+.book-title{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.03em;color:var(--white);line-height:1.3;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.book-genre{font-family:'Rajdhani';font-size:.65rem;color:var(--muted);letter-spacing:.08em;margin-bottom:3px;}
+.book-meta{font-family:'Rajdhani';font-size:.62rem;color:var(--muted);display:flex;gap:8px;}
+
+/* ===== STATS BAR ===== */
+.stats-bar{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 48px;display:flex;justify-content:center;gap:80px;flex-wrap:wrap;}
 .stat{text-align:center;}
-.stat-n{font-family:'Bebas Neue';font-size:3rem;color:var(--white);line-height:1;}
-.stat-l{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.stat-n{font-family:'Bebas Neue';font-size:3rem;line-height:1;color:var(--white);}
+.stat-l{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
 
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-.foot-logo{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.1em;}
-.foot-logo span{color:var(--red);}
-footer p{font-family:'Rajdhani';font-size:.72rem;letter-spacing:.1em;color:var(--muted);}
-.foot-links{display:flex;gap:20px;}
-.foot-links a{font-family:'Rajdhani';font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
-.foot-links a:hover{color:var(--red);}
+/* ===== FOOTER ===== */
+footer{background:#0a0a0d;border-top:1px solid var(--border);padding:48px;}
+.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand .logo-f{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;margin-bottom:10px;}
+.footer-brand .logo-f span{color:var(--red);}
+.footer-brand p{font-family:'Rajdhani';font-size:.78rem;line-height:1.6;color:var(--muted);letter-spacing:.04em;max-width:240px;}
+.footer-col h4{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.footer-col a{display:block;font-family:'Rajdhani';font-size:.78rem;font-weight:600;letter-spacing:.08em;color:rgba(245,240,232,.5);margin-bottom:8px;transition:color .2s;}
+.footer-col a:hover{color:var(--red);}
+.footer-social{display:flex;gap:10px;margin-top:4px;}
+.fsoc{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--border);color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:6px;}
+.fsoc:hover{color:var(--white);border-color:rgba(255,255,255,.3);}
+.fsoc.ig:hover{border-color:#e1306c;color:#e1306c;}
+.fsoc.fb:hover{border-color:#1877f2;color:#1877f2;}
+.fsoc.yt:hover{border-color:#ff0000;color:#ff0000;}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);letter-spacing:.08em;}
 
-@media(max-width:768px){
-  nav{padding:0 20px;}
-  .nav-r .hide{display:none;}
-  section{padding:60px 20px;}
-  .hero h1{font-size:4rem;}
-  .stats-bar{gap:40px;}
-  footer{flex-direction:column;text-align:center;padding:30px 20px;}
+@media(max-width:900px){
+  .topbar,.trending-dots{display:none;}
+  nav,.stories-sec,footer{padding-left:20px;padding-right:20px;}
+  .nav-tags{display:none;}
+  .trending-content{grid-template-columns:1fr;padding:40px 20px;gap:30px;min-height:auto;}
+  .trending-cover{width:160px;height:230px;}
+  .trending-cover-wrap{justify-content:flex-start;}
+  .books-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;}
+  .stats-bar{gap:40px;padding:30px 20px;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;text-align:center;}
 }
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span><span class="dot"></span>Live Now</span>
+    <span>📚 Comic Reading Hindi</span>
+    <span>🎌 Manga Read Hindi</span>
+    <span>Original Webnovels</span>
+  </div>
+  <div class="social-links">
+    <a href="https://instagram.com/voomcomix" target="_blank" class="ig">📷 Instagram</a>
+    <a href="https://facebook.com/voomcomix" target="_blank" class="fb">📘 Facebook</a>
+    <a href="https://youtube.com/@voomcomix" target="_blank" class="yt">▶ YouTube</a>
+  </div>
+</div>
+
+<!-- NAV -->
 <nav>
-  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="v">C</span>OMIX</a>
+  <div class="nav-tags">
+    <span class="nav-tag">📚 Comic Reading Hindi</span>
+    <span class="nav-tag">🎌 Manga Read Hindi</span>
+  </div>
   <div class="nav-r">
-    <a href="stories.html" class="hide">Stories</a>
-    <a href="about.html" class="hide">About</a>
-    <a href="terms.html" class="hide">Terms</a>
-    <a href="stories.html" class="btn">📖 Read Now</a>
+    <a href="stories.html">Stories</a>
+    <a href="about.html">About</a>
+    <a href="stories.html" class="nav-cta">📖 Read Now</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">Original Webnovels · Hindi &amp; English</div>
-  <h1>STORIES<br/>THAT <span class="outline">HIT</span><br/>DIFFERENT</h1>
-  <p>Raw storytelling. Zero filters. Action, fantasy, drama, thriller — written with passion, free to read.</p>
-  <div class="hero-btns">
-    <a href="stories.html" class="btn-red">Browse All Stories →</a>
-    <a href="stories.html" class="btn-ghost">Latest Chapters</a>
+<!-- TRENDING HERO -->
+<div class="trending-hero" id="trending-hero">
+  <div class="trending-bg">
+    <div class="trending-bg-img" id="hero-bg-img" style="width:100%;height:100%;background:linear-gradient(135deg,#0a0a1a,#1a0d2e);"></div>
+    <div class="trending-bg-overlay"></div>
   </div>
-</section>
+  <div class="trending-content">
+    <div class="trending-text">
+      <div class="trending-label"><span class="fire-icon">🔥</span> Trending Now</div>
+      <h1 id="hero-title">LOADING<br/><span class="red">STORY</span></h1>
+      <div class="trending-meta" id="hero-meta"></div>
+      <div class="trending-desc" id="hero-desc">Loading...</div>
+      <div class="trending-btns">
+        <a href="#" id="hero-read-btn" class="btn-red">📖 Start Reading</a>
+        <a href="stories.html" class="btn-ghost">Browse All</a>
+      </div>
+    </div>
+    <div class="trending-cover-wrap">
+      <div class="trending-cover" id="hero-cover">
+        <div class="cover-fallback" id="hero-cover-inner" style="background:linear-gradient(135deg,#0a0a1a,#1a0d2e);">📖</div>
+      </div>
+      <div class="trending-badge">🔥 TRENDING</div>
+      <div class="trending-rank"><span>#1</span><small>This Week</small></div>
+    </div>
+  </div>
+  <div class="trending-dots" id="trending-dots"></div>
+</div>
 
 <!-- MARQUEE -->
 <div class="marquee">
-  <div class="marquee-inner" id="marquee"></div>
+  <div class="marquee-track" id="marquee-track"></div>
 </div>
 
 <!-- FEATURED STORIES -->
-<section>
+<section class="stories-sec">
   <div class="sec-head">
     <h2>FEATURED <span>STORIES</span></h2>
     <div class="sec-line"></div>
     <a href="stories.html" class="sec-link">View All →</a>
   </div>
-  <div class="grid" id="featured-grid"></div>
+  <div class="books-grid" id="books-grid"></div>
 </section>
 
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stat"><div class="stat-n" id="stat-stories">0</div><div class="stat-l">Stories</div></div>
-  <div class="stat"><div class="stat-n" id="stat-chapters">0</div><div class="stat-l">Chapters</div></div>
+  <div class="stat"><div class="stat-n" id="st-stories">0</div><div class="stat-l">Stories</div></div>
+  <div class="stat"><div class="stat-n" id="st-chapters">0</div><div class="stat-l">Chapters</div></div>
   <div class="stat"><div class="stat-n">2</div><div class="stat-l">Languages</div></div>
   <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Free</div></div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
-  <p>© 2024 VoomComix · All Rights Reserved</p>
-  <div class="foot-links">
-    <a href="stories.html">Stories</a>
-    <a href="about.html">About</a>
-    <a href="terms.html">Terms</a>
-    <a href="admin.html">Admin</a>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo-f">VOOM<span>COMIX</span></div>
+      <p>Original webnovels in Hindi & English. Raw storytelling, zero filters. Free to read, always.</p>
+      <br/>
+      <p style="font-family:Rajdhani;font-size:.68rem;letter-spacing:.06em;color:#5a505a;">Created & owned by<br/><strong style="color:#f5a623;">Mr. Imtiyaz Sheikh</strong></p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="index.html">Home</a>
+      <a href="stories.html">All Stories</a>
+      <a href="about.html">About Us</a>
+      <a href="terms.html">Terms & Conditions</a>
+      <a href="admin.html">Admin Panel</a>
+    </div>
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <div class="footer-social">
+        <a href="https://instagram.com/voomcomix" target="_blank" class="fsoc ig">📷 IG</a>
+        <a href="https://facebook.com/voomcomix" target="_blank" class="fsoc fb">📘 FB</a>
+        <a href="https://youtube.com/@voomcomix" target="_blank" class="fsoc yt">▶ YT</a>
+      </div>
+      <br/>
+      <p style="font-family:Rajdhani;font-size:.72rem;color:#5a505a;letter-spacing:.06em;line-height:1.6;">📧 voomcomix@gmail.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 VoomComix — Created & owned by Mr. Imtiyaz Sheikh. All Rights Reserved.</p>
+    <div style="display:flex;gap:16px;">
+      <a href="about.html" style="font-family:Rajdhani;font-size:.68rem;color:#5a505a;letter-spacing:.12em;text-transform:uppercase;">About</a>
+      <a href="terms.html" style="font-family:Rajdhani;font-size:.68rem;color:#5a505a;letter-spacing:.12em;text-transform:uppercase;">Terms</a>
+    </div>
   </div>
 </footer>
 
@@ -158,39 +291,90 @@ footer p{font-family:'Rajdhani';font-size:.72rem;letter-spacing:.1em;color:var(-
 <script>
 const stories = loadData();
 
-// Marquee
-const tags = ["Action","Fantasy","Romance","Thriller","Mystery","Hindi Stories","English Novels","Free to Read","VoomComix Original","Dark","Adventure"];
-const m = document.getElementById('marquee');
-let html = '';
-for(let i=0;i<2;i++) tags.forEach(t=>{ html+=`<span class="m-item"><span class="m-dot"></span>${t}</span>`; });
-m.innerHTML = html;
+// MARQUEE
+const tags=["Action","Fantasy","Romance","Thriller","Mystery","Hindi Stories","English Novels","Free to Read","VoomComix Original","Dark","Manga Hindi","Comic Hindi","Adventure","Cultivation"];
+const mt=document.getElementById('marquee-track');
+let mh='';
+for(let i=0;i<2;i++) tags.forEach(t=>{mh+=`<span class="m-item"><span class="m-dot"></span>${t}</span>`;});
+mt.innerHTML=mh;
 
-// Featured grid (first 4 stories)
-const grid = document.getElementById('featured-grid');
-stories.slice(0,4).forEach((s,i)=>{
-  const badgeClass = s.status==='ongoing'?'badge-ongoing':s.status==='complete'?'badge-complete':'badge-hiatus';
-  const badgeText = s.status==='ongoing'?'Ongoing':s.status==='complete'?'Complete':'Hiatus';
+// TRENDING HERO
+const trendingStories = [...stories].sort((a,b)=>(b.isTrending?1:0)-(a.isTrending?1:0));
+let heroIdx = 0;
+
+function renderHero(idx){
+  const s = trendingStories[idx] || trendingStories[0];
+  if(!s) return;
+  document.getElementById('hero-title').innerHTML = s.title.toUpperCase().replace(' ','<br/><span class="red">') + '</span>';
+  document.getElementById('hero-meta').innerHTML = `
+    <span class="tmeta genre">${s.genre}</span>
+    <span class="tmeta views">👁 ${s.views}</span>
+    <span class="tmeta status">${s.status.toUpperCase()}</span>`;
+  document.getElementById('hero-desc').textContent = s.description;
+  document.getElementById('hero-read-btn').href = `story.html?id=${s.id}`;
+
+  const coverEl = document.getElementById('hero-cover-inner');
+  if(s.cover && s.cover.trim()){
+    coverEl.innerHTML = `<img src="${s.cover}" alt="${s.title}" style="width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;"/>`;
+  } else {
+    coverEl.style.background = s.coverColor;
+    coverEl.innerHTML = `<span style="font-size:5rem">${s.coverEmoji||'📖'}</span>`;
+  }
+
+  // BG
+  const bgEl = document.getElementById('hero-bg-img');
+  if(s.cover && s.cover.trim()){
+    bgEl.style.background='none';
+    bgEl.style.backgroundImage=`url(${s.cover})`;
+    bgEl.style.backgroundSize='cover';
+    bgEl.style.backgroundPosition='center';
+  } else {
+    bgEl.style.background=s.coverColor;
+  }
+
+  // Dots
+  document.querySelectorAll('.tdot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+// Dots
+const dotsEl = document.getElementById('trending-dots');
+trendingStories.slice(0,5).forEach((_,i)=>{
+  const d=document.createElement('div');
+  d.className='tdot'+(i===0?' active':'');
+  d.onclick=()=>{heroIdx=i;renderHero(i);};
+  dotsEl.appendChild(d);
+});
+renderHero(0);
+
+// Auto-rotate hero
+setInterval(()=>{
+  heroIdx=(heroIdx+1)%Math.min(trendingStories.length,5);
+  renderHero(heroIdx);
+},5000);
+
+// BOOKS GRID
+const grid = document.getElementById('books-grid');
+stories.forEach((s,i)=>{
+  const badgeClass = s.status==='ongoing'?'badge-ongoing':s.status==='complete'?'badge-complete':'badge-new';
+  const badgeText = s.status==='ongoing'?'Ongoing':s.status==='complete'?'Complete':'New';
+  const coverHTML = s.cover && s.cover.trim()
+    ? `<img src="${s.cover}" alt="${s.title}"/>`
+    : `<div class="book-cover-fallback" style="background:${s.coverColor}">${s.coverEmoji||'📖'}</div>`;
   grid.innerHTML += `
-  <div class="story-card" style="animation-delay:${i*0.1}s" onclick="location.href='story.html?id=${s.id}'">
-    <div class="s-cover" style="background:${s.coverColor}">${s.cover}
-      <span class="s-badge ${badgeClass}">${badgeText}</span>
+  <div class="book-card" style="animation-delay:${i*.08}s" onclick="location.href='story.html?id=${s.id}'">
+    <div class="book-cover-wrap">
+      ${coverHTML}
+      <span class="book-badge ${badgeClass}">${badgeText}</span>
     </div>
-    <div class="s-body">
-      <div class="s-genre">${s.genre}</div>
-      <div class="s-title">${s.title}</div>
-      <div class="s-desc">${s.description}</div>
-      <div class="s-foot">
-        <span class="s-meta">📖 ${s.chapters.length} Chapters · ${s.views} views</span>
-        <span class="s-read">Read →</span>
-      </div>
-    </div>
+    <div class="book-title">${s.title}</div>
+    <div class="book-genre">${s.genre}</div>
+    <div class="book-meta"><span>📖 ${s.chapters.length} Ch</span><span>⭐ ${s.rating}</span></div>
   </div>`;
 });
 
 // Stats
-document.getElementById('stat-stories').textContent = stories.length;
-let totalCh = stories.reduce((a,s)=>a+s.chapters.length,0);
-document.getElementById('stat-chapters').textContent = totalCh;
+document.getElementById('st-stories').textContent=stories.length;
+document.getElementById('st-chapters').textContent=stories.reduce((a,s)=>a+s.chapters.length,0);
 </script>
 </body>
 </html>
