@@ -111,30 +111,56 @@ footer p{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);}
   </div>
 </footer>
 
-<script src="stories-data.js"></script>
+<!-- ✅ Supabase se stories load ho rahi hain (static stories-data.js hataya gaya) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
 <script>
-let all=loadData(), curStatus='all', curLang='all', curQ='';
+const sb = getSupabase();
+let all = [], curStatus = 'all', curLang = 'all', curQ = '';
 
-function getFiltered(){
-  return all.filter(s=>{
-    const ms=curStatus==='all'||s.status===curStatus;
-    const ml=curLang==='all'||s.language===curLang;
-    const q=curQ.toLowerCase();
-    const mq=!q||s.title.toLowerCase().includes(q)||s.genre.toLowerCase().includes(q)||(s.tags||[]).some(t=>t.toLowerCase().includes(q));
-    return ms&&ml&&mq;
+async function loadStories() {
+  const { data, error } = await sb
+    .from('stories')
+    .select('*')
+    .eq('approval_status', 'approved'); // ✅ sirf approved stories dikhao
+  if (error) { console.error('Supabase error:', error); return []; }
+  return (data || []).map(s => ({
+    id: s.id,
+    title: s.title,
+    genre: s.genre || 'General',
+    language: s.language || 'English',
+    status: s.status || 'ongoing',
+    cover: s.cover_url || '',
+    coverColor: '#1a1a2e',
+    coverEmoji: s.cover_emoji || '📖',
+    tags: s.tags || [],
+    rating: s.rating || '4.5',
+    chapters: Array(s.total_chapters || 0).fill({}),
+  }));
+}
+
+function getFiltered() {
+  return all.filter(s => {
+    const ms = curStatus === 'all' || s.status === curStatus;
+    const ml = curLang === 'all' || s.language === curLang;
+    const q = curQ.toLowerCase();
+    const mq = !q || s.title.toLowerCase().includes(q) || s.genre.toLowerCase().includes(q) || (s.tags || []).some(t => t.toLowerCase().includes(q));
+    return ms && ml && mq;
   });
 }
 
-function render(list){
-  const g=document.getElementById('books-grid');
-  const nr=document.getElementById('no-res');
-  if(!list.length){g.innerHTML='';nr.style.display='block';return;}
-  nr.style.display='none';
-  g.innerHTML=list.map((s,i)=>{
-    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" alt="${s.title}"/>`:`<div class="book-cover-fallback" style="background:${s.coverColor}">${s.coverEmoji||'📖'}</div>`;
-    const sc=`s-${s.status}`;
-    const st=s.status.charAt(0).toUpperCase()+s.status.slice(1);
-    return `<div class="book-card" style="animation-delay:${i*.06}s" onclick="location.href='story.html?id=${s.id}'">
+function render(list) {
+  const g = document.getElementById('books-grid');
+  const nr = document.getElementById('no-res');
+  if (!list.length) { g.innerHTML = ''; nr.style.display = 'block'; return; }
+  nr.style.display = 'none';
+  g.innerHTML = list.map((s, i) => {
+    const cover = s.cover && s.cover.trim()
+      ? `<img src="${s.cover}" alt="${s.title}"/>`
+      : `<div class="book-cover-fallback" style="background:${s.coverColor}">${s.coverEmoji || '📖'}</div>`;
+    const sc = `s-${s.status}`;
+    const st = s.status.charAt(0).toUpperCase() + s.status.slice(1);
+    return `<div class="book-card" style="animation-delay:${i * .06}s" onclick="location.href='story.html?id=${s.id}'">
       <div class="book-cover-wrap">${cover}
         <span class="b-status ${sc}">${st}</span>
         <span class="b-lang">${s.language}</span>
@@ -144,22 +170,23 @@ function render(list){
       <div class="book-meta"><span>📖 ${s.chapters.length} Ch</span><span>⭐ ${s.rating}</span></div>
     </div>`;
   }).join('');
-  document.getElementById('stories-count').textContent=`${list.length} ${list.length===1?'story':'stories'} found`;
+  document.getElementById('stories-count').textContent = `${list.length} ${list.length === 1 ? 'story' : 'stories'} found`;
 }
 
-function filterBy(status,btn){
-  curStatus=status;curLang='all';
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');render(getFiltered());
+function filterBy(status, btn) {
+  curStatus = status; curLang = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); render(getFiltered());
 }
-function filterLang(lang,btn){
-  curLang=curLang===lang?'all':lang;curStatus='all';
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  if(curLang!=='all')btn.classList.add('active');render(getFiltered());
+function filterLang(lang, btn) {
+  curLang = curLang === lang ? 'all' : lang; curStatus = 'all';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (curLang !== 'all') btn.classList.add('active'); render(getFiltered());
 }
-function doSearch(){curQ=document.getElementById('search').value;render(getFiltered());}
+function doSearch() { curQ = document.getElementById('search').value; render(getFiltered()); }
 
-render(all);
+// ✅ Supabase se data load karo aur render karo
+loadStories().then(data => { all = data; render(all); });
 </script>
 </body>
 </html>
