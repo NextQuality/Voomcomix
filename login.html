@@ -123,10 +123,9 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
 <script>
 const sb = getSupabase();
 
-// Check if already logged in
-getCurrentUser().then(user => {
-  if (user) window.location.href = 'index.html';
-});
+// Check if already logged in - only redirect if NOT on login page intentionally
+// (Don't auto-redirect to prevent back button trap)
+
 
 function switchTab(t) {
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -190,18 +189,24 @@ async function doSignup() {
     return;
   }
 
-  // If writer applicant, submit application
+  // If writer — auto approve, set role directly
   if (role === 'writer_applicant' && data.user) {
-    await sb.from('writer_applications').insert({
-      user_id: data.user.id,
-      reason: 'Requested writer access during signup',
-      status: 'pending'
-    });
+    // Update profile role to writer immediately
+    await sb.from('profiles').update({ role: 'writer' }).eq('id', data.user.id);
   }
 
-  document.getElementById('signup-success').textContent = '🎉 Account created! Check your email to verify, then login.';
-  document.getElementById('signup-success').style.display = 'block';
+  // Auto-confirm and redirect to login
+  const successEl = document.getElementById('signup-success');
+  successEl.textContent = role === 'writer_applicant'
+    ? '🎉 Writer account created! Ab login karo aur apni story likhna shuru karo!'
+    : '🎉 Account ban gaya! Login karo.';
+  successEl.style.display = 'block';
   btn.textContent = '✓ Done!';
+  // Auto switch to login after 2 sec
+  setTimeout(() => {
+    document.getElementById('login-email').value = email;
+    switchTab('login');
+  }, 2000);
 }
 
 async function forgotPassword() {
