@@ -35,7 +35,7 @@ nav{background:var(--ink);border-bottom:3px solid var(--red);padding:0 48px;heig
 .logo .v{color:var(--red);}
 .logo .c{color:var(--gold2);}
 .nav-tags{display:flex;gap:6px;}
-.nav-tag{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);transition:all .2s;}
+.nav-tag{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);transition:all .2s;cursor:pointer;display:inline-block;}
 .nav-tag:hover{border-color:var(--gold2);color:var(--gold2);}
 .nav-r{display:flex;align-items:center;gap:20px;}
 .nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);transition:color .2s;}
@@ -46,12 +46,12 @@ nav{background:var(--ink);border-bottom:3px solid var(--red);padding:0 48px;heig
 .hero{position:relative;overflow:hidden;border-bottom:2px solid var(--border);background:var(--ink);}
 .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.15;filter:blur(3px);}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,20,16,.98) 0%,rgba(26,20,16,.75) 55%,rgba(26,20,16,.2) 100%);}
-.hero-inner{position:relative;z-index:1;padding:60px 48px;display:grid;grid-template-columns:1fr 360px;gap:60px;align-items:center;min-height:440px;}
+.hero-inner{position:relative;z-index:1;padding:60px 48px;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;min-height:440px;}
 .hero-label{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red2);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
 .hero-label::before{content:'';width:20px;height:2px;background:var(--red2);}
 .fire{animation:flick .8s ease-in-out infinite alternate;}
 @keyframes flick{from{transform:scale(1)}to{transform:scale(1.1) rotate(3deg)}}
-.hero h1{font-family:'Bebas Neue';font-size:clamp(2.8rem,5vw,5rem);line-height:.95;letter-spacing:.04em;color:#f5efe6;margin-bottom:18px;}
+.hero h1{font-family:'Bebas Neue';font-size:clamp(2.8rem,5vw,5rem);line-height:.95;letter-spacing:.04em;color:#ffffff;margin-bottom:18px;}
 .hero h1 .red{color:var(--red2);}
 .hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
 .hm{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.12em;padding:3px 10px;border:1px solid;}
@@ -65,9 +65,9 @@ nav{background:var(--ink);border-bottom:3px solid var(--red);padding:0 48px;heig
 .btn-outline{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:#f5efe6;padding:10px 24px;border:1px solid rgba(245,239,230,.3);transition:all .2s;display:inline-block;}
 .btn-outline:hover{border-color:#f5efe6;}
 .hero-cover-wrap{display:flex;justify-content:center;align-items:center;}
-.hero-book{width:220px;height:310px;position:relative;box-shadow:20px 20px 60px rgba(0,0,0,.7);transform:perspective(600px) rotateY(-8deg);transition:transform .4s;}
-.hero-book:hover{transform:perspective(600px) rotateY(-2deg);}
-.hero-book img,.hero-book .book-fb{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;}
+.hero-book{width:270px;height:380px;position:relative;box-shadow:20px 20px 60px rgba(0,0,0,.7);transform:perspective(600px) rotateY(-8deg);transition:transform .4s;}
+.hero-book:hover{transform:perspective(600px) rotateY(-2deg) scale(1.02);}
+.hero-book img,.hero-book .book-fb{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;color:#fff;}
 .hero-book .book-fb{display:flex;align-items:center;justify-content:center;font-size:5rem;}
 .hero-book::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:16px;background:linear-gradient(90deg,#333,#555);border-radius:2px 0 0 2px;}
 .hero-trending-badge{position:absolute;top:-10px;right:-10px;background:var(--red);color:#fff;font-family:'Bebas Neue';font-size:.95rem;letter-spacing:.1em;padding:7px 12px;}
@@ -238,8 +238,8 @@ footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,25
 <nav>
   <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="c">C</span>OMIX</a>
   <div class="nav-tags">
-    <span class="nav-tag">📚 Comic Hindi</span>
-    <span class="nav-tag">🎌 Manga Hindi</span>
+    <a href="stories.html?type=comic" class="nav-tag">📚 Comic Hindi</a>
+    <a href="stories.html?type=manga" class="nav-tag">🎌 Manga Hindi</a>
   </div>
   <div class="nav-r">
     <a href="stories.html">Stories</a>
@@ -289,6 +289,36 @@ footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,25
     <a href="stories.html" class="sec-link">View All →</a>
   </div>
   <div class="books-grid" id="books-grid"></div>
+</section>
+
+<!-- TOP 10 HINDI RANKINGS -->
+<section class="rank-sec">
+  <div class="rank-sec-head">
+    <h2>TOP 10 <span>HINDI</span> RANKINGS</h2>
+    <span class="rank-badge">🇮🇳 HINDI</span>
+    <div class="sec-line"></div>
+  </div>
+  <div class="rank-list" id="rank-hindi"></div>
+</section>
+
+<!-- TOP 10 ENGLISH RANKINGS -->
+<section class="rank-sec alt">
+  <div class="rank-sec-head">
+    <h2>TOP 10 <span>ENGLISH</span> RANKINGS</h2>
+    <span class="rank-badge" style="background:var(--teal);">🌐 ENGLISH</span>
+    <div class="sec-line"></div>
+  </div>
+  <div class="rank-list" id="rank-english"></div>
+</section>
+
+<!-- TOP 10 OVERALL RANKINGS -->
+<section class="rank-sec">
+  <div class="rank-sec-head">
+    <h2>TOP 10 <span>OVERALL</span> RANKINGS</h2>
+    <span class="rank-badge" style="background:var(--gold);">🏆 ALL TIME</span>
+    <div class="sec-line"></div>
+  </div>
+  <div class="rank-list" id="rank-all"></div>
 </section>
 
 <!-- GET STARTED -->
@@ -351,36 +381,6 @@ footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,25
       <a href="become-writer.html">Join as Writer →</a>
     </div>
   </div>
-</section>
-
-<!-- TOP 10 HINDI RANKINGS -->
-<section class="rank-sec">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>HINDI</span> RANKINGS</h2>
-    <span class="rank-badge">🇮🇳 HINDI</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-hindi"></div>
-</section>
-
-<!-- TOP 10 ENGLISH RANKINGS -->
-<section class="rank-sec alt">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>ENGLISH</span> RANKINGS</h2>
-    <span class="rank-badge" style="background:var(--teal);">🌐 ENGLISH</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-english"></div>
-</section>
-
-<!-- TOP 10 OVERALL RANKINGS -->
-<section class="rank-sec">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>OVERALL</span> RANKINGS</h2>
-    <span class="rank-badge" style="background:var(--gold);">🏆 ALL TIME</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-all"></div>
 </section>
 
 <!-- READER FEATURES -->
@@ -472,9 +472,53 @@ footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,25
   </div>
 </footer>
 
-<script src="stories-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const stories = loadData();
+// Load stories from Supabase (approved ones only)
+const SUPABASE_URL = 'https://gcpbvzyndmwdlvopftma.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function loadStories() {
+  // Try Supabase first
+  try {
+    const { data, error } = await sb.from('stories')
+      .select('*, profiles(username, display_name)')
+      .eq('approval_status', 'approved')
+      .order('created_at', { ascending: false });
+    if (!error && data && data.length > 0) {
+      return data.map(s => ({
+        id: s.id,
+        title: s.title,
+        genre: s.genre || 'General',
+        type: s.story_type || 'novel',
+        status: s.status || 'ongoing',
+        description: s.description || '',
+        cover: s.cover_url || '',
+        coverColor: '#2a1a10',
+        coverEmoji: s.story_type === 'manga' ? '🎌' : s.story_type === 'comic' ? '📚' : '📖',
+        views: s.view_count || 0,
+        likes: s.like_count || 0,
+        isTrending: s.is_trending || false,
+        chapters: [],
+        author: s.profiles?.display_name || 'VoomComix',
+        language: s.language || 'english',
+        created_at: s.created_at
+      }));
+    }
+  } catch(e) { console.log('Supabase load failed, using local data'); }
+  // Fallback to localStorage
+  try {
+    const local = JSON.parse(localStorage.getItem('voomcomix_stories') || '[]');
+    if (local.length > 0) return local;
+  } catch(e) {}
+  return [];
+}
+
+let stories = [];
+// Load and render everything after stories load
+loadStories().then(data => {
+  stories = data;
 
 // ===== HERO =====
 const trending = [...stories].sort((a,b)=>(b.isTrending?1:0)-(a.isTrending?1:0));
@@ -568,7 +612,8 @@ document.getElementById('rank-hindi').innerHTML=rankHTML(hindi,'Hindi stories ja
 document.getElementById('rank-english').innerHTML=rankHTML(english,'English stories coming soon!');
 document.getElementById('rank-all').innerHTML=rankHTML(allTop,'No stories yet.');
 
-document.head.insertAdjacentHTML('beforeend','<style>@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}</style>');
+  document.head.insertAdjacentHTML('beforeend','<style>@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}</style>');
+}); // end loadStories().then
 </script>
 </body>
 </html>
