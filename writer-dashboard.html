@@ -382,15 +382,7 @@ async function init() {
 
   // Admin can access writer dashboard too
   if (profile.role !== 'writer' && profile.role !== 'admin') {
-    // Check if pending application
-    const { data: app } = await sb.from('writer_applications').select('*').eq('user_id', user.id).single();
-    if (app && app.status === 'pending') {
-      document.getElementById('pending-notice').innerHTML = `
-        <div class="notice"><div class="notice-ic">⏳</div><div>
-          <div class="notice-title">Application Pending</div>
-          <div class="notice-text">Your writer application is under review. You'll be notified once approved. Meanwhile, you can explore the site.</div>
-        </div></div>`;
-    } else {
+    // Stories auto-approved — no pending check needed else {
       window.location.href = 'become-writer.html';
       return;
     }
@@ -515,7 +507,7 @@ async function saveStory() {
       tags: document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
       language: document.getElementById('f-lang').value,
       status: document.getElementById('f-status').value,
-      approval_status: id ? undefined : 'pending',
+      approval_status: 'approved',  // Auto-approved — no admin review needed
     };
 
     if (id) {
