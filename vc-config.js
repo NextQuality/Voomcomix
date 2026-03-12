@@ -38,8 +38,9 @@ async function requireAuth(redirectTo = 'login.html') {
 
 async function requireWriter() {
   const profile = await getCurrentProfile();
-  if (!profile || profile.role !== 'writer') {
-    window.location.href = 'become-writer.html';
+  // Allow both writer AND admin roles
+  if (!profile || (profile.role !== 'writer' && profile.role !== 'admin')) {
+    window.location.href = 'login.html';
     return null;
   }
   return profile;
