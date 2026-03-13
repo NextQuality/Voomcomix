@@ -6,16 +6,10 @@
 <title>Story — VoomComix</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:#0f0f14;--card:#141420;--card2:#1a1a28;--red:#e63022;--gold:#f0a500;
-  --white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);
-  --green:#00a651;
-}
+:root{--bg:#0f0f14;--card:#141420;--card2:#1a1a28;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
 a{text-decoration:none;color:inherit;}
-
-/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
 .logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
 .logo span{color:var(--red);}
@@ -23,115 +17,60 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.9
 .nav-r a:hover{color:var(--white);}
 
 /* STORY HERO */
-.story-hero{padding:90px 40px 0;background:linear-gradient(180deg,rgba(230,48,34,.05) 0%,transparent 100%);border-bottom:1px solid var(--border);}
-.story-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:220px 1fr;gap:48px;padding-bottom:48px;}
-.story-cover-big{width:220px;height:310px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:5rem;flex-shrink:0;border:2px solid var(--border);box-shadow:8px 8px 0 var(--red);overflow:hidden;background:#1a1a28;}
-.story-cover-big img{width:100%;height:100%;object-fit:cover;}
-.story-info h1{font-family:'Bebas Neue';font-size:3rem;letter-spacing:.04em;line-height:1.05;margin-bottom:6px;}
-.story-author{font-family:'Rajdhani';font-size:.78rem;font-weight:600;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
-.story-meta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
-.meta-badge{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);}
-.meta-genre{color:var(--gold);border-color:rgba(240,165,0,.25);}
-.meta-status-ongoing{color:var(--red);border-color:rgba(230,48,34,.35);}
-.meta-status-complete{color:var(--green);border-color:rgba(0,166,81,.35);}
-.meta-status-hiatus{color:var(--gold);border-color:rgba(240,165,0,.35);}
+.story-hero{padding:90px 40px 0;background:linear-gradient(180deg,rgba(230,48,34,.04) 0%,transparent 100%);border-bottom:1px solid var(--border);}
+.story-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:200px 1fr;gap:40px;padding-bottom:40px;}
+.story-cover-big{width:200px;height:280px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:5rem;flex-shrink:0;border:2px solid var(--border);box-shadow:8px 8px 0 var(--red);}
+.story-info h1{font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.04em;line-height:1.1;margin-bottom:10px;}
+.story-meta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.meta-badge{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);}
+.meta-genre{color:var(--gold);border-color:rgba(240,165,0,.2);}
+.meta-status-ongoing{color:var(--red);border-color:rgba(230,48,34,.3);}
+.meta-status-complete{color:#00a651;border-color:rgba(0,166,81,.3);}
 .meta-lang{color:var(--muted);}
-.story-desc{font-size:.88rem;line-height:1.9;color:rgba(253,250,244,.62);margin-bottom:20px;max-width:580px;}
-.story-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
-.s-tag{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);transition:all .2s;cursor:default;}
-.s-tag:hover{border-color:rgba(230,48,34,.4);color:var(--white);}
-
-/* STATS ROW */
-.story-stats{display:flex;gap:28px;margin-bottom:26px;flex-wrap:wrap;}
+.story-desc{font-size:.9rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:20px;max-width:600px;}
+.story-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.s-tag{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);}
+.story-stats{display:flex;gap:24px;margin-bottom:24px;}
 .s-stat{text-align:center;}
-.s-stat-n{font-family:'Bebas Neue';font-size:1.7rem;line-height:1;}
-.s-stat-l{font-family:'Rajdhani';font-size:.58rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
-
-/* ACTION BUTTONS ROW */
-.story-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-.btn-start{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 28px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);display:inline-flex;align-items:center;gap:8px;transition:all .2s;cursor:pointer;border:none;}
+.s-stat-n{font-family:'Bebas Neue';font-size:1.6rem;line-height:1;}
+.s-stat-l{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.btn-start{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 28px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);display:inline-block;transition:all .2s;cursor:pointer;}
 .btn-start:hover{background:var(--gold);color:#000;}
-.btn-like{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--muted);padding:11px 20px;border:1px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all .2s;cursor:pointer;}
-.btn-like:hover,.btn-like.liked{border-color:rgba(230,48,34,.5);color:var(--red);}
-.btn-like.liked .heart-icon{filter:none;}
-.btn-share{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:transparent;color:var(--muted);padding:11px 20px;border:1px solid var(--border);display:inline-flex;align-items:center;gap:8px;transition:all .2s;cursor:pointer;position:relative;}
-.btn-share:hover{border-color:rgba(240,165,0,.4);color:var(--gold);}
-.share-dropdown{position:absolute;top:calc(100% + 8px);left:0;background:#1a1a28;border:1px solid var(--border);border-radius:4px;min-width:180px;z-index:50;display:none;overflow:hidden;}
-.share-dropdown.open{display:block;}
-.share-opt{display:flex;align-items:center;gap:10px;padding:10px 16px;font-family:'Rajdhani';font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:background .15s;}
-.share-opt:hover{background:rgba(255,255,255,.05);color:var(--white);}
-
-/* STAR RATING WIDGET */
-.rating-widget{margin-top:28px;padding:20px 24px;background:var(--card);border:1px solid var(--border);border-radius:4px;}
-.rating-widget-title{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-.stars-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;}
-.star{font-size:1.8rem;cursor:pointer;transition:transform .15s;user-select:none;filter:grayscale(1) brightness(.4);}
-.star:hover,.star.active{filter:none;transform:scale(1.15);}
-.rating-summary{font-family:'Rajdhani';font-size:.75rem;color:var(--muted);margin-top:6px;}
-.rating-summary strong{color:var(--gold);font-size:1rem;}
-.user-rated-msg{font-family:'Rajdhani';font-size:.72rem;color:var(--green);margin-top:6px;display:none;}
 
 /* CHAPTERS */
-.chapters-section{max-width:960px;margin:0 auto;padding:40px 40px 0;}
-.section-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
-.section-header h2{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.05em;white-space:nowrap;}
-.section-header h2 span{color:var(--red);}
-.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(230,48,34,.4),transparent);}
-.sec-count{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.chapters-section{max-width:960px;margin:0 auto;padding:40px;}
+.ch-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
+.ch-header h2{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.05em;}
+.ch-header h2 span{color:var(--red);}
+.ch-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(230,48,34,.4),transparent);}
+.ch-count{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+
 .chapter-list{display:flex;flex-direction:column;gap:2px;}
 .chapter-row{background:var(--card);border:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .2s;position:relative;}
 .chapter-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transition:transform .2s;transform-origin:center;}
 .chapter-row:hover{border-color:rgba(230,48,34,.3);background:var(--card2);padding-left:26px;}
 .chapter-row:hover::before{transform:scaleY(1);}
-.ch-num{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.05em;color:var(--red);min-width:46px;}
+.ch-num{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.05em;color:var(--red);min-width:40px;}
 .ch-title{font-family:'Rajdhani';font-size:.9rem;font-weight:600;letter-spacing:.05em;flex:1;}
-.ch-meta{font-family:'Rajdhani';font-size:.67rem;color:var(--muted);text-align:right;line-height:1.6;}
-.ch-read{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-left:16px;}
-.empty-ch{text-align:center;padding:60px 20px;font-family:'Rajdhani';font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.ch-meta{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);text-align:right;}
+.ch-words{display:block;}
+.ch-date{display:block;}
+.ch-read{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-left:16px;}
 
-/* COMMENTS SECTION */
-.comments-section{max-width:960px;margin:0 auto;padding:40px;}
-.comment-form-box{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:24px;}
-.comment-form-title{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-.comment-name-input,.comment-text-input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--white);font-family:'Rajdhani';font-size:.88rem;padding:10px 14px;outline:none;transition:border-color .2s;margin-bottom:10px;border-radius:2px;}
-.comment-name-input:focus,.comment-text-input:focus{border-color:rgba(230,48,34,.5);}
-.comment-text-input{min-height:90px;resize:vertical;line-height:1.6;}
-.btn-comment{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:10px 24px;border:none;cursor:pointer;transition:background .2s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
-.btn-comment:hover{background:var(--gold);color:#000;}
-.comments-list{display:flex;flex-direction:column;gap:12px;}
-.comment-card{background:var(--card);border:1px solid var(--border);padding:16px 20px;}
-.comment-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.comment-user{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.1em;color:var(--gold);}
-.comment-time{font-family:'Rajdhani';font-size:.65rem;color:var(--muted);}
-.comment-body{font-size:.85rem;line-height:1.7;color:rgba(253,250,244,.7);}
-.comment-actions{display:flex;gap:14px;margin-top:10px;}
-.comment-like-btn{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .2s;display:flex;align-items:center;gap:5px;}
-.comment-like-btn:hover,.comment-like-btn.liked{color:var(--red);}
-.no-comments{text-align:center;padding:40px;font-family:'Rajdhani';font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-
-/* TOAST */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(16px);background:#1a1a28;color:var(--white);font-family:'Rajdhani';font-size:.82rem;font-weight:600;letter-spacing:.1em;padding:12px 24px;border:1px solid var(--border);z-index:999;opacity:0;transition:all .3s;pointer-events:none;}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.toast.green{border-color:rgba(0,166,81,.4);color:var(--green);}
-.toast.red{border-color:rgba(230,48,34,.4);color:var(--red);}
-
-/* FOOTER */
-footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:20px;}
+footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 .foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
 .foot-logo span{color:var(--red);}
 footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
 
 @media(max-width:700px){
   nav{padding:0 20px;}
-  .story-inner{grid-template-columns:1fr;gap:24px;}
-  .story-cover-big{width:160px;height:224px;font-size:3.5rem;}
-  .story-hero,.chapters-section,.comments-section{padding-left:20px;padding-right:20px;}
-  .story-actions{flex-wrap:wrap;}
+  .story-inner{grid-template-columns:1fr;gap:20px;}
+  .story-cover-big{width:140px;height:200px;font-size:3.5rem;}
+  .story-hero,.chapters-section{padding-left:20px;padding-right:20px;}
 }
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
   <div class="nav-r">
@@ -139,350 +78,103 @@ footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
   </div>
 </nav>
 
-<div id="story-page"></div>
+<div id="story-page">
+  <!-- Loaded by JS -->
+</div>
 
 <footer>
   <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
   <p>© 2024 VoomComix · All Rights Reserved</p>
 </footer>
 
-<div class="toast" id="toast"></div>
-
-<script src="stories-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ===== SETUP =====
+const SUPABASE_URL = 'https://gcpbvzyndmwdlvopftma.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const params = new URLSearchParams(location.search);
 const storyId = params.get('id');
-const stories = loadData();
-const story = stories.find(s => s.id === storyId);
 
-// ===== TOAST =====
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type + ' show';
-  setTimeout(() => t.classList.remove('show'), 2600);
+function showNotFound() {
+  document.getElementById('story-page').innerHTML = '<div style="text-align:center;padding:200px 20px;font-family:Rajdhani;font-size:1rem;letter-spacing:.2em;color:#6a6478;text-transform:uppercase;">Story not found. <a href="stories.html" style="color:#e63022;">Back to Stories →</a></div>';
 }
 
-// ===== COVER HELPER =====
-function getCoverEl(s) {
-  if (s.cover && s.cover.trim()) {
-    return `<div class="story-cover-big"><img src="${s.cover}" alt="${s.title}"/></div>`;
-  }
-  return `<div class="story-cover-big" style="background:${s.coverColor||'#1a1a28'}">${s.coverEmoji||'📖'}</div>`;
-}
+async function loadStory() {
+  if (!storyId) { showNotFound(); return; }
 
-if (!story) {
-  document.getElementById('story-page').innerHTML =
-    '<div style="text-align:center;padding:200px 20px;font-family:Rajdhani;font-size:1rem;letter-spacing:.2em;color:#6a6478;text-transform:uppercase;">Story not found. <a href="stories.html" style="color:#e63022;">Back to Stories →</a></div>';
-} else {
+  // Load story from Supabase
+  const { data: story, error } = await sb
+    .from('stories')
+    .select('*, profiles(username, display_name)')
+    .eq('id', storyId)
+    .single();
+
+  if (error || !story) { showNotFound(); return; }
+
+  // Track view
+  await sb.from('story_views').insert({ story_id: storyId }).catch(()=>{});
+
+  // Load chapters
+  const { data: chapters } = await sb
+    .from('chapters')
+    .select('*')
+    .eq('story_id', storyId)
+    .order('chapter_number', { ascending: true });
+
+  const chList = chapters || [];
   document.title = story.title + ' — VoomComix';
-  const statusClass = 'meta-status-' + story.status;
-  const statusText = story.status.charAt(0).toUpperCase() + story.status.slice(1);
+  const statusClass = 'meta-status-' + (story.status || 'ongoing');
+  const statusText = (story.status||'ongoing').charAt(0).toUpperCase() + (story.status||'ongoing').slice(1);
+  const authorName = story.profiles?.display_name || story.profiles?.username || 'VoomComix';
 
-  // ===== LIKES =====
-  const likedKey = 'vc-liked-' + storyId;
-  let likeCount = parseInt(localStorage.getItem('vc-likes-' + storyId) || story.likes || 0);
-  const isLiked = localStorage.getItem(likedKey) === '1';
+  const chaptersHTML = chList.map((ch) => `
+  <div class="chapter-row" onclick="location.href='chapter.html?story=${story.id}&ch=${ch.id}'">
+    <span class="ch-num">CH ${ch.chapter_number}</span>
+    <span class="ch-title">${ch.title || 'Chapter ' + ch.chapter_number}</span>
+    <span class="ch-meta">
+      <span class="ch-words">${(ch.word_count||0).toLocaleString()} words</span>
+      <span class="ch-date">${new Date(ch.created_at).toLocaleDateString('en-IN')}</span>
+    </span>
+    <span class="ch-read">Read →</span>
+  </div>`).join('');
 
-  // ===== RATING DATA =====
-  const ratingKey = 'vc-ratings-' + storyId;
-  const userRatedKey = 'vc-user-rated-' + storyId;
-  let ratingsData = JSON.parse(localStorage.getItem(ratingKey) || 'null');
-  if (!ratingsData) {
-    // Seed with story's default rating
-    const defaultCount = Math.floor(Math.random() * 40) + 10;
-    ratingsData = { total: story.rating * defaultCount, count: defaultCount };
-    localStorage.setItem(ratingKey, JSON.stringify(ratingsData));
-  }
-  const avgRating = ratingsData.count > 0 ? (ratingsData.total / ratingsData.count).toFixed(1) : '0.0';
-  const userPrevRating = parseInt(localStorage.getItem(userRatedKey) || '0');
+  const coverHTML = story.cover_url
+    ? `<img src="${story.cover_url}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" alt="${story.title}"/>`
+    : `<span>${story.story_type==='manga'?'🎌':story.story_type==='comic'?'📚':'📖'}</span>`;
 
-  // ===== CHAPTERS HTML =====
-  const chaptersHTML = (story.chapters && story.chapters.length)
-    ? story.chapters.map(ch => `
-      <div class="chapter-row" onclick="location.href='chapter.html?story=${story.id}&ch=${ch.id}'">
-        <span class="ch-num">CH ${ch.id}</span>
-        <span class="ch-title">${ch.title}</span>
-        <span class="ch-meta">${(ch.wordCount||0).toLocaleString()} words<br/>${ch.date||''}</span>
-        <span class="ch-read">Read →</span>
-      </div>`).join('')
-    : '<div class="empty-ch">No chapters yet — check back soon!</div>';
-
-  // ===== MAIN RENDER =====
   document.getElementById('story-page').innerHTML = `
   <div class="story-hero">
     <div class="story-inner">
-      ${getCoverEl(story)}
+      <div class="story-cover-big" style="background:#1a0a05;">${coverHTML}</div>
       <div class="story-info">
         <h1>${story.title}</h1>
-        <div class="story-author">By ${story.author || 'VoomComix'}</div>
         <div class="story-meta-row">
-          <span class="meta-badge meta-genre">${story.genre}</span>
+          <span class="meta-badge meta-genre">${story.genre || 'General'}</span>
           <span class="meta-badge ${statusClass}">${statusText}</span>
-          <span class="meta-badge meta-lang">${story.language}</span>
+          <span class="meta-badge meta-lang">${story.language || 'English'}</span>
         </div>
-        <div class="story-desc">${story.description}</div>
-        <div class="story-tags">${(story.tags||[]).map(t=>`<span class="s-tag">${t}</span>`).join('')}</div>
+        <div class="story-desc">${story.description || ''}</div>
         <div class="story-stats">
-          <div class="s-stat"><div class="s-stat-n">${(story.chapters||[]).length}</div><div class="s-stat-l">Chapters</div></div>
-          <div class="s-stat"><div class="s-stat-n">${story.views||'0'}</div><div class="s-stat-l">Views</div></div>
-          <div class="s-stat"><div class="s-stat-n" id="like-count-top">${likeCount}</div><div class="s-stat-l">Likes</div></div>
-          <div class="s-stat"><div class="s-stat-n">⭐${avgRating}</div><div class="s-stat-l">Rating (${ratingsData.count})</div></div>
+          <div class="s-stat"><div class="s-stat-n">${chList.length}</div><div class="s-stat-l">Chapters</div></div>
+          <div class="s-stat"><div class="s-stat-n">${story.view_count || 0}</div><div class="s-stat-l">Views</div></div>
+          <div class="s-stat"><div class="s-stat-n">✍️</div><div class="s-stat-l">${authorName}</div></div>
         </div>
-        <div class="story-actions">
-          <a href="chapter.html?story=${story.id}&ch=1" class="btn-start">📖 Start Reading</a>
-          <button class="btn-like ${isLiked?'liked':''}" id="like-btn" onclick="toggleLike()">
-            <span id="heart-icon">${isLiked?'❤️':'🤍'}</span>
-            <span id="like-count-btn">${likeCount}</span> Likes
-          </button>
-          <div class="btn-share" id="share-btn" onclick="toggleShare()">
-            🔗 Share
-            <div class="share-dropdown" id="share-dd">
-              <div class="share-opt" onclick="shareWA()">📱 WhatsApp</div>
-              <div class="share-opt" onclick="copyLink()">🔗 Copy Link</div>
-              <div class="share-opt" onclick="shareTwitter()">🐦 Twitter / X</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STAR RATING -->
-        <div class="rating-widget">
-          <div class="rating-widget-title">Rate This Story</div>
-          <div class="stars-row" id="stars-row">
-            ${[1,2,3,4,5].map(n=>`<span class="star ${userPrevRating>=n?'active':''}" data-val="${n}" onclick="submitRating(${n})" onmouseover="hoverStars(${n})" onmouseout="resetStars()">★</span>`).join('')}
-          </div>
-          <div class="rating-summary">Average: <strong id="avg-display">${avgRating}</strong> ★ &nbsp;·&nbsp; <span id="rating-count">${ratingsData.count}</span> ratings</div>
-          <div class="user-rated-msg" id="rated-msg">✓ You rated this ${userPrevRating} star${userPrevRating>1?'s':''}!</div>
-        </div>
+        ${chList.length > 0 ? `<a href="chapter.html?story=${story.id}&ch=${chList[0].id}" class="btn-start">📖 Start Reading</a>` : '<span style="font-family:Rajdhani;color:#6a6478;">No chapters yet</span>'}
       </div>
     </div>
   </div>
-
-  <!-- CHAPTERS -->
   <div class="chapters-section">
-    <div class="section-header">
+    <div class="ch-header">
       <h2>CHAPTER <span>LIST</span></h2>
-      <div class="sec-line"></div>
-      <span class="sec-count">${(story.chapters||[]).length} chapters</span>
+      <div class="ch-line"></div>
+      <span class="ch-count">${chList.length} chapters</span>
     </div>
-    <div class="chapter-list">${chaptersHTML}</div>
-  </div>
-
-  <!-- COMMENTS -->
-  <div class="comments-section">
-    <div class="section-header">
-      <h2>COMMENTS <span>&amp; DISCUSSION</span></h2>
-      <div class="sec-line"></div>
-      <span class="sec-count" id="comment-count-label">0 comments</span>
-    </div>
-    <div class="comment-form-box">
-      <div class="comment-form-title">Leave a Comment</div>
-      <input class="comment-name-input" id="c-name" placeholder="Your name (e.g. Reader123)" maxlength="40"/>
-      <textarea class="comment-text-input" id="c-text" placeholder="Share your thoughts about this story..."></textarea>
-      <button class="btn-comment" onclick="postComment()">Post Comment →</button>
-    </div>
-    <div class="comments-list" id="comments-list"></div>
+    <div class="chapter-list">${chaptersHTML || '<p style="font-family:Rajdhani;color:#6a6478;padding:20px;">No chapters yet.</p>'}</div>
   </div>`;
-
-  // Show rated msg if user already rated
-  if (userPrevRating > 0) {
-    document.getElementById('rated-msg').style.display = 'block';
-  }
-
-  // Load comments
-  renderComments();
-  updateCommentCount();
-
-  // Close share dropdown on outside click
-  document.addEventListener('click', e => {
-    if (!document.getElementById('share-btn').contains(e.target)) {
-      document.getElementById('share-dd').classList.remove('open');
-    }
-  });
 }
 
-// ===== LIKE FUNCTIONS =====
-function toggleLike() {
-  const likedKey = 'vc-liked-' + storyId;
-  const isLiked = localStorage.getItem(likedKey) === '1';
-  let count = parseInt(localStorage.getItem('vc-likes-' + storyId) || story.likes || 0);
-
-  if (isLiked) {
-    count = Math.max(0, count - 1);
-    localStorage.removeItem(likedKey);
-    document.getElementById('like-btn').classList.remove('liked');
-    document.getElementById('heart-icon').textContent = '🤍';
-    showToast('Like removed', '');
-  } else {
-    count++;
-    localStorage.setItem(likedKey, '1');
-    document.getElementById('like-btn').classList.add('liked');
-    document.getElementById('heart-icon').textContent = '❤️';
-    showToast('Story liked! ❤️', 'red');
-  }
-
-  localStorage.setItem('vc-likes-' + storyId, count);
-  document.getElementById('like-count-btn').textContent = count;
-  document.getElementById('like-count-top').textContent = count;
-}
-
-// ===== SHARE FUNCTIONS =====
-function toggleShare() {
-  document.getElementById('share-dd').classList.toggle('open');
-}
-function shareWA() {
-  const url = encodeURIComponent(location.href);
-  const txt = encodeURIComponent('Check out "' + story.title + '" on VoomComix! 📖');
-  window.open('https://wa.me/?text=' + txt + '%20' + url, '_blank');
-}
-function copyLink() {
-  navigator.clipboard.writeText(location.href).then(() => showToast('Link copied! 🔗', 'green'));
-  document.getElementById('share-dd').classList.remove('open');
-}
-function shareTwitter() {
-  const url = encodeURIComponent(location.href);
-  const txt = encodeURIComponent('Reading "' + story.title + '" on @VoomComix 📖');
-  window.open('https://twitter.com/intent/tweet?text=' + txt + '&url=' + url, '_blank');
-}
-
-// ===== STAR RATING =====
-function hoverStars(val) {
-  document.querySelectorAll('.star').forEach(s => {
-    s.style.filter = parseInt(s.dataset.val) <= val ? 'none' : 'grayscale(1) brightness(.4)';
-    s.style.transform = parseInt(s.dataset.val) === val ? 'scale(1.2)' : '';
-  });
-}
-function resetStars() {
-  const prev = parseInt(localStorage.getItem('vc-user-rated-' + storyId) || '0');
-  document.querySelectorAll('.star').forEach(s => {
-    const v = parseInt(s.dataset.val);
-    s.style.filter = v <= prev ? 'none' : 'grayscale(1) brightness(.4)';
-    s.style.transform = '';
-  });
-}
-function submitRating(val) {
-  const userRatedKey = 'vc-user-rated-' + storyId;
-  const ratingKey = 'vc-ratings-' + storyId;
-  const prevRating = parseInt(localStorage.getItem(userRatedKey) || '0');
-  let rd = JSON.parse(localStorage.getItem(ratingKey) || '{"total":0,"count":0}');
-
-  if (prevRating > 0) {
-    // Update existing
-    rd.total = rd.total - prevRating + val;
-  } else {
-    rd.total += val;
-    rd.count++;
-  }
-  localStorage.setItem(ratingKey, JSON.stringify(rd));
-  localStorage.setItem(userRatedKey, val);
-
-  const avg = (rd.total / rd.count).toFixed(1);
-  document.getElementById('avg-display').textContent = avg;
-  document.getElementById('rating-count').textContent = rd.count;
-  document.getElementById('rated-msg').textContent = '✓ You rated this ' + val + ' star' + (val > 1 ? 's' : '') + '!';
-  document.getElementById('rated-msg').style.display = 'block';
-
-  // Refresh star display
-  document.querySelectorAll('.star').forEach(s => {
-    const v = parseInt(s.dataset.val);
-    s.style.filter = v <= val ? 'none' : 'grayscale(1) brightness(.4)';
-  });
-
-  showToast('Rating saved! ' + '★'.repeat(val), 'green');
-}
-
-// ===== COMMENTS =====
-function getComments() {
-  return JSON.parse(localStorage.getItem('vc-comments-' + storyId) || '[]');
-}
-function saveComments(arr) {
-  localStorage.setItem('vc-comments-' + storyId, JSON.stringify(arr));
-}
-function updateCommentCount() {
-  const count = getComments().length;
-  const el = document.getElementById('comment-count-label');
-  if (el) el.textContent = count + ' comment' + (count !== 1 ? 's' : '');
-}
-
-function postComment() {
-  const name = document.getElementById('c-name').value.trim();
-  const text = document.getElementById('c-text').value.trim();
-  if (!name) { showToast('Please enter your name!', 'red'); return; }
-  if (!text) { showToast('Please write a comment!', 'red'); return; }
-  if (text.length < 3) { showToast('Comment too short!', 'red'); return; }
-
-  const comments = getComments();
-  const now = new Date();
-  const timeStr = now.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) +
-    ' · ' + now.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
-
-  comments.unshift({
-    id: Date.now(),
-    user: name,
-    text: text,
-    time: timeStr,
-    likes: 0
-  });
-  saveComments(comments);
-  document.getElementById('c-name').value = '';
-  document.getElementById('c-text').value = '';
-  renderComments();
-  updateCommentCount();
-  showToast('Comment posted! 💬', 'green');
-}
-
-function toggleCommentLike(id) {
-  const likedKey = 'vc-clk-' + id;
-  const isLiked = localStorage.getItem(likedKey) === '1';
-  const comments = getComments();
-  const c = comments.find(x => x.id === id);
-  if (!c) return;
-  if (isLiked) {
-    c.likes = Math.max(0, (c.likes || 0) - 1);
-    localStorage.removeItem(likedKey);
-  } else {
-    c.likes = (c.likes || 0) + 1;
-    localStorage.setItem(likedKey, '1');
-  }
-  saveComments(comments);
-  renderComments();
-}
-
-function deleteComment(id) {
-  if (!confirm('Delete this comment?')) return;
-  saveComments(getComments().filter(c => c.id !== id));
-  renderComments();
-  updateCommentCount();
-  showToast('Comment deleted', '');
-}
-
-function renderComments() {
-  const comments = getComments();
-  const list = document.getElementById('comments-list');
-  if (!list) return;
-  if (!comments.length) {
-    list.innerHTML = '<div class="no-comments">No comments yet — be the first to share your thoughts!</div>';
-    return;
-  }
-  list.innerHTML = comments.map(c => {
-    const likedKey = 'vc-clk-' + c.id;
-    const isLiked = localStorage.getItem(likedKey) === '1';
-    return `<div class="comment-card">
-      <div class="comment-header">
-        <span class="comment-user">👤 ${c.user}</span>
-        <span class="comment-time">${c.time}</span>
-      </div>
-      <div class="comment-body">${c.text}</div>
-      <div class="comment-actions">
-        <button class="comment-like-btn ${isLiked?'liked':''}" onclick="toggleCommentLike(${c.id})">
-          ${isLiked?'❤️':'🤍'} ${c.likes||0} Likes
-        </button>
-        <button class="comment-like-btn" onclick="deleteComment(${c.id})" style="color:#6a6478;">🗑 Delete</button>
-      </div>
-    </div>`;
-  }).join('');
-}
+loadStory();
 </script>
 </body>
 </html>
