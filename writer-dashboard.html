@@ -12,7 +12,6 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;fon
 a{text-decoration:none;color:inherit;}
 button{cursor:pointer;font-family:'Rajdhani';}
 input,textarea,select{font-family:'Rajdhani';}
-
 .app{display:flex;min-height:100vh;}
 
 /* SIDEBAR */
@@ -70,9 +69,7 @@ input,textarea,select{font-family:'Rajdhani';}
 .srow-meta{font-size:.68rem;color:var(--muted);margin-top:2px;}
 .srow-actions{display:flex;gap:6px;flex-shrink:0;}
 .status-pill{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:20px;}
-.sp-pending{background:#fef3c7;color:#92400e;}
 .sp-approved{background:#d1fae5;color:#065f46;}
-.sp-rejected{background:#fee2e2;color:#991b1b;}
 .sp-ongoing{background:#dbeafe;color:#1e40af;}
 
 /* CHAPTER ROWS */
@@ -113,14 +110,14 @@ input,textarea,select{font-family:'Rajdhani';}
 .cover-wrap{display:flex;gap:18px;align-items:flex-start;}
 .cover-box{width:110px;height:154px;border-radius:10px;border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;flex-shrink:0;background:var(--bg);transition:border-color .2s;}
 .cover-box:hover{border-color:var(--red);}
-.cover-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.cover-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .cover-box img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:8px;}
 .cover-ic{font-size:1.6rem;margin-bottom:4px;}
 .cover-txt{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;}
 
 /* PAGE GRID */
 .pages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:8px;margin-top:10px;}
-.pslot{position:relative;background:var(--bg);border:2px dashed var(--border);border-radius:8px;aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;overflow:hidden;}
+.pslot{position:relative;background:var(--bg);border:2px dashed var(--border);border-radius:8px;aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;transition:all .2s;}
 .pslot:hover{border-color:var(--red);}
 .pslot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 .pslot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:6px;}
@@ -155,11 +152,20 @@ input,textarea,select{font-family:'Rajdhani';}
 .empty-t{font-size:.9rem;font-weight:600;}
 .empty-s{font-size:.78rem;margin-top:4px;}
 
-/* PENDING NOTICE */
+/* NOTICE */
 .notice{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1px solid rgba(212,130,10,.3);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;}
 .notice-ic{font-size:1.4rem;flex-shrink:0;}
 .notice-title{font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:2px;}
 .notice-text{font-size:.75rem;color:var(--muted);line-height:1.5;}
+
+/* STORY TYPE SELECTOR */
+.type-selector{display:flex;gap:10px;margin-bottom:16px;}
+.type-btn{flex:1;padding:14px 10px;border:2px solid var(--border);border-radius:10px;background:var(--bg);cursor:pointer;text-align:center;transition:all .2s;}
+.type-btn:hover{border-color:var(--muted);}
+.type-btn.selected{border-color:var(--red);background:#fff5f5;}
+.type-btn-ic{font-size:1.8rem;display:block;margin-bottom:6px;}
+.type-btn-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);}
+.type-btn-sub{font-size:.62rem;color:var(--muted);margin-top:2px;}
 
 @media(max-width:700px){.sidebar{display:none;}.main{margin-left:0;}}
 </style>
@@ -172,7 +178,7 @@ input,textarea,select{font-family:'Rajdhani';}
     <div class="sb-user">
       <div class="sb-avatar" id="sb-avatar">?</div>
       <div class="sb-uname" id="sb-uname">Loading...</div>
-      <div class="sb-role">✍️ Writer</div>
+      <div class="sb-role" id="sb-role">✍️ Writer</div>
     </div>
     <div class="sb-section">
       <div class="sb-lbl">Studio</div>
@@ -204,14 +210,29 @@ input,textarea,select{font-family:'Rajdhani';}
 
       <!-- DASHBOARD -->
       <div class="panel active" id="panel-dashboard">
-        <div id="pending-notice"></div>
-        <div class="stats-row" id="writer-stats"></div>
+        <div class="stats-row" id="writer-stats">
+          <div class="stat"><div class="stat-ic">📚</div><div class="stat-v">—</div><div class="stat-l">My Stories</div></div>
+          <div class="stat"><div class="stat-ic">📄</div><div class="stat-v">—</div><div class="stat-l">Chapters</div></div>
+          <div class="stat"><div class="stat-ic">👁️</div><div class="stat-v">—</div><div class="stat-l">Total Views</div></div>
+          <div class="stat"><div class="stat-ic">❤️</div><div class="stat-v">—</div><div class="stat-l">Followers</div></div>
+        </div>
         <div class="card">
           <div class="card-hd">
             <span class="card-title">My Stories</span>
             <button class="btn btn-dark" onclick="startAddStory()">+ New Story</button>
           </div>
-          <div id="dash-stories"></div>
+          <div id="dash-stories"><div class="empty"><div class="empty-ic">⏳</div><div class="empty-t">Loading...</div></div></div>
+        </div>
+
+        <!-- EARNINGS QUICK CARD -->
+        <div class="card" id="dash-earnings-card">
+          <div class="card-hd">
+            <span class="card-title">💰 My Earnings</span>
+            <button class="btn btn-teal" onclick="goPanel('revenue')">View All →</button>
+          </div>
+          <div id="dash-earnings">
+            <div class="empty"><div class="empty-ic">⏳</div><div class="empty-t">Loading...</div></div>
+          </div>
         </div>
       </div>
 
@@ -229,31 +250,62 @@ input,textarea,select{font-family:'Rajdhani';}
       <!-- ADD/EDIT STORY -->
       <div class="panel" id="panel-add-story">
         <input type="hidden" id="edit-id"/>
-        <input type="hidden" id="edit-type"/>
 
+        <!-- STEP 1: Choose Type -->
+        <div id="step-type" class="form-sec">
+          <div class="form-sec-title">Step 1 — Choose Story Type</div>
+          <div class="type-selector">
+            <div class="type-btn selected" id="type-novel" onclick="selectType('novel',this)">
+              <span class="type-btn-ic">📖</span>
+              <div class="type-btn-label">Novel</div>
+              <div class="type-btn-sub">Text chapters</div>
+            </div>
+            <div class="type-btn" id="type-manga" onclick="selectType('manga',this)">
+              <span class="type-btn-ic">🎌</span>
+              <div class="type-btn-label">Manga</div>
+              <div class="type-btn-sub">Vertical scroll images</div>
+            </div>
+            <div class="type-btn" id="type-comic" onclick="selectType('comic',this)">
+              <span class="type-btn-ic">🗂️</span>
+              <div class="type-btn-label">Comic</div>
+              <div class="type-btn-sub">Page spread / flip</div>
+            </div>
+          </div>
+          <input type="hidden" id="f-type" value="novel"/>
+        </div>
+
+        <!-- STEP 2: Story Details -->
         <div class="form-sec">
-          <div class="form-sec-title">Cover Image</div>
+          <div class="form-sec-title">Step 2 — Story Details</div>
           <div class="cover-wrap">
-            <div class="cover-box" onclick="document.getElementById('cover-file').click()">
-              <input type="file" id="cover-file" accept="image/*" onchange="previewCover(this)" style="display:none"/>
+            <div class="cover-box" id="cover-box-click">
+              <input type="file" id="cover-file" accept="image/*" onchange="previewCover(this)"/>
               <img id="cover-preview-img" style="display:none"/>
-              <div id="cover-placeholder"><div class="cover-ic">📷</div><div class="cover-txt">Upload Cover</div></div>
+              <div id="cover-placeholder">
+                <div class="cover-ic">📷</div>
+                <div class="cover-txt">Upload Cover</div>
+              </div>
             </div>
             <input type="hidden" id="f-cover-url"/>
             <div style="flex:1">
-              <div class="fg"><label>Story Title *</label><input type="text" id="f-title" placeholder="Enter story title"/></div>
+              <div class="fg"><label>Story Title *</label><input type="text" id="f-title" placeholder="Enter your story title"/></div>
               <div class="grid2">
-                <div class="fg"><label>Type</label>
-                  <select id="f-type">
-                    <option value="novel">📖 Novel</option>
-                    <option value="manga">🎌 Manga</option>
-                    <option value="comic">🗂️ Comic</option>
-                  </select>
-                </div>
-                <div class="fg"><label>Genre</label><input type="text" id="f-genre" placeholder="Fantasy, Action..."/></div>
-                <div class="fg"><label>Language</label>
+                <div class="fg"><label>Genre</label><input type="text" id="f-genre" placeholder="Fantasy, Action, Romance..."/></div>
+                <div class="fg"><label>Story Language</label>
                   <select id="f-lang">
-                    <option>English</option><option>Hindi</option><option>Hindi + English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="English" selected>English</option>
+                    <option value="Hindi + English">Hindi + English</option>
+                    <option value="Marathi">Marathi</option>
+                    <option value="Bengali">Bengali</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Kannada">Kannada</option>
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="Gujarati">Gujarati</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="Odia">Odia</option>
+                    <option value="Urdu">Urdu</option>
                   </select>
                 </div>
                 <div class="fg"><label>Status</label>
@@ -263,28 +315,28 @@ input,textarea,select{font-family:'Rajdhani';}
                     <option value="hiatus">Hiatus</option>
                   </select>
                 </div>
+                <div class="fg"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Action, Dark, Romance"/></div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="form-sec">
-          <div class="form-sec-title">Details</div>
-          <div class="fg"><label>Tags (comma separated)</label><input type="text" id="f-tags" placeholder="Action, Dark, Romance"/></div>
-          <div class="fg"><label>Description *</label><textarea id="f-desc" placeholder="Write a compelling description..." style="min-height:120px;"></textarea></div>
+          <div class="fg" style="margin-top:14px;"><label>Description *</label>
+            <textarea id="f-desc" placeholder="Write a compelling description of your story..." style="min-height:120px;"></textarea>
+          </div>
         </div>
 
         <div style="display:flex;gap:10px;align-items:center;">
-          <button class="btn btn-dark btn-lg" onclick="saveStory()" id="btn-save-story">💾 Submit for Review</button>
+          <button class="btn btn-dark btn-lg" onclick="saveStory()" id="btn-save-story">🚀 Publish Story</button>
           <button class="btn btn-outline btn-lg" onclick="goPanel('my-stories')">Cancel</button>
-          <span style="font-size:.7rem;color:var(--muted);margin-left:8px;">Stories are reviewed by admin before publishing</span>
+          <span id="save-note" style="font-size:.7rem;color:var(--teal);margin-left:8px;">✓ Story goes live immediately</span>
         </div>
       </div>
 
       <!-- CHAPTERS -->
       <div class="panel" id="panel-chapters">
         <div class="card">
-          <div class="card-hd" id="ch-header"></div>
+          <div class="card-hd" id="ch-header">
+            <span class="card-title">Chapters</span>
+          </div>
           <div id="ch-list"></div>
         </div>
       </div>
@@ -295,7 +347,7 @@ input,textarea,select{font-family:'Rajdhani';}
           <div class="notice-ic">💡</div>
           <div>
             <div class="notice-title">How Revenue Works</div>
-            <div class="notice-text">VoomComix earns from Google AdSense. Each month, earnings are divided based on your story views. Your share is transferred via UPI. Make sure your UPI ID is set in Settings.</div>
+            <div class="notice-text">VoomComix earns from Google AdSense. Each month, earnings are divided based on your story views. Your share is transferred via UPI. Set your UPI ID in Settings.</div>
           </div>
         </div>
         <div class="stats-row" id="rev-stats"></div>
@@ -310,29 +362,31 @@ input,textarea,select{font-family:'Rajdhani';}
         <div class="form-sec">
           <div class="form-sec-title">Profile</div>
           <div class="grid2">
-            <div class="fg"><label>Display Name</label><input type="text" id="s-name" placeholder="Your name"/></div>
+            <div class="fg"><label>Display Name</label><input type="text" id="s-name" placeholder="Your pen name"/></div>
             <div class="fg"><label>Username</label><input type="text" id="s-username" placeholder="username" disabled style="opacity:.6;"/></div>
           </div>
           <div class="fg"><label>Bio</label><textarea id="s-bio" placeholder="Tell readers about yourself..." style="min-height:80px;"></textarea></div>
           <button class="btn btn-dark" onclick="saveProfile()">Save Profile</button>
         </div>
         <div class="form-sec">
-          <div class="form-sec-title">💰 Payment Details</div>
+          <div class="form-sec-title">💰 Payment Details (UPI)</div>
           <div class="notice" style="margin-bottom:14px;">
             <div class="notice-ic">⚠️</div>
             <div>
               <div class="notice-title">Required for Revenue Payout</div>
-              <div class="notice-text">Add your UPI ID so we can send monthly revenue payments directly to your account.</div>
+              <div class="notice-text">Add your UPI ID so VoomComix can send monthly revenue payments directly to your account.</div>
             </div>
           </div>
-          <div class="fg" style="max-width:320px;"><label>UPI ID</label><input type="text" id="s-upi" placeholder="yourname@upi or 9876543210@paytm"/></div>
-          <button class="btn btn-gold" onclick="savePayment()">💾 Save UPI</button>
+          <div class="fg" style="max-width:320px;"><label>UPI ID</label>
+            <input type="text" id="s-upi" placeholder="yourname@upi or 9876543210@paytm"/>
+          </div>
+          <button class="btn btn-gold" onclick="savePayment()">💾 Save UPI ID</button>
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
+    </div><!-- end content -->
+  </div><!-- end main -->
+</div><!-- end app -->
 
 <!-- CHAPTER MODAL -->
 <div class="modal-bg" id="ch-modal">
@@ -344,16 +398,26 @@ input,textarea,select{font-family:'Rajdhani';}
     <div class="modal-body">
       <input type="hidden" id="m-sid"/>
       <input type="hidden" id="m-cid"/>
-      <input type="hidden" id="m-type"/>
+      <input type="hidden" id="m-stype"/>
       <div class="grid2" style="margin-bottom:14px;">
-        <div class="fg"><label>Chapter No.</label><input type="number" id="m-num" min="1"/></div>
-        <div class="fg"><label>Date</label><input type="date" id="m-date"/></div>
+        <div class="fg"><label>Chapter Number</label><input type="number" id="m-num" min="1"/></div>
+        <div class="fg"><label>Publish Date</label><input type="date" id="m-date"/></div>
       </div>
-      <div class="fg" style="margin-bottom:14px;"><label>Chapter Title *</label><input type="text" id="m-title" placeholder="e.g. The First Battle"/></div>
-      <div id="m-novel"><div class="fg"><label>Content *</label><textarea id="m-content" style="min-height:300px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;" placeholder="Write your chapter here...&#10;&#10;Leave a blank line between paragraphs."></textarea><div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Blank line = paragraph break</div></div></div>
-      <div id="m-pages" style="display:none;">
+      <div class="fg" style="margin-bottom:14px;"><label>Chapter Title *</label>
+        <input type="text" id="m-title" placeholder="e.g. The First Battle"/>
+      </div>
+      <!-- Novel: text content -->
+      <div id="m-novel-section">
+        <div class="fg"><label>Chapter Content *</label>
+          <textarea id="m-content" style="min-height:320px;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;"
+            placeholder="Write your chapter here...&#10;&#10;Leave a blank line between paragraphs."></textarea>
+          <div style="font-size:.65rem;color:var(--muted);margin-top:4px;">Blank line = new paragraph</div>
+        </div>
+      </div>
+      <!-- Manga/Comic: page images -->
+      <div id="m-pages-section" style="display:none;">
         <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Pages (Max 20)</div>
-        <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px;">Click any slot to upload a page image</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:10px;">Click any slot to upload a page image. Pages will appear in order.</div>
         <div class="pages-grid" id="pages-grid"></div>
       </div>
     </div>
@@ -367,259 +431,429 @@ input,textarea,select{font-family:'Rajdhani';}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vc-config.js"></script>
 <script>
-const sb = getSupabase();
+const SUPA_URL = 'https://gcpbvzyndmwdlvopftma.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+let _client = null;
+function client() {
+  if (_client) return _client;
+  if (typeof getSupabase === 'function') {
+    _client = getSupabase();
+  } else {
+    _client = window.supabase.createClient(SUPA_URL, SUPA_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
+  }
+  return _client;
+}
+
 let profile = null;
-let prevPanel = null;
+let prevPanel = 'dashboard';
 let currentSid = null;
 let pageImages = {};
 
-// ===== INIT =====
+// ===========================
+// INIT
+// ===========================
 async function init() {
-  const user = await requireAuth('login.html');
-  if (!user) return;
-  profile = await getCurrentProfile();
-  if (!profile) return;
+  try {
+    const { data: { user } } = await client().auth.getUser();
+    if (!user) { window.location.href = 'login.html'; return; }
 
-  // Admin can access writer dashboard too
-  if (profile.role !== 'writer' && profile.role !== 'admin') {
-    // Stories auto-approved — no pending check needed else {
-      window.location.href = 'become-writer.html';
-      return;
+    const { data: prof } = await client().from('profiles').select('*').eq('id', user.id).single();
+    if (!prof) { window.location.href = 'login.html'; return; }
+
+    if (prof.role !== 'writer' && prof.role !== 'admin') {
+      window.location.href = 'login.html'; return;
     }
+
+    profile = prof;
+    document.getElementById('sb-uname').textContent = prof.display_name || prof.username || 'Writer';
+    document.getElementById('sb-avatar').textContent = (prof.display_name || prof.username || 'W')[0].toUpperCase();
+    document.getElementById('sb-role').textContent = prof.role === 'admin' ? '👑 Admin' : '✍️ Writer';
+
+    await renderDash();
+    loadSettings();
+  } catch(e) {
+    console.error('Init error:', e);
   }
-
-  // Set sidebar info
-  document.getElementById('sb-uname').textContent = profile.display_name || profile.username;
-  document.getElementById('sb-avatar').textContent = (profile.display_name || profile.username || 'U')[0].toUpperCase();
-
-  renderDash();
-  loadSettings();
 }
 
-// ===== NAVIGATION =====
+// ===========================
+// NAVIGATION
+// ===========================
 function goPanel(name, sbEl) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sb-item').forEach(x => x.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
+  const panel = document.getElementById('panel-' + name);
+  if (!panel) return;
+  panel.classList.add('active');
   if (sbEl) sbEl.classList.add('active');
-  const titles = { dashboard:'Dashboard','my-stories':'My Stories','add-story':'New Story',chapters:'Chapters',revenue:'Revenue',settings:'Settings' };
+
+  const titles = {
+    dashboard: 'Dashboard',
+    'my-stories': 'My Stories',
+    'add-story': 'New Story',
+    chapters: 'Chapters',
+    revenue: 'Revenue',
+    settings: 'Settings'
+  };
   document.getElementById('tb-title').textContent = titles[name] || name;
+
   const back = document.getElementById('tb-back');
-  if (name === 'chapters' || name === 'add-story') { back.classList.add('show'); prevPanel = 'my-stories'; }
-  else { back.classList.remove('show'); prevPanel = null; }
+  if (name === 'chapters' || name === 'add-story') {
+    back.classList.add('show');
+  } else {
+    back.classList.remove('show');
+    prevPanel = name;
+  }
+
   if (name === 'my-stories') renderStories();
   if (name === 'revenue') renderRevenue();
 }
 
-function handleBack() { goPanel(prevPanel || 'dashboard'); }
+function handleBack() { goPanel(prevPanel || 'my-stories'); }
 
 function startAddStory() {
   clearStoryForm();
-  document.getElementById('tb-title').textContent = 'New Story';
   goPanel('add-story');
 }
 
-// ===== DASHBOARD =====
+// ===========================
+// STORY TYPE SELECTOR
+// ===========================
+function selectType(type, el) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('f-type').value = type;
+}
+
+// ===========================
+// DASHBOARD
+// ===========================
 async function renderDash() {
-  const { data: stories } = await sb.from('stories').select('*').eq('author_id', profile.id);
-  const totalViews = (stories || []).reduce((a, s) => a + (s.total_views || 0), 0);
-  const totalCh = (stories || []).reduce((a, s) => a + (s.total_chapters || 0), 0);
+  const { data: stories } = await client().from('stories').select('*').eq('author_id', profile.id);
+  const list = stories || [];
+  const totalViews = list.reduce((a, s) => a + (s.total_views || 0), 0);
+  const totalCh    = list.reduce((a, s) => a + (s.total_chapters || 0), 0);
+  const totalFoll  = list.reduce((a, s) => a + (s.total_followers || 0), 0);
+
+  // Fetch pending earnings
+  const { data: revRecs } = await client().from('revenue_records').select('writer_share,status,month,total_views,share_percent').eq('author_id', profile.id).order('month', {ascending:false});
+  const totalEarned  = (revRecs||[]).reduce((a,r) => a + (r.writer_share||0), 0);
+  const pendingPay   = (revRecs||[]).filter(r=>r.status==='pending').reduce((a,r) => a + (r.writer_share||0), 0);
 
   document.getElementById('writer-stats').innerHTML = [
-    { ic:'📚', v: (stories||[]).length, l:'My Stories' },
-    { ic:'📄', v: totalCh, l:'Total Chapters' },
-    { ic:'👁️', v: formatNum(totalViews), l:'Total Views' },
-    { ic:'❤️', v: (stories||[]).reduce((a,s)=>a+(s.total_followers||0),0), l:'Followers' },
-  ].map(s => `<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
+    { ic:'📚', v: list.length,           l:'My Stories',      color:'' },
+    { ic:'📄', v: totalCh,               l:'Total Chapters',  color:'' },
+    { ic:'👁️', v: formatNum(totalViews), l:'Total Views',     color:'' },
+    { ic:'❤️', v: totalFoll,             l:'Followers',       color:'' },
+    { ic:'💰', v: '₹'+totalEarned.toFixed(0), l:'Total Earned', color:'color:#0a7c6e' },
+    { ic:'⏳', v: '₹'+pendingPay.toFixed(0),  l:'Pending Payout', color:'color:#d4820a' },
+  ].map(s => `<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v" style="${s.color}">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
 
-  document.getElementById('dash-stories').innerHTML = (stories||[]).length
-    ? (stories||[]).slice(0,5).map(s => storyRowHTML(s)).join('')
-    : `<div class="empty"><div class="empty-ic">✍️</div><div class="empty-t">No stories yet</div><div class="empty-s">Click "New Story" to publish your first!</div></div>`;
+  document.getElementById('dash-stories').innerHTML = list.length
+    ? list.slice(0, 6).map(s => storyRowHTML(s)).join('')
+    : `<div class="empty">
+        <div class="empty-ic">✍️</div>
+        <div class="empty-t">No stories yet</div>
+        <div class="empty-s">Click "New Story" to publish your first story!</div>
+      </div>`;
+
+  // Earnings quick view
+  const latestRev = (revRecs||[]).slice(0,3);
+  document.getElementById('dash-earnings').innerHTML = latestRev.length
+    ? `<div style="padding:14px 18px;">
+        ${latestRev.map(r => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+            <div>
+              <div style="font-size:.85rem;font-weight:700;">${r.month}</div>
+              <div style="font-size:.65rem;color:var(--muted);">${formatNum(r.total_views||0)} views · ${r.share_percent||70}% share</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--teal);">₹${(r.writer_share||0).toFixed(2)}</div>
+              <div style="font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;${r.status==='paid'?'background:#d1fae5;color:#065f46':'background:#fef3c7;color:#92400e'}">${r.status==='paid'?'✓ Paid':'⏳ Pending'}</div>
+            </div>
+          </div>`).join('')}
+        <div style="padding-top:12px;font-size:.7rem;color:var(--muted);">Revenue calculated monthly from AdSense. Paid via UPI. Set UPI in Settings.</div>
+      </div>`
+    : `<div class="empty">
+        <div class="empty-ic">💰</div>
+        <div class="empty-t">No earnings yet</div>
+        <div class="empty-s">Revenue records appear here each month based on your story views.</div>
+        <div style="margin-top:12px;"><button class="btn btn-outline" onclick="goPanel('settings')">⚙️ Add UPI ID</button></div>
+      </div>`;
 }
 
 async function renderStories() {
-  const { data: stories } = await sb.from('stories').select('*').eq('author_id', profile.id);
-  document.getElementById('my-stories-count').textContent = `My Stories (${(stories||[]).length})`;
-  document.getElementById('my-stories-list').innerHTML = (stories||[]).length
-    ? stories.map(s => storyRowHTML(s)).join('')
+  const { data: stories } = await client().from('stories').select('*').eq('author_id', profile.id).order('created_at', { ascending: false });
+  const list = stories || [];
+  document.getElementById('my-stories-count').textContent = `My Stories (${list.length})`;
+  document.getElementById('my-stories-list').innerHTML = list.length
+    ? list.map(s => storyRowHTML(s)).join('')
     : `<div class="empty"><div class="empty-ic">✍️</div><div class="empty-t">No stories yet</div></div>`;
 }
 
 function storyRowHTML(s) {
-  const cover = s.cover_url ? `<img src="${s.cover_url}" class="srow-cover"/>` : `<div class="srow-cover-fb">${s.cover_emoji || '📖'}</div>`;
-  const statusMap = { pending:'sp-pending', approved:'sp-approved', rejected:'sp-rejected' };
+  const typeIcons = { novel:'📖', manga:'🎌', comic:'🗂️' };
+  const cover = s.cover_url
+    ? `<img src="${s.cover_url}" class="srow-cover" onerror="this.style.display='none'"/>`
+    : `<div class="srow-cover-fb">${typeIcons[s.type] || '📖'}</div>`;
+
   return `<div class="srow">${cover}
     <div class="srow-info">
       <div class="srow-title">${s.title}</div>
       <div class="srow-meta">
-        <span class="status-pill ${statusMap[s.approval_status]||'sp-pending'}">${s.approval_status}</span>
-        · ${s.genre||'—'} · ${s.total_chapters||0} chapters · ${formatNum(s.total_views||0)} views
+        <span class="status-pill sp-approved">${s.type || 'novel'}</span>
+        · ${s.language || '—'} · ${s.genre || '—'}
+        · ${s.total_chapters || 0} ch · ${formatNum(s.total_views || 0)} views
       </div>
     </div>
     <div class="srow-actions">
-      <button class="btn btn-teal btn-ic" onclick="openChapters('${s.id}','${s.type||'novel'}')" title="Chapters">📖</button>
-      <button class="btn btn-outline btn-ic" onclick="editStory('${s.id}')" title="Edit">✏️</button>
-      <button class="btn btn-danger btn-ic" onclick="delStory('${s.id}')" title="Delete">🗑️</button>
-    </div></div>`;
+      <button class="btn btn-teal btn-ic" title="Chapters" onclick="openChapters('${s.id}','${s.type||'novel'}')">📖</button>
+      <button class="btn btn-outline btn-ic" title="Edit" onclick="editStory('${s.id}')">✏️</button>
+      <button class="btn btn-danger btn-ic" title="Delete" onclick="delStory('${s.id}')">🗑️</button>
+    </div>
+  </div>`;
 }
 
-// ===== STORY FORM =====
+// ===========================
+// COVER PREVIEW
+// ===========================
 function previewCover(input) {
-  const file = input.files[0]; if (!file) return;
+  const file = input.files[0];
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     const img = document.getElementById('cover-preview-img');
-    img.src = e.target.result; img.style.display = 'block';
+    img.src = e.target.result;
+    img.style.display = 'block';
     document.getElementById('cover-placeholder').style.display = 'none';
-    // Store temporarily as base64 — will upload on save
     document.getElementById('f-cover-url').value = e.target.result;
-    document.getElementById('cover-file')._file = file;
+    input._file = file;
   };
   reader.readAsDataURL(file);
 }
 
+// ===========================
+// SAVE STORY
+// ===========================
 async function saveStory() {
-  const id = document.getElementById('edit-id').value;
+  const id    = document.getElementById('edit-id').value;
   const title = document.getElementById('f-title').value.trim();
-  const desc = document.getElementById('f-desc').value.trim();
-  if (!title || !desc) { showToast('Title and description required!', 'error'); return; }
+  const desc  = document.getElementById('f-desc').value.trim();
+  const type  = document.getElementById('f-type').value;
+
+  if (!title) { showToast('Please enter a story title!', 'error'); return; }
+  if (!desc)  { showToast('Please write a description!', 'error'); return; }
 
   const btn = document.getElementById('btn-save-story');
-  btn.disabled = true; btn.textContent = 'Saving...';
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
 
   try {
-    // Upload cover if new file
-    let coverUrl = document.getElementById('f-cover-url').value;
-    const coverFile = document.getElementById('cover-file')._file;
-    if (coverFile && !coverUrl.startsWith('http')) {
-      try { coverUrl = await uploadImage(coverFile, 'covers', 'cover'); }
-      catch(e) { coverUrl = ''; }
+    // Upload cover if new file selected
+    let coverUrl = null;
+    const coverInput = document.getElementById('cover-file');
+    if (coverInput._file) {
+      try {
+        coverUrl = await uploadImage(coverInput._file, 'covers', 'cover');
+      } catch(e) {
+        coverUrl = null;
+      }
+    } else {
+      const existing = document.getElementById('f-cover-url').value;
+      if (existing && existing.startsWith('http')) coverUrl = existing;
     }
 
+    const typeEmoji = { novel:'📖', manga:'🎌', comic:'🗂️' };
+
     const storyData = {
-      author_id: profile.id,
       title,
       description: desc,
-      cover_url: coverUrl && coverUrl.startsWith('http') ? coverUrl : null,
-      cover_emoji: '📖',
-      type: document.getElementById('f-type').value,
-      genre: document.getElementById('f-genre').value || 'General',
-      tags: document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+      type,
+      cover_url: coverUrl || null,
+      cover_emoji: typeEmoji[type] || '📖',
+      genre:    document.getElementById('f-genre').value.trim() || 'General',
       language: document.getElementById('f-lang').value,
-      status: document.getElementById('f-status').value,
-      approval_status: 'approved',  // Auto-approved — no admin review needed
+      status:   document.getElementById('f-status').value,
+      tags:     document.getElementById('f-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+      approval_status: 'approved',  // Live immediately
+      updated_at: new Date().toISOString(),
     };
 
     if (id) {
-      delete storyData.author_id; delete storyData.approval_status;
-      await sb.from('stories').update(storyData).eq('id', id);
+      // Edit existing
+      delete storyData.approval_status;
+      await client().from('stories').update(storyData).eq('id', id);
       showToast('Story updated! ✓', 'success');
     } else {
-      await sb.from('stories').insert(storyData);
-      showToast('Story submitted for review! 🎉', 'success');
+      // New story
+      storyData.author_id = profile.id;
+      await client().from('stories').insert(storyData);
+      showToast('Story published! 🚀', 'success');
     }
+
     clearStoryForm();
     goPanel('my-stories');
+    renderDash();
   } catch(e) {
-    showToast(e.message, 'error');
+    showToast('Error: ' + e.message, 'error');
+    console.error(e);
   }
-  btn.disabled = false; btn.textContent = '💾 Submit for Review';
+
+  btn.disabled = false;
+  btn.textContent = '🚀 Publish Story';
 }
 
 async function editStory(id) {
-  const { data: s } = await sb.from('stories').select('*').eq('id', id).single();
+  const { data: s } = await client().from('stories').select('*').eq('id', id).single();
+  if (!s) return;
+
   document.getElementById('edit-id').value = s.id;
-  document.getElementById('f-title').value = s.title;
-  document.getElementById('f-type').value = s.type || 'novel';
-  document.getElementById('f-genre').value = s.genre || '';
-  document.getElementById('f-lang').value = s.language || 'English';
+  document.getElementById('f-title').value  = s.title || '';
+  document.getElementById('f-genre').value  = s.genre || '';
+  document.getElementById('f-lang').value   = s.language || 'English';
   document.getElementById('f-status').value = s.status || 'ongoing';
-  document.getElementById('f-tags').value = (s.tags||[]).join(', ');
-  document.getElementById('f-desc').value = s.description || '';
+  document.getElementById('f-tags').value   = (s.tags || []).join(', ');
+  document.getElementById('f-desc').value   = s.description || '';
+
+  // Set type
+  selectType(s.type || 'novel', document.getElementById('type-' + (s.type || 'novel')));
+
   if (s.cover_url) {
     document.getElementById('cover-preview-img').src = s.cover_url;
     document.getElementById('cover-preview-img').style.display = 'block';
     document.getElementById('cover-placeholder').style.display = 'none';
     document.getElementById('f-cover-url').value = s.cover_url;
   }
+
   document.getElementById('btn-save-story').textContent = '💾 Save Changes';
-  document.getElementById('tb-title').textContent = 'Edit Story';
+  document.getElementById('save-note').textContent = '';
   goPanel('add-story');
 }
 
 async function delStory(id) {
-  if (!confirm('Delete this story and ALL chapters?')) return;
-  await sb.from('stories').delete().eq('id', id);
-  showToast('Story deleted', 'error');
-  renderDash(); renderStories();
+  if (!confirm('Delete this story and all its chapters? This cannot be undone.')) return;
+  await client().from('stories').delete().eq('id', id);
+  showToast('Story deleted.', 'error');
+  renderDash();
+  renderStories();
 }
 
 function clearStoryForm() {
-  ['edit-id','f-title','f-genre','f-tags','f-desc','f-cover-url'].forEach(i => document.getElementById(i).value = '');
-  document.getElementById('f-type').value = 'novel';
-  document.getElementById('f-status').value = 'ongoing';
-  document.getElementById('f-lang').value = 'English';
+  document.getElementById('edit-id').value   = '';
+  document.getElementById('f-title').value   = '';
+  document.getElementById('f-genre').value   = '';
+  document.getElementById('f-tags').value    = '';
+  document.getElementById('f-desc').value    = '';
+  document.getElementById('f-type').value    = 'novel';
+  document.getElementById('f-lang').value    = 'English';
+  document.getElementById('f-status').value  = 'ongoing';
+  document.getElementById('f-cover-url').value = '';
   document.getElementById('cover-preview-img').src = '';
   document.getElementById('cover-preview-img').style.display = 'none';
   document.getElementById('cover-placeholder').style.display = '';
-  document.getElementById('btn-save-story').textContent = '💾 Submit for Review';
+  document.getElementById('cover-file')._file = null;
+  document.getElementById('btn-save-story').textContent = '🚀 Publish Story';
+  document.getElementById('save-note').textContent = '✓ Story goes live immediately';
+  // Reset type selector
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('type-novel').classList.add('selected');
 }
 
-// ===== CHAPTERS =====
+// ===========================
+// CHAPTERS
+// ===========================
 async function openChapters(sid, type) {
   currentSid = sid;
-  const { data: s } = await sb.from('stories').select('*').eq('id', sid).single();
+  const { data: s } = await client().from('stories').select('*').eq('id', sid).single();
+  if (!s) return;
+
+  const typeIcons = { novel:'📖', manga:'🎌', comic:'🗂️' };
   document.getElementById('ch-header').innerHTML = `
-    <div><div class="card-title">${s.title}</div><div style="font-size:.65rem;color:var(--muted);margin-top:2px;">${s.total_chapters||0} chapters · ${s.type||'novel'}</div></div>
+    <div>
+      <div class="card-title">${typeIcons[s.type]||'📖'} ${s.title}</div>
+      <div style="font-size:.65rem;color:var(--muted);margin-top:2px;">${s.total_chapters||0} chapters · ${s.type||'novel'} · ${s.language||''}</div>
+    </div>
     <button class="btn btn-dark" onclick="openModal('${sid}')">+ Add Chapter</button>`;
+
   await renderChapters(sid);
   goPanel('chapters');
 }
 
 async function renderChapters(sid) {
-  const { data: s } = await sb.from('stories').select('type').eq('id', sid).single();
-  const { data: chapters } = await sb.from('chapters').select('*').eq('story_id', sid).order('chapter_number');
+  const { data: s }   = await client().from('stories').select('type').eq('id', sid).single();
+  const { data: chs } = await client().from('chapters').select('*').eq('story_id', sid).order('chapter_number', { ascending: true });
   const el = document.getElementById('ch-list');
-  if (!(chapters||[]).length) { el.innerHTML = '<div class="empty"><div class="empty-ic">📄</div><div class="empty-t">No chapters yet</div><div class="empty-s">Click "+ Add Chapter" to start writing!</div></div>'; return; }
-  el.innerHTML = chapters.map(ch => `<div class="crow">
-    <div class="crow-num">${ch.chapter_number}</div>
-    <div style="flex:1"><div class="crow-title">${ch.title}</div><div class="crow-meta">${s.type!=='novel'?'pages':((ch.word_count||0).toLocaleString()+' words')} · ${ch.published_at?new Date(ch.published_at).toLocaleDateString('en-IN'):''}</div></div>
-    <div style="display:flex;gap:6px;">
-      <button class="btn btn-outline btn-ic" onclick="openModal('${sid}','${ch.id}')">✏️</button>
-      <button class="btn btn-danger btn-ic" onclick="delChapter('${ch.id}','${sid}')">🗑️</button>
-    </div></div>`).join('');
+  const list = chs || [];
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">
+      <div class="empty-ic">📄</div>
+      <div class="empty-t">No chapters yet</div>
+      <div class="empty-s">Click "+ Add Chapter" to start!</div>
+    </div>`;
+    return;
+  }
+
+  el.innerHTML = list.map(ch => `
+    <div class="crow">
+      <div class="crow-num">${ch.chapter_number}</div>
+      <div style="flex:1">
+        <div class="crow-title">${ch.title}</div>
+        <div class="crow-meta">
+          ${s.type !== 'novel' ? 'Image chapter' : ((ch.word_count||0).toLocaleString() + ' words')}
+          · ${ch.published_at ? new Date(ch.published_at).toLocaleDateString('en-IN') : ''}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-outline btn-ic" onclick="openModal('${sid}','${ch.id}')">✏️</button>
+        <button class="btn btn-danger btn-ic" onclick="delChapter('${ch.id}','${sid}')">🗑️</button>
+      </div>
+    </div>`).join('');
 }
 
-// ===== CHAPTER MODAL =====
+// ===========================
+// CHAPTER MODAL
+// ===========================
 async function openModal(sid, cid = null) {
-  const { data: s } = await sb.from('stories').select('type,total_chapters').eq('id', sid).single();
-  const tc = s.type || 'novel';
-  const isVisual = tc === 'manga' || tc === 'comic';
-  document.getElementById('m-sid').value = sid;
-  document.getElementById('m-cid').value = cid || '';
-  document.getElementById('m-type').value = tc;
-  document.getElementById('m-novel').style.display = isVisual ? 'none' : 'block';
-  document.getElementById('m-pages').style.display = isVisual ? 'block' : 'none';
+  const { data: s } = await client().from('stories').select('type,total_chapters').eq('id', sid).single();
+  if (!s) return;
+
+  const stype    = s.type || 'novel';
+  const isVisual = stype === 'manga' || stype === 'comic';
+
+  document.getElementById('m-sid').value   = sid;
+  document.getElementById('m-cid').value   = cid || '';
+  document.getElementById('m-stype').value = stype;
+
+  // Show/hide sections
+  document.getElementById('m-novel-section').style.display = isVisual ? 'none' : 'block';
+  document.getElementById('m-pages-section').style.display = isVisual ? 'block' : 'none';
+
   pageImages = {};
 
   if (cid) {
-    const { data: ch } = await sb.from('chapters').select('*').eq('id', cid).single();
-    document.getElementById('m-num').value = ch.chapter_number;
-    document.getElementById('m-title').value = ch.title;
+    const { data: ch } = await client().from('chapters').select('*').eq('id', cid).single();
+    if (!ch) return;
+    document.getElementById('m-num').value     = ch.chapter_number;
+    document.getElementById('m-title').value   = ch.title || '';
     document.getElementById('m-content').value = ch.content || '';
-    document.getElementById('m-date').value = ch.published_at ? ch.published_at.split('T')[0] : '';
+    document.getElementById('m-date').value    = ch.published_at ? ch.published_at.split('T')[0] : '';
     document.getElementById('modal-title').textContent = 'Edit Chapter ' + ch.chapter_number;
+
     if (isVisual) {
-      const { data: pages } = await sb.from('chapter_pages').select('*').eq('chapter_id', cid).order('page_number');
-      (pages||[]).forEach(p => { pageImages[p.page_number - 1] = p.image_url; });
+      const { data: pages } = await client().from('chapter_pages').select('*').eq('chapter_id', cid).order('page_number', { ascending: true });
+      (pages || []).forEach(p => { pageImages[p.page_number - 1] = p.image_url; });
     }
   } else {
-    document.getElementById('m-num').value = (s.total_chapters || 0) + 1;
-    document.getElementById('m-title').value = '';
+    document.getElementById('m-num').value     = (s.total_chapters || 0) + 1;
+    document.getElementById('m-title').value   = '';
     document.getElementById('m-content').value = '';
-    document.getElementById('m-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('m-date').value    = new Date().toISOString().split('T')[0];
     document.getElementById('modal-title').textContent = 'Add Chapter';
   }
+
   if (isVisual) buildPageGrid();
   document.getElementById('ch-modal').classList.add('open');
 }
@@ -630,21 +864,34 @@ function buildPageGrid() {
   for (let i = 0; i < 20; i++) {
     const slot = document.createElement('div');
     slot.className = 'pslot' + (pageImages[i] ? ' pslot-uploaded' : '');
-    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
-    inp.onchange = e => uploadPageImg(e, i);
-    const num = document.createElement('div'); num.className = 'pslot-n'; num.textContent = i + 1;
+
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = e => uploadPagePreview(e, i);
+
+    const num = document.createElement('div');
+    num.className = 'pslot-n';
+    num.textContent = i + 1;
+
     slot.appendChild(inp);
+
     if (pageImages[i]) {
-      const img = document.createElement('img'); img.src = pageImages[i]; slot.appendChild(img);
-      const del = document.createElement('button'); del.className = 'pslot-del'; del.textContent = '✕';
-      del.onclick = e => { e.stopPropagation(); delete pageImages[i]; buildPageGrid(); };
+      const img = document.createElement('img');
+      img.src = pageImages[i];
+      slot.appendChild(img);
+      const del = document.createElement('button');
+      del.className = 'pslot-del';
+      del.textContent = '✕';
+      del.onclick = e => { e.stopPropagation(); delete pageImages[i]; delete pageImages[i + '_file']; buildPageGrid(); };
       slot.appendChild(del);
-    } else { slot.appendChild(num); }
+    } else {
+      slot.appendChild(num);
+    }
     grid.appendChild(slot);
   }
 }
 
-function uploadPageImg(e, idx) {
+function uploadPagePreview(e, idx) {
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
@@ -655,53 +902,59 @@ function uploadPageImg(e, idx) {
   reader.readAsDataURL(file);
 }
 
-function closeModal() { document.getElementById('ch-modal').classList.remove('open'); pageImages = {}; }
+function closeModal() {
+  document.getElementById('ch-modal').classList.remove('open');
+  pageImages = {};
+}
 
 async function saveChapter() {
-  const sid = document.getElementById('m-sid').value;
-  const cid = document.getElementById('m-cid').value;
+  const sid   = document.getElementById('m-sid').value;
+  const cid   = document.getElementById('m-cid').value;
+  const stype = document.getElementById('m-stype').value;
   const title = document.getElementById('m-title').value.trim();
-  const tc = document.getElementById('m-type').value;
-  const isVisual = tc === 'manga' || tc === 'comic';
-  const content = isVisual ? '' : document.getElementById('m-content').value.trim();
-  if (!title) { showToast('Title required!', 'error'); return; }
-  if (!isVisual && !content) { showToast('Content required!', 'error'); return; }
+  const isVisual = stype === 'manga' || stype === 'comic';
+  const content  = isVisual ? '' : document.getElementById('m-content').value.trim();
+
+  if (!title) { showToast('Chapter title required!', 'error'); return; }
+  if (!isVisual && !content) { showToast('Chapter content required!', 'error'); return; }
 
   const btn = document.getElementById('btn-save-ch');
   btn.disabled = true; btn.textContent = 'Saving...';
 
   try {
     const chData = {
-      story_id: sid,
+      story_id:      sid,
       chapter_number: parseInt(document.getElementById('m-num').value) || 1,
-      title, content,
-      word_count: content ? content.split(/\s+/).length : 0,
-      published_at: document.getElementById('m-date').value || new Date().toISOString(),
+      title,
+      content,
+      word_count:    content ? content.split(/\s+/).filter(Boolean).length : 0,
+      published_at:  document.getElementById('m-date').value || new Date().toISOString(),
     };
 
     let chId = cid;
+
     if (cid) {
-      await sb.from('chapters').update(chData).eq('id', cid);
+      await client().from('chapters').update(chData).eq('id', cid);
     } else {
-      const { data: newCh } = await sb.from('chapters').insert(chData).select().single();
+      const { data: newCh, error: chErr } = await client().from('chapters').insert(chData).select().single();
+      if (chErr) throw new Error(chErr.message);
       chId = newCh.id;
     }
 
     // Save pages for manga/comic
     if (isVisual && chId) {
-      if (cid) await sb.from('chapter_pages').delete().eq('chapter_id', chId);
+      if (cid) await client().from('chapter_pages').delete().eq('chapter_id', chId);
       const pageRows = [];
       for (let i = 0; i < 20; i++) {
         if (!pageImages[i]) continue;
         let imgUrl = pageImages[i];
-        // If it's a file (new upload), upload to storage
         if (pageImages[i + '_file']) {
           try { imgUrl = await uploadImage(pageImages[i + '_file'], 'pages', `ch-${chId}-p${i+1}`); }
-          catch(e) { imgUrl = pageImages[i]; } // fallback to base64
+          catch(e) { /* keep base64 as fallback */ }
         }
         pageRows.push({ chapter_id: chId, page_number: i + 1, image_url: imgUrl });
       }
-      if (pageRows.length) await sb.from('chapter_pages').insert(pageRows);
+      if (pageRows.length) await client().from('chapter_pages').insert(pageRows);
     }
 
     closeModal();
@@ -709,61 +962,91 @@ async function saveChapter() {
     renderDash();
     showToast(cid ? 'Chapter updated! ✓' : 'Chapter published! 📖', 'success');
   } catch(e) {
-    showToast(e.message, 'error');
+    showToast('Error: ' + e.message, 'error');
+    console.error(e);
   }
+
   btn.disabled = false; btn.textContent = '💾 Save Chapter';
 }
 
 async function delChapter(cid, sid) {
   if (!confirm('Delete this chapter?')) return;
-  await sb.from('chapters').delete().eq('id', cid);
-  showToast('Chapter deleted', 'error');
+  await client().from('chapters').delete().eq('id', cid);
+  showToast('Chapter deleted.', 'error');
   renderChapters(sid);
 }
 
-// ===== REVENUE =====
+// ===========================
+// REVENUE
+// ===========================
 async function renderRevenue() {
-  const { data: records } = await sb.from('revenue_records').select('*').eq('author_id', profile.id).order('month', { ascending: false });
-  const totalEarned = (records||[]).reduce((a,r)=>a+(r.writer_share||0),0);
-  const totalViews = (records||[]).reduce((a,r)=>a+(r.total_views||0),0);
-  const pending = (records||[]).filter(r=>r.status==='pending').reduce((a,r)=>a+(r.writer_share||0),0);
+  const { data: records } = await client().from('revenue_records').select('*').eq('author_id', profile.id).order('month', { ascending: false });
+  const list = records || [];
+
+  const totalEarned = list.reduce((a, r) => a + (r.writer_share || 0), 0);
+  const totalViews  = list.reduce((a, r) => a + (r.total_views || 0), 0);
+  const pending     = list.filter(r => r.status === 'pending').reduce((a, r) => a + (r.writer_share || 0), 0);
 
   document.getElementById('rev-stats').innerHTML = [
-    { ic:'💰', v:'₹'+totalEarned.toFixed(2), l:'Total Earned' },
-    { ic:'⏳', v:'₹'+pending.toFixed(2), l:'Pending Payout' },
-    { ic:'👁️', v:formatNum(totalViews), l:'Lifetime Views' },
-  ].map(s=>`<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
+    { ic:'💰', v: '₹' + totalEarned.toFixed(2), l:'Total Earned' },
+    { ic:'⏳', v: '₹' + pending.toFixed(2),     l:'Pending Payout' },
+    { ic:'👁️', v: formatNum(totalViews),         l:'Lifetime Views' },
+  ].map(s => `<div class="stat"><div class="stat-ic">${s.ic}</div><div class="stat-v">${s.v}</div><div class="stat-l">${s.l}</div></div>`).join('');
 
-  document.getElementById('rev-list').innerHTML = (records||[]).length ? records.map(r=>`
-    <div class="rev-bar">
-      <div class="rev-month">${r.month}</div>
-      <div class="rev-amount">₹${(r.writer_share||0).toFixed(2)}</div>
-      <div class="rev-views">${formatNum(r.total_views||0)} views · Your share: ${r.share_percent||70}%</div>
-      <div class="rev-status ${r.status==='paid'?'rs-paid':'rs-pending'}">${r.status==='paid'?'✓ Paid':'⏳ Pending'}</div>
-    </div>`) .join('')
-    : '<div class="empty"><div class="empty-ic">💰</div><div class="empty-t">No revenue records yet</div><div class="empty-s">Revenue is calculated monthly based on AdSense earnings</div></div>';
+  document.getElementById('rev-list').innerHTML = list.length
+    ? list.map(r => `
+        <div class="rev-bar">
+          <div class="rev-month">${r.month}</div>
+          <div class="rev-amount">₹${(r.writer_share || 0).toFixed(2)}</div>
+          <div class="rev-views">${formatNum(r.total_views || 0)} views · Your share: ${r.share_percent || 70}%</div>
+          <div class="rev-status ${r.status === 'paid' ? 'rs-paid' : 'rs-pending'}">${r.status === 'paid' ? '✓ Paid' : '⏳ Pending'}</div>
+        </div>`).join('')
+    : `<div class="empty">
+        <div class="empty-ic">💰</div>
+        <div class="empty-t">No revenue records yet</div>
+        <div class="empty-s">Revenue is calculated monthly based on AdSense earnings and your story views.</div>
+      </div>`;
 }
 
-// ===== SETTINGS =====
-async function loadSettings() {
-  document.getElementById('s-name').value = profile.display_name || '';
+// ===========================
+// SETTINGS
+// ===========================
+function loadSettings() {
+  if (!profile) return;
+  document.getElementById('s-name').value     = profile.display_name || '';
   document.getElementById('s-username').value = profile.username || '';
-  document.getElementById('s-bio').value = profile.bio || '';
-  document.getElementById('s-upi').value = profile.upi_id || '';
+  document.getElementById('s-bio').value      = profile.bio || '';
+  document.getElementById('s-upi').value      = profile.upi_id || '';
 }
 
 async function saveProfile() {
-  await sb.from('profiles').update({ display_name: document.getElementById('s-name').value, bio: document.getElementById('s-bio').value }).eq('id', profile.id);
+  const name = document.getElementById('s-name').value.trim();
+  const bio  = document.getElementById('s-bio').value.trim();
+  await client().from('profiles').update({ display_name: name, bio }).eq('id', profile.id);
+  profile.display_name = name;
+  profile.bio = bio;
+  document.getElementById('sb-uname').textContent = name || profile.username;
   showToast('Profile saved! ✓', 'success');
 }
 
 async function savePayment() {
   const upi = document.getElementById('s-upi').value.trim();
   if (!upi) { showToast('Please enter your UPI ID', 'error'); return; }
-  await sb.from('profiles').update({ upi_id: upi }).eq('id', profile.id);
-  showToast('UPI saved! ✓', 'success');
+  await client().from('profiles').update({ upi_id: upi }).eq('id', profile.id);
+  showToast('UPI ID saved! ✓', 'success');
 }
 
+// ===========================
+// LOGOUT
+// ===========================
+async function navLogout() {
+  await client().auth.signOut();
+  window.location.href = 'index.html';
+}
+
+// ===========================
+// START
+// ===========================
 init();
 </script>
 </body>
