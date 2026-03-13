@@ -98,161 +98,282 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,20,16,.97
   <div class="nav-center" id="nav-title">Manga Reader</div>
   <div class="nav-r">
     <a href="#" id="back-btn" class="nav-btn back">← Back</a>
-    <button class="nav-btn" onclick="toggleSettings()">⚙</button>
   </div>
 </nav>
 
 <div id="manga-main">
-  <!-- Loaded by JS -->
+  <div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">Loading…</div>
 </div>
 
 <div class="float-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
-<script src="stories-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
 <script>
-const p=new URLSearchParams(location.search);
-const storyId=p.get('id');
-let chId=parseInt(p.get('ch'))||1;
-const stories=loadData();
-const story=stories.find(s=>s.id===storyId);
+const p = new URLSearchParams(location.search);
+const storyId = p.get('id');
+let chId = p.get('ch');          // can be UUID or chapter_number
+let allChapters = [];
+let storyData   = null;
 
-if(!story){
-  document.getElementById('manga-main').innerHTML='<div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">Story not found. <a href="stories.html" style="color:#c0392b;">Back →</a></div>';
-}else{
-  document.title=story.title+' — VoomComix Manga';
-  document.getElementById('back-btn').href='story.html?id='+storyId;
-
-  function getChapter(id){return story.chapters.find(c=>c.id===id)||story.chapters[0];}
-
-  function renderManga(cid){
-    chId=cid;
-    const ch=getChapter(cid);
-    if(!ch)return;
-    const chIdx=story.chapters.findIndex(c=>c.id===cid);
-    const pages=ch.pages||[];
-    const maxPages=20;
-
-    document.getElementById('nav-title').textContent=story.title+' · Ch '+cid;
-    document.title='Ch '+cid+': '+ch.title+' — '+story.title;
-
-    // Save reading history
-    const hist=JSON.parse(localStorage.getItem('vc-history')||'[]');
-    const existing=hist.findIndex(h=>h.storyId===storyId);
-    const entry={storyId,chId:cid,chIdx:chIdx+1,time:Date.now()};
-    if(existing>-1)hist[existing]=entry;else hist.unshift(entry);
-    localStorage.setItem('vc-history',JSON.stringify(hist.slice(0,20)));
-
-    // Chapter options
-    const chOptions=story.chapters.map(c=>`<option value="${c.id}" ${c.id===cid?'selected':''}>${c.id}. ${c.title}</option>`).join('');
-
-    // Pages HTML
-    let pagesHTML='';
-    for(let i=0;i<maxPages;i++){
-      const pg=pages[i];
-      if(pg&&pg.image){
-        pagesHTML+=`<div class="manga-page"><img src="${pg.image}" alt="Page ${i+1}" loading="lazy"/><span class="page-num-overlay">${i+1}</span></div>`;
-      }else if(i===0||pg){
-        pagesHTML+=`<div class="manga-page"><div class="empty-page"><div class="page-num">${i+1}</div><p>Page ${i+1} — Upload image in Admin</p></div><span class="page-num-overlay">${i+1}</span></div>`;
-      }
-    }
-
-    // Likes/follows/comments
-    const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
-    const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
-    const isLiked=likes[storyId];
-    const isFollowing=follows[storyId];
-    const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
-
-    document.getElementById('manga-main').innerHTML=`
-    <div class="ch-header">
-      <span class="ch-type-badge">🎌 Manga</span>
-      <div class="ch-story-title">${story.title}</div>
-      <div class="ch-num">Chapter ${cid} — ${ch.title}</div>
-    </div>
-
-    <div class="ch-nav">
-      <button class="ch-nav-btn" ${chIdx===0?'disabled':''} onclick="renderManga(${story.chapters[chIdx-1]?.id})">← Prev</button>
-      <select class="ch-select" onchange="renderManga(parseInt(this.value))">${chOptions}</select>
-      <span class="ch-page-count">${pages.filter(pg=>pg&&pg.image).length}/${maxPages} pages</span>
-      <button class="ch-nav-btn" ${chIdx===story.chapters.length-1?'disabled':''} onclick="renderManga(${story.chapters[chIdx+1]?.id})">Next →</button>
-    </div>
-
-    <div class="manga-wrap">${pagesHTML}
-
-      <div class="chapter-end">
-        <h3>CHAPTER <span>${cid}</span> END</h3>
-        <p>${chIdx===story.chapters.length-1?'New chapter coming soon! Follow to get notified.':'Continue to next chapter →'}</p>
-        <div class="end-btns">
-          ${chIdx<story.chapters.length-1?`<button class="btn-r" onclick="renderManga(${story.chapters[chIdx+1].id})">Next Chapter →</button>`:''}
-          <button class="btn-g" onclick="location.href='story.html?id=${storyId}'">Chapter List</button>
-        </div>
-      </div>
-
-      <div class="interact-section">
-        <div class="interact-row">
-          <button class="like-btn ${isLiked?'liked':''}" onclick="toggleLike(this)">♥ <span id="like-count">${story.likes||0}</span> Likes</button>
-          <button class="follow-btn ${isFollowing?'following':''}" onclick="toggleFollow(this)">${isFollowing?'✓ Following':'+ Follow'}</button>
-          <button class="share-btn" onclick="copyLink()">🔗 Share</button>
-        </div>
-        <div class="comments-head">COMMENTS <span>(${comments.length})</span></div>
-        <div class="comment-form">
-          <input type="text" id="comment-input" placeholder="Write a comment... (your name: message)" maxlength="200"/>
-          <button onclick="postComment()">Post</button>
-        </div>
-        <div class="comment-list" id="comment-list">
-          ${comments.length?comments.map(c=>`<div class="comment-item"><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div><div class="comment-time">${c.time}</div></div>`).join(''):'<div class="no-comments">Be the first to comment!</div>'}
-        </div>
-      </div>
-    </div>`;
-
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  renderManga(chId);
-}
-
-// Progress bar
-window.addEventListener('scroll',()=>{
-  const h=document.documentElement;
-  document.getElementById('read-progress').style.width=((h.scrollTop/(h.scrollHeight-h.clientHeight))*100)+'%';
+// ── progress bar ──
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('read-progress').style.width =
+    ((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100) + '%';
 });
 
-function toggleLike(btn){
-  const d=loadData();const s=d.find(x=>x.id===storyId);if(!s)return;
-  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
-  if(likes[storyId]){delete likes[storyId];s.likes=Math.max(0,(s.likes||1)-1);btn.classList.remove('liked');}
-  else{likes[storyId]=1;s.likes=(s.likes||0)+1;btn.classList.add('liked');}
-  localStorage.setItem('vc-likes',JSON.stringify(likes));
-  localStorage.setItem('voomcomix_stories',JSON.stringify(d));
-  document.getElementById('like-count').textContent=s.likes;
+// ── MAIN INIT ──
+async function init() {
+  if (!storyId) { showError('No story ID in URL.'); return; }
+
+  // Load story
+  const { data: story, error: sErr } = await sb()
+    .from('stories')
+    .select('*, profiles(display_name, username)')
+    .eq('id', storyId)
+    .single();
+
+  if (sErr || !story) { showError('Story not found.'); return; }
+  storyData = story;
+
+  document.title = story.title + ' — VoomComix Manga';
+  document.getElementById('back-btn').href = 'story.html?id=' + storyId;
+
+  // Load all chapters
+  const { data: chapters } = await sb()
+    .from('chapters')
+    .select('*')
+    .eq('story_id', storyId)
+    .order('chapter_number', { ascending: true });
+
+  allChapters = chapters || [];
+  if (!allChapters.length) { showError('No chapters yet.'); return; }
+
+  // Resolve which chapter to show
+  let ch = allChapters.find(c => c.id === chId)
+        || allChapters.find(c => String(c.chapter_number) === String(chId))
+        || allChapters[0];
+
+  renderManga(ch);
 }
 
-function toggleFollow(btn){
-  const follows=JSON.parse(localStorage.getItem('vc-follows')||'{}');
-  const fl=JSON.parse(localStorage.getItem('vc-follow-list')||'[]');
-  if(follows[storyId]){delete follows[storyId];const i=fl.indexOf(storyId);if(i>-1)fl.splice(i,1);btn.classList.remove('following');btn.textContent='+ Follow';}
-  else{follows[storyId]=1;if(!fl.includes(storyId))fl.push(storyId);btn.classList.add('following');btn.textContent='✓ Following';}
-  localStorage.setItem('vc-follows',JSON.stringify(follows));
-  localStorage.setItem('vc-follow-list',JSON.stringify(fl));
+// ── RENDER ──
+async function renderManga(ch) {
+  if (!ch) return;
+  chId = ch.id;
+  const chIdx = allChapters.findIndex(c => c.id === ch.id);
+
+  document.getElementById('nav-title').textContent = storyData.title + ' · Ch ' + ch.chapter_number;
+  document.title = 'Ch ' + ch.chapter_number + ': ' + (ch.title || '') + ' — ' + storyData.title;
+
+  // Load pages
+  const { data: pages } = await sb()
+    .from('chapter_pages')
+    .select('*')
+    .eq('chapter_id', ch.id)
+    .order('page_number', { ascending: true });
+
+  const pageList = pages || [];
+
+  // Chapter select options
+  const chOptions = allChapters.map(c =>
+    `<option value="${c.id}" ${c.id === ch.id ? 'selected' : ''}>
+      Ch ${c.chapter_number}${c.title ? ': ' + c.title : ''}
+    </option>`
+  ).join('');
+
+  // Pages HTML
+  let pagesHTML = '';
+  if (pageList.length) {
+    pageList.forEach((pg, i) => {
+      if (pg.image_url) {
+        pagesHTML += `<div class="manga-page">
+          <img src="${pg.image_url}" alt="Page ${i + 1}" loading="lazy"/>
+          <span class="page-num-overlay">${i + 1}</span>
+        </div>`;
+      } else {
+        pagesHTML += `<div class="manga-page"><div class="empty-page">
+          <div class="page-num">${i + 1}</div>
+          <p>Page ${i + 1} — Image not uploaded yet</p>
+        </div><span class="page-num-overlay">${i + 1}</span></div>`;
+      }
+    });
+  } else {
+    // No pages uploaded yet — show placeholder
+    for (let i = 0; i < 5; i++) {
+      pagesHTML += `<div class="manga-page"><div class="empty-page">
+        <div class="page-num">${i + 1}</div>
+        <p>Page ${i + 1} — No pages uploaded yet</p>
+      </div></div>`;
+    }
+  }
+
+  // Like state (localStorage for guests)
+  const likes  = JSON.parse(localStorage.getItem('vc-likes')  || '{}');
+  const follows= JSON.parse(localStorage.getItem('vc-follows') || '{}');
+  const isLiked     = !!likes[storyId];
+  const isFollowing = !!follows[storyId];
+
+  // Comments from Supabase
+  const { data: commentData } = await sb()
+    .from('comments')
+    .select('*, profiles(display_name, username)')
+    .eq('story_id', storyId)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  const comments = commentData || [];
+
+  const commentsHTML = comments.length
+    ? comments.map(c => `
+        <div class="comment-item">
+          <div class="comment-user">${c.profiles?.display_name || c.profiles?.username || 'Reader'}</div>
+          <div class="comment-text">${escHtml(c.content || '')}</div>
+          <div class="comment-time">${timeAgo(c.created_at)}</div>
+        </div>`).join('')
+    : '<div class="no-comments">Be the first to comment!</div>';
+
+  document.getElementById('manga-main').innerHTML = `
+  <div class="ch-header">
+    <span class="ch-type-badge">🎌 Manga</span>
+    <div class="ch-story-title">${storyData.title}</div>
+    <div class="ch-num">Chapter ${ch.chapter_number}${ch.title ? ' — ' + ch.title : ''}</div>
+  </div>
+
+  <div class="ch-nav">
+    <button class="ch-nav-btn" ${chIdx === 0 ? 'disabled' : ''}
+      onclick="renderManga(allChapters[${chIdx - 1}])">← Prev</button>
+    <select class="ch-select" onchange="renderManga(allChapters.find(c=>c.id===this.value))">
+      ${chOptions}
+    </select>
+    <span class="ch-page-count">${pageList.length} pages</span>
+    <button class="ch-nav-btn" ${chIdx === allChapters.length - 1 ? 'disabled' : ''}
+      onclick="renderManga(allChapters[${chIdx + 1}])">Next →</button>
+  </div>
+
+  <div class="manga-wrap">${pagesHTML}
+
+    <div class="chapter-end">
+      <h3>CHAPTER <span>${ch.chapter_number}</span> END</h3>
+      <p>${chIdx === allChapters.length - 1
+        ? 'New chapter coming soon! Follow to get notified.'
+        : 'Continue to next chapter →'}</p>
+      <div class="end-btns">
+        ${chIdx < allChapters.length - 1
+          ? `<button class="btn-r" onclick="renderManga(allChapters[${chIdx + 1}])">Next Chapter →</button>`
+          : ''}
+        <button class="btn-g" onclick="location.href='story.html?id=${storyId}'">Chapter List</button>
+      </div>
+    </div>
+
+    <div class="interact-section">
+      <div class="interact-row">
+        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(this)">
+          ♥ <span id="like-count">${storyData.like_count || 0}</span> Likes
+        </button>
+        <button class="follow-btn ${isFollowing ? 'following' : ''}" onclick="toggleFollow(this)">
+          ${isFollowing ? '✓ Following' : '+ Follow'}
+        </button>
+        <button class="share-btn" onclick="copyLink()">🔗 Share</button>
+      </div>
+      <div class="comments-head">COMMENTS <span>(${comments.length})</span></div>
+      <div class="comment-form">
+        <input type="text" id="comment-input" placeholder="Write a comment…" maxlength="200"/>
+        <button onclick="postComment()">Post</button>
+      </div>
+      <div class="comment-list" id="comment-list">${commentsHTML}</div>
+    </div>
+  </div>`;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function postComment(){
-  const inp=document.getElementById('comment-input');
-  const val=inp.value.trim();if(!val)return;
-  const parts=val.split(':');
-  const user=parts.length>1?parts[0].trim():'Reader';
-  const text=parts.length>1?parts.slice(1).join(':').trim():val;
-  const comments=JSON.parse(localStorage.getItem('vc-comments-'+storyId)||'[]');
-  comments.unshift({user,text,time:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})});
-  localStorage.setItem('vc-comments-'+storyId,JSON.stringify(comments.slice(0,50)));
-  inp.value='';
-  const cl=document.getElementById('comment-list');
-  cl.innerHTML=`<div class="comment-item"><div class="comment-user">${user}</div><div class="comment-text">${text}</div><div class="comment-time">Just now</div></div>`+cl.innerHTML.replace('<div class="no-comments">Be the first to comment!</div>','');
+// ── LIKE ──
+async function toggleLike(btn) {
+  const likes = JSON.parse(localStorage.getItem('vc-likes') || '{}');
+  const countEl = document.getElementById('like-count');
+  if (likes[storyId]) {
+    delete likes[storyId];
+    btn.classList.remove('liked');
+    countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
+    await sb().from('stories').update({ like_count: parseInt(countEl.textContent) }).eq('id', storyId);
+  } else {
+    likes[storyId] = 1;
+    btn.classList.add('liked');
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+    await sb().from('stories').update({ like_count: parseInt(countEl.textContent) }).eq('id', storyId);
+  }
+  localStorage.setItem('vc-likes', JSON.stringify(likes));
 }
 
-function copyLink(){
-  navigator.clipboard.writeText(location.href).then(()=>alert('Link copied!')).catch(()=>alert('Copy: '+location.href));
+// ── FOLLOW ──
+function toggleFollow(btn) {
+  const follows = JSON.parse(localStorage.getItem('vc-follows') || '{}');
+  if (follows[storyId]) {
+    delete follows[storyId];
+    btn.classList.remove('following');
+    btn.textContent = '+ Follow';
+  } else {
+    follows[storyId] = 1;
+    btn.classList.add('following');
+    btn.textContent = '✓ Following';
+  }
+  localStorage.setItem('vc-follows', JSON.stringify(follows));
 }
+
+// ── COMMENT ──
+async function postComment() {
+  const inp = document.getElementById('comment-input');
+  const val = inp.value.trim();
+  if (!val) return;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    showToast('Please login to comment.', 'warning');
+    return;
+  }
+
+  const { error } = await sb().from('comments').insert({
+    story_id:   storyId,
+    user_id:    user.id,
+    content:    val,
+    chapter_id: chId
+  });
+
+  if (error) { showToast('Could not post comment.', 'error'); return; }
+
+  inp.value = '';
+  const profile = await getCurrentProfile();
+  const cl = document.getElementById('comment-list');
+  const newComment = `<div class="comment-item">
+    <div class="comment-user">${profile?.display_name || profile?.username || 'You'}</div>
+    <div class="comment-text">${escHtml(val)}</div>
+    <div class="comment-time">Just now</div>
+  </div>`;
+  cl.innerHTML = newComment + cl.innerHTML.replace('<div class="no-comments">Be the first to comment!</div>', '');
+}
+
+// ── SHARE ──
+function copyLink() {
+  navigator.clipboard.writeText(location.href)
+    .then(() => showToast('Link copied!'))
+    .catch(() => showToast('Copy this link: ' + location.href, 'info'));
+}
+
+// ── HELPERS ──
+function showError(msg) {
+  document.getElementById('manga-main').innerHTML =
+    `<div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">
+      ${msg} <a href="stories.html" style="color:#c0392b;">Back to Stories →</a>
+    </div>`;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── START ──
+init();
 </script>
 </body>
 </html>
