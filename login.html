@@ -28,15 +28,13 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
 .form.active{display:block;}
 .form-group{margin-bottom:16px;}
 .form-group label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.form-group input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;font-family:'Rajdhani';outline:none;transition:all .2s;background:#fdfaf7;color:var(--ink);}
-.form-group input:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.1);}
+.form-group input,
+.form-group select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;font-family:'Rajdhani';outline:none;transition:all .2s;background:#fdfaf7;color:var(--ink);}
+.form-group input:focus,
+.form-group select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.1);}
 .btn-submit{width:100%;padding:12px;background:var(--ink);color:#fff;border:none;border-radius:8px;font-family:'Rajdhani';font-size:.9rem;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .2s;margin-top:4px;}
 .btn-submit:hover{background:var(--red);}
 .btn-submit:disabled{opacity:.6;cursor:not-allowed;}
-.divider{text-align:center;margin:16px 0;font-size:.75rem;color:var(--muted);position:relative;}
-.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
-.divider::before{left:0;}
-.divider::after{right:0;}
 .form-note{font-size:.75rem;color:var(--muted);text-align:center;margin-top:12px;line-height:1.5;}
 .form-note a{color:var(--red);cursor:pointer;}
 .error-msg{background:#fef2f2;border:1px solid rgba(192,57,43,.2);color:var(--red);padding:10px 14px;border-radius:8px;font-size:.8rem;margin-bottom:14px;display:none;}
@@ -46,13 +44,15 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
 </head>
 <body>
 <div class="page">
+
+  <!-- LEFT PANEL -->
   <div class="left">
     <div class="left-logo">VOOM<span>COMIX</span></div>
     <div class="left-content">
       <div class="left-title">Stories That Hit Different</div>
       <div class="left-sub">Join thousands of readers and writers on India's growing webnovel platform.</div>
       <ul class="left-features">
-        <li><span>📖</span> Read novels, manga & comics</li>
+        <li><span>📖</span> Read novels, manga &amp; comics — free</li>
         <li><span>✍️</span> Publish your own stories</li>
         <li><span>💰</span> Earn from AdSense revenue share</li>
         <li><span>❤️</span> Build your reader community</li>
@@ -61,6 +61,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
     </div>
     <div style="font-size:.65rem;color:rgba(255,255,255,.2);">© 2025 VoomComix · voomcomix.in</div>
   </div>
+
+  <!-- RIGHT PANEL -->
   <div class="right">
     <div class="tab-row">
       <div class="tab active" id="tab-login" onclick="switchTab('login')">Login</div>
@@ -76,7 +78,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" id="login-pw" placeholder="Enter password" onkeyup="if(event.key==='Enter')doLogin()"/>
+        <input type="password" id="login-pw" placeholder="Enter password"
+          onkeyup="if(event.key==='Enter') doLogin()"/>
       </div>
       <button class="btn-submit" id="btn-login" onclick="doLogin()">Login →</button>
       <div class="form-note">
@@ -95,7 +98,8 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
       </div>
       <div class="form-group">
         <label>Username</label>
-        <input type="text" id="signup-username" placeholder="unique_username" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"/>
+        <input type="text" id="signup-username" placeholder="unique_username"
+          oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"/>
       </div>
       <div class="form-group">
         <label>Email</label>
@@ -107,26 +111,22 @@ body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;min
       </div>
       <div class="form-group">
         <label>I want to join as</label>
-        <select id="signup-role" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;font-family:'Rajdhani';background:#fdfaf7;color:var(--ink);outline:none;">
+        <select id="signup-role">
           <option value="reader">Reader — I want to read stories</option>
-          <option value="writer_applicant">Writer — I want to publish stories too</option>
+          <option value="writer">Writer — I want to publish stories too</option>
         </select>
       </div>
       <button class="btn-submit" id="btn-signup" onclick="doSignup()">Create Account →</button>
       <div class="form-note">By signing up you agree to our <a href="terms.html">Terms of Service</a></div>
     </div>
+
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vc-config.js"></script>
 <script>
-const sb = getSupabase();
-
-// Check if already logged in - only redirect if NOT on login page intentionally
-// (Don't auto-redirect to prevent back button trap)
-
-
+// ── Tab switch ──
 function switchTab(t) {
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   document.querySelectorAll('.form').forEach(x => x.classList.remove('active'));
@@ -136,85 +136,127 @@ function switchTab(t) {
 
 function showErr(id, msg) {
   const el = document.getElementById(id);
-  el.textContent = msg; el.style.display = 'block';
+  el.textContent = msg;
+  el.style.display = 'block';
 }
-function hideErr(id) { document.getElementById(id).style.display = 'none'; }
+function hideErr(id) {
+  document.getElementById(id).style.display = 'none';
+}
 
+// ── LOGIN ──
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
-  const pw = document.getElementById('login-pw').value;
-  if (!email || !pw) { showErr('login-error', 'Please fill all fields'); return; }
+  const pw    = document.getElementById('login-pw').value;
+  if (!email || !pw) { showErr('login-error', 'Please fill all fields.'); return; }
   hideErr('login-error');
+
   const btn = document.getElementById('btn-login');
-  btn.disabled = true; btn.textContent = 'Logging in...';
-  const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+
+  const { error } = await sb().auth.signInWithPassword({ email, password: pw });
+
   if (error) {
-    showErr('login-error', error.message === 'Invalid login credentials' ? 'Wrong email or password' : error.message);
-    btn.disabled = false; btn.textContent = 'Login →';
-  } else {
-    btn.textContent = '✓ Welcome back!';
-    const profile = await getCurrentProfile();
-    if (profile?.role === 'admin') window.location.href = 'admin.html';
-    else if (profile?.role === 'writer') window.location.href = 'writer-dashboard.html';
-    else window.location.href = 'index.html';
+    showErr('login-error',
+      error.message === 'Invalid login credentials'
+        ? 'Wrong email or password.'
+        : error.message
+    );
+    btn.disabled = false;
+    btn.textContent = 'Login →';
+    return;
   }
+
+  btn.textContent = '✓ Welcome back!';
+
+  // Redirect based on role
+  const profile = await getCurrentProfile();
+  if (profile?.role === 'admin')        window.location.href = 'admin.html';
+  else if (profile?.role === 'writer')  window.location.href = 'writer-dashboard.html';
+  else                                  window.location.href = 'index.html';
 }
 
+// ── SIGNUP ──
 async function doSignup() {
-  const name = document.getElementById('signup-name').value.trim();
+  const name     = document.getElementById('signup-name').value.trim();
   const username = document.getElementById('signup-username').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const pw = document.getElementById('signup-pw').value;
-  const role = document.getElementById('signup-role').value;
-  if (!name || !username || !email || !pw) { showErr('signup-error', 'Please fill all fields'); return; }
-  if (pw.length < 6) { showErr('signup-error', 'Password must be at least 6 characters'); return; }
-  if (username.length < 3) { showErr('signup-error', 'Username must be at least 3 characters'); return; }
+  const email    = document.getElementById('signup-email').value.trim();
+  const pw       = document.getElementById('signup-pw').value;
+  const role     = document.getElementById('signup-role').value; // 'reader' or 'writer'
+
+  // Validation
+  if (!name || !username || !email || !pw) {
+    showErr('signup-error', 'Please fill all fields.'); return;
+  }
+  if (pw.length < 6) {
+    showErr('signup-error', 'Password must be at least 6 characters.'); return;
+  }
+  if (username.length < 3) {
+    showErr('signup-error', 'Username must be at least 3 characters.'); return;
+  }
   hideErr('signup-error');
 
-  // Check username unique
-  const { data: existing } = await sb.from('profiles').select('id').eq('username', username).single();
-  if (existing) { showErr('signup-error', 'Username already taken! Try another.'); return; }
+  // Check username availability
+  const { data: existing } = await sb()
+    .from('profiles')
+    .select('id')
+    .eq('username', username)
+    .maybeSingle();
+  if (existing) {
+    showErr('signup-error', 'Username already taken! Try another.'); return;
+  }
 
   const btn = document.getElementById('btn-signup');
-  btn.disabled = true; btn.textContent = 'Creating account...';
+  btn.disabled = true;
+  btn.textContent = 'Creating account…';
 
-  const { data, error } = await sb.auth.signUp({
-    email, password: pw,
-    options: { data: { username, display_name: name } }
+  // Create auth user
+  const { data, error } = await sb().auth.signUp({
+    email,
+    password: pw,
+    options: {
+      data: { username, display_name: name }
+    }
   });
 
   if (error) {
     showErr('signup-error', error.message);
-    btn.disabled = false; btn.textContent = 'Create Account →';
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
     return;
   }
 
-  // If writer — auto approve, set role directly
-  if (role === 'writer_applicant' && data.user) {
-    // Update profile role to writer immediately
-    await sb.from('profiles').update({ role: 'writer' }).eq('id', data.user.id);
+  // Set role in profile (writer gets writer role immediately — no approval needed)
+  if (data.user) {
+    await sb()
+      .from('profiles')
+      .update({ role: role, display_name: name, username: username })
+      .eq('id', data.user.id);
   }
 
-  // Auto-confirm and redirect to login
+  // Show success + auto-switch to login
   const successEl = document.getElementById('signup-success');
-  successEl.textContent = role === 'writer_applicant'
-    ? '🎉 Writer account created! Ab login karo aur apni story likhna shuru karo!'
-    : '🎉 Account ban gaya! Login karo.';
+  successEl.textContent = role === 'writer'
+    ? '🎉 Writer account created! Login now and start publishing your story.'
+    : '🎉 Account created! Login to start reading.';
   successEl.style.display = 'block';
   btn.textContent = '✓ Done!';
-  // Auto switch to login after 2 sec
+
   setTimeout(() => {
     document.getElementById('login-email').value = email;
     switchTab('login');
   }, 2000);
 }
 
+// ── FORGOT PASSWORD ──
 async function forgotPassword() {
-  const email = prompt('Enter your email address:');
+  const email = prompt('Enter your registered email address:');
   if (!email) return;
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/reset-password.html' });
+  const { error } = await sb().auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://nextquality.github.io/Voomcomix/login.html'
+  });
   if (error) showToast(error.message, 'error');
-  else showToast('Password reset email sent! Check your inbox.');
+  else       showToast('Password reset email sent! Check your inbox.');
 }
 </script>
 </body>
