@@ -3,121 +3,271 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>About — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<title>Terms & Conditions — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0f14;--card:#141420;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
+:root{--bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;--red:#e8341c;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);--radius:12px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
-a{text-decoration:none;color:inherit;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;}
+a{text-decoration:none;color:var(--red);}
+a:hover{text-decoration:underline;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,14,18,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 40px;gap:20px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;text-decoration:none;color:var(--white);}
 .logo span{color:var(--red);}
-.nav-r a{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
-.nav-r a:hover{color:var(--white);}
-.content{max-width:800px;margin:0 auto;padding:110px 40px 80px;}
-h1{font-family:'Bebas Neue';font-size:3rem;letter-spacing:.05em;margin-bottom:8px;}
-h1 span{color:var(--red);}
-.sub{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
-h2{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;color:var(--gold);margin:40px 0 12px;}
-p{font-size:.95rem;line-height:1.9;color:rgba(253,250,244,.65);margin-bottom:16px;}
-ul{padding-left:24px;margin-bottom:16px;}
-li{font-size:.93rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:6px;}
-.divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
-.highlight{background:rgba(230,48,34,.08);border-left:3px solid var(--red);padding:16px 20px;margin:24px 0;font-size:.9rem;color:rgba(253,250,244,.75);line-height:1.7;}
-footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
-.foot-logo span{color:var(--red);}
-footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
-.foot-links a{font-family:'Rajdhani';font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:16px;transition:color .2s;}
-.foot-links a:hover{color:var(--red);}
-@media(max-width:600px){.content{padding:90px 20px 60px;}nav{padding:0 20px;}footer{padding:24px 20px;flex-direction:column;text-align:center;}}
+.page-hero{margin-top:60px;padding:60px 40px 48px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,72px);letter-spacing:.5px;}
+.page-hero h1 span{color:var(--red);}
+.page-hero p{font-size:14px;color:var(--muted);margin-top:10px;}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:32px;max-width:1060px;margin:0 auto;padding:48px 40px;}
+/* TOC */
+.toc{position:sticky;top:80px;height:fit-content;}
+.toc h4{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+.toc-list a{font-size:13px;color:rgba(245,239,230,.6);padding:6px 10px;border-radius:6px;display:block;transition:all .2s;text-decoration:none;border-left:2px solid transparent;}
+.toc-list a:hover{color:var(--white);background:var(--bg3);}
+.toc-list a.active{color:var(--red);border-left-color:var(--red);}
+/* CONTENT */
+.tc-content h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.3px;margin-bottom:14px;padding-top:16px;color:var(--white);}
+.tc-content h2 span{color:var(--red);}
+.tc-content h3{font-size:16px;font-weight:600;margin:20px 0 10px;color:var(--white);}
+.tc-content p{font-size:14px;color:rgba(245,239,230,.75);line-height:1.8;margin-bottom:12px;}
+.tc-content ul,.tc-content ol{margin:10px 0 14px 20px;}
+.tc-content li{font-size:14px;color:rgba(245,239,230,.75);line-height:1.8;margin-bottom:6px;}
+.tc-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:20px;scroll-margin-top:80px;}
+.tc-section.warning{border-left:3px solid var(--red);}
+.tc-section.info{border-left:3px solid #3b82f6;}
+.tc-section.gold{border-left:3px solid var(--gold);}
+.updated{font-size:12px;color:var(--muted);margin-bottom:20px;}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:28px 40px;text-align:center;}
+footer p{font-size:13px;color:var(--muted);}
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr;padding:32px 20px;}
+  .toc{display:none;}
+  .page-hero{padding:48px 20px 36px;}
+  #header{padding:0 20px;}
+}
 </style>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
-  <div class="nav-r">
-    <a href="stories.html">Stories</a>
-    <a href="about.html">About</a>
-    <a href="terms.html">Terms</a>
-  </div>
-</nav>
 
-<div class="content" id="page-content">
-  <!-- JS loads content based on page -->
+<header id="header">
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div style="margin-left:auto;font-size:13px;color:var(--muted);">Last updated: January 2025</div>
+</header>
+
+<div class="page-hero">
+  <h1>Terms & <span>Conditions</span></h1>
+  <p>Please read these terms carefully before using VoomComix as a reader, writer or contractor.</p>
+</div>
+
+<div class="layout">
+
+  <!-- TABLE OF CONTENTS -->
+  <aside class="toc">
+    <h4>Contents</h4>
+    <ul class="toc-list">
+      <li><a href="#general">1. General Terms</a></li>
+      <li><a href="#reader">2. Reader Terms</a></li>
+      <li><a href="#writer">3. Writer Terms</a></li>
+      <li><a href="#content">4. Content Policy</a></li>
+      <li><a href="#monetization">5. Monetization</a></li>
+      <li><a href="#contract">6. Content Contracts</a></li>
+      <li><a href="#ip">7. Intellectual Property</a></li>
+      <li><a href="#privacy">8. Privacy</a></li>
+      <li><a href="#termination">9. Termination & Bans</a></li>
+      <li><a href="#liability">10. Liability</a></li>
+      <li><a href="#changes">11. Changes to Terms</a></li>
+      <li><a href="#contact-tc">12. Contact</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="tc-content">
+    <div class="updated">Last updated: January 2025 · Effective immediately upon account creation or use of VoomComix.</div>
+
+    <div class="tc-section" id="general">
+      <h2>1. <span>General Terms</span></h2>
+      <p>By accessing or using VoomComix ("the Platform"), you agree to be bound by these Terms & Conditions. These terms apply to all users — readers, writers and contractors. If you do not agree to these terms, you must not use the Platform.</p>
+      <p>VoomComix is owned and operated by Mr. Imtiyaz Sheikh. The Platform was founded in 2024 and is headquartered in India.</p>
+      <p>We reserve the right to update these Terms at any time. Continued use of the Platform after an update constitutes acceptance of the revised terms.</p>
+    </div>
+
+    <div class="tc-section info" id="reader">
+      <h2>2. <span>Reader Terms</span></h2>
+      <p>All content on VoomComix is free to read. Readers do not need an account to browse most content, however an account is required to follow books, post reviews and leave comments.</p>
+      <h3>Reader accounts</h3>
+      <ul>
+        <li>You must provide accurate information when creating an account.</li>
+        <li>You are responsible for keeping your login credentials secure.</li>
+        <li>Readers must be at least 13 years of age to create an account.</li>
+        <li>Access to 18+ content requires you to confirm you are 18 or older.</li>
+      </ul>
+      <h3>Reader conduct</h3>
+      <ul>
+        <li>Do not post abusive, harassing or hateful comments on any book or chapter.</li>
+        <li>Do not post fake reviews intended to harm or artificially boost a writer.</li>
+        <li>Do not attempt to copy, download or reproduce any content from the Platform for redistribution.</li>
+        <li>VoomComix reserves the right to remove any comment or review that violates these terms.</li>
+      </ul>
+    </div>
+
+    <div class="tc-section info" id="writer">
+      <h2>3. <span>Writer Terms</span></h2>
+      <p>Writers are users who publish original stories (novels, manga or comics) on VoomComix. Creating a writer account is free.</p>
+      <h3>Account responsibilities</h3>
+      <ul>
+        <li>You must provide your real full name, a valid email address and accurate profile information.</li>
+        <li>You are solely responsible for all content you publish on the Platform.</li>
+        <li>A writer account cannot be used to publish content on behalf of another person without explicit written consent.</li>
+      </ul>
+      <h3>Book creation rules</h3>
+      <ul>
+        <li>Each book must have a unique title, cover image and "About" description.</li>
+        <li>Books marked as 18+ must contain only content appropriate for adults. Mislabelling content is a violation.</li>
+        <li>Once a book is created it cannot be deleted, to protect reader history and follower data. Chapters may be edited or rewritten.</li>
+        <li>Writers may schedule chapter releases in advance or publish immediately.</li>
+        <li>Manga and comic chapters must contain a minimum of 10 image pages per chapter.</li>
+      </ul>
+      <h3>Content ownership</h3>
+      <ul>
+        <li>You retain ownership of the original content you create and publish on VoomComix.</li>
+        <li>By publishing on VoomComix you grant us a non-exclusive, royalty-free license to display, distribute and promote your content on the Platform.</li>
+        <li>This license does not allow VoomComix to sell your content without your written consent.</li>
+      </ul>
+    </div>
+
+    <div class="tc-section warning" id="content">
+      <h2>4. <span>Content Policy</span></h2>
+      <p>All content published on VoomComix must comply with the following rules. Violations may result in content removal, account suspension or permanent ban.</p>
+      <h3>Strictly prohibited content</h3>
+      <ul>
+        <li><strong>Plagiarism:</strong> Publishing content copied from any book, website or other source without authorisation. This results in immediate permanent ban.</li>
+        <li><strong>AI-generated stories:</strong> Using AI tools to write the story itself. AI may only be used for grammar and language correction, up to a maximum of 20% of total content.</li>
+        <li><strong>Sexual content involving minors:</strong> Any such content results in immediate permanent ban and will be reported to relevant authorities.</li>
+        <li><strong>Hate speech:</strong> Content targeting any individual or group based on religion, caste, race, gender, sexuality or disability.</li>
+        <li><strong>Violence without context:</strong> Graphic violence that serves no narrative purpose and appears designed solely for shock or harm.</li>
+        <li><strong>Misinformation:</strong> Content presenting false information as fact in a way designed to mislead readers.</li>
+        <li><strong>Spam:</strong> Repetitive low-quality content posted to game the system or artificially inflate metrics.</li>
+      </ul>
+      <h3>Permitted content</h3>
+      <ul>
+        <li>Mature (18+) content is permitted provided the book is correctly labelled as 18+ at the time of creation.</li>
+        <li>Dark themes such as violence, addiction or trauma are permitted when handled responsibly within the narrative.</li>
+        <li>All Indian languages are permitted.</li>
+      </ul>
+    </div>
+
+    <div class="tc-section gold" id="monetization">
+      <h2>5. <span>Monetization</span></h2>
+      <p>Writers whose books meet the following criteria may apply for AdSense revenue monetization through VoomComix.</p>
+      <h3>Eligibility requirements</h3>
+      <ul>
+        <li>Minimum 5,000 followers on the book.</li>
+        <li>Minimum 20,000 total chapter views on the book.</li>
+        <li>Minimum 50 positive reviews (4 or 5 stars) on the book.</li>
+        <li>At least 80% of the content must be original writing by the author.</li>
+        <li>AI usage must not exceed 20% of total content, and only for grammar corrections.</li>
+        <li>The story must be exclusive to VoomComix and not published on any other platform.</li>
+      </ul>
+      <h3>Review process</h3>
+      <p>Once you apply, VoomComix will review your book within 7–14 working days to verify originality and compliance. If the book is rejected, you will receive a written reason and will have up to 3 opportunities to improve and reapply. If the book is approved after 3 rejections based on effort and quality, it may still be approved at VoomComix's discretion.</p>
+      <h3>Revenue and payments</h3>
+      <ul>
+        <li>Approved writers earn 60% of the AdSense revenue generated by their book's pages.</li>
+        <li>For future book sales, YouTube adaptations or other platform sales, the writer earns 70% of the total revenue.</li>
+        <li>Payments are processed monthly. The minimum transfer threshold is $10 USD. Amounts below this threshold remain pending until the threshold is reached.</li>
+        <li>Payments are transferred directly to the writer's bank account on file.</li>
+        <li>Bank details can only be added once a book has been approved for monetization.</li>
+        <li>VoomComix does not guarantee a specific revenue amount. Revenue depends entirely on AdSense performance.</li>
+      </ul>
+    </div>
+
+    <div class="tc-section" id="contract">
+      <h2>6. <span>Content Contracts</span></h2>
+      <p>Any individual or organisation wishing to adapt a VoomComix original story for use on any external platform (YouTube, Netflix, film, podcast, game etc.) must apply for a formal content contract through VoomComix.</p>
+      <ul>
+        <li>Applications must include the exact book name, unique book ID and original author name.</li>
+        <li>VoomComix will contact the original author and facilitate a formal agreement between both parties.</li>
+        <li>No adaptation or commercial use of any VoomComix story may begin before the contract is signed.</li>
+        <li>Unauthorised use of VoomComix stories constitutes intellectual property infringement and will be pursued legally.</li>
+        <li>The original author receives 70% of any revenue from the contracted use.</li>
+        <li>Contract enquiries: <a href="mailto:contract@voomcomix.in">contract@voomcomix.in</a></li>
+      </ul>
+    </div>
+
+    <div class="tc-section" id="ip">
+      <h2>7. <span>Intellectual Property</span></h2>
+      <p>All original stories, artwork, characters and content published on VoomComix remain the intellectual property of their respective authors.</p>
+      <p>The VoomComix name, logo, platform design and all non-user-generated content are the intellectual property of VoomComix and may not be reproduced or used without written permission.</p>
+      <p>Readers may not copy, reproduce, redistribute or publish any content from the Platform without explicit written authorisation from both VoomComix and the original author.</p>
+    </div>
+
+    <div class="tc-section" id="privacy">
+      <h2>8. <span>Privacy</span></h2>
+      <p>VoomComix collects user data including name, email, reading history and engagement data to operate and improve the Platform. We do not sell your personal data to third parties.</p>
+      <p>For full details on how we collect, use and protect your data, please read our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+      <p>Bank account details provided by writers are stored securely and used only for payment transfers. VoomComix does not share financial information with any third party.</p>
+    </div>
+
+    <div class="tc-section warning" id="termination">
+      <h2>9. <span>Termination & Bans</span></h2>
+      <p>VoomComix reserves the right to suspend or permanently ban any account that violates these Terms & Conditions.</p>
+      <h3>Grounds for permanent ban</h3>
+      <ul>
+        <li>Plagiarism — confirmed copying of content from any source.</li>
+        <li>AI-generated stories — confirmed use of AI to write more than 20% of story content.</li>
+        <li>Sexual content involving minors — zero tolerance, immediate permanent ban.</li>
+        <li>Repeated hate speech or abusive conduct after warnings.</li>
+        <li>Fraud — attempting to manipulate views, followers or reviews artificially.</li>
+        <li>Any form of illegal activity conducted through the Platform.</li>
+      </ul>
+      <p>When a book is banned, the reason will be documented and communicated to the author. Banned accounts cannot create new accounts to bypass the ban.</p>
+      <p>User content data is never deleted even after a ban, to maintain platform integrity and reader history records.</p>
+    </div>
+
+    <div class="tc-section" id="liability">
+      <h2>10. <span>Liability</span></h2>
+      <p>VoomComix provides the Platform on an "as is" basis. We do not guarantee uninterrupted or error-free service at all times.</p>
+      <p>VoomComix is not responsible for the accuracy or quality of user-generated content. Views expressed in stories, reviews or comments are those of the individual users, not of VoomComix.</p>
+      <p>VoomComix is not liable for any loss of revenue, data or opportunity arising from Platform downtime, content removal or account suspension carried out in accordance with these Terms.</p>
+    </div>
+
+    <div class="tc-section" id="changes">
+      <h2>11. <span>Changes to Terms</span></h2>
+      <p>VoomComix may update these Terms & Conditions at any time. When significant changes are made, we will post an announcement in the "Let's Update" section on the homepage.</p>
+      <p>Continued use of the Platform after the updated Terms are posted constitutes your acceptance of the changes. If you disagree with any updated term, you must stop using the Platform.</p>
+    </div>
+
+    <div class="tc-section" id="contact-tc">
+      <h2>12. <span>Contact</span></h2>
+      <p>If you have any questions about these Terms & Conditions, please contact us:</p>
+      <ul>
+        <li>General queries: <a href="mailto:help@voomcomix.in">help@voomcomix.in</a></li>
+        <li>Contract & legal: <a href="mailto:contract@voomcomix.in">contract@voomcomix.in</a></li>
+      </ul>
+      <p style="margin-top:14px;font-size:13px;color:var(--muted);">VoomComix · Founded 2024 · India</p>
+    </div>
+
+  </div>
 </div>
 
 <footer>
-  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
-  <p>© 2024 VoomComix · All Rights Reserved</p>
-  <div class="foot-links">
-    <a href="stories.html">Stories</a>
-    <a href="about.html">About</a>
-    <a href="terms.html">Terms</a>
-  </div>
+  <p>© 2024–2026 VoomComix · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About Us</a> · <a href="index.html">Home</a></p>
 </footer>
 
 <script>
-const page = location.pathname.includes('terms') ? 'terms' : 'about';
-document.title = (page==='terms'?'Terms & Conditions':'About') + ' — VoomComix';
-
-const content = {
-  about: `
-    <h1>ABOUT <span>VOOMCOMIX</span></h1>
-    <div class="sub">Who we are · What we do</div>
-    <p>VoomComix is an independent creative platform dedicated to original storytelling. Founded with one simple belief — <strong style="color:var(--white)">great stories should be free to read.</strong></p>
-    <p>We write in Hindi and English, across genres — action, fantasy, romance, thriller, mystery. No templates. No formulas. Just raw, honest storytelling from the heart.</p>
-    <div class="highlight">Every story on VoomComix is 100% original — written, edited, and published by the VoomComix creator. No AI-generated content. Real stories, real emotions.</div>
-    <h2>OUR MISSION</h2>
-    <p>To build a space where readers can discover compelling original stories without paywalls, subscriptions, or ads. A place where stories come first.</p>
-    <h2>WHAT WE OFFER</h2>
-    <ul>
-      <li>📚 Original webnovels in Hindi & English</li>
-      <li>⚔️ Multiple genres — action, fantasy, romance, thriller and more</li>
-      <li>📖 Clean, distraction-free reading experience</li>
-      <li>🆓 Everything is completely free to read</li>
-      <li>🔄 Regular chapter updates</li>
-    </ul>
-    <h2>CONTACT</h2>
-    <p>Have a suggestion, feedback, or just want to say hi? Reach out at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
-    <p>You can also visit our site at <a href="https://voomcomix.in" style="color:var(--red);">voomcomix.in</a></p>
-  `,
-  terms: `
-    <h1>TERMS & <span>CONDITIONS</span></h1>
-    <div class="sub">Last updated: January 2024</div>
-    <div class="highlight">By accessing and using VoomComix (voomcomix.in), you agree to the following terms and conditions. Please read them carefully.</div>
-    <h2>1. ACCEPTANCE OF TERMS</h2>
-    <p>By visiting, reading, or using any part of VoomComix, you confirm that you have read, understood, and agree to be bound by these Terms and Conditions. If you do not agree, please do not use this website.</p>
-    <h2>2. CONTENT OWNERSHIP</h2>
-    <p>All stories, chapters, characters, plots, and creative content published on VoomComix are the exclusive intellectual property of VoomComix and its creator. All rights are reserved.</p>
-    <ul>
-      <li>You may not copy, reproduce, republish, or distribute any content without written permission.</li>
-      <li>You may not claim any VoomComix story or content as your own.</li>
-      <li>Sharing links to our stories is encouraged — copying the actual content is not allowed.</li>
-    </ul>
-    <h2>3. FREE TO READ</h2>
-    <p>All content on VoomComix is provided free of charge for personal reading enjoyment. We do not charge readers for access to any story or chapter.</p>
-    <h2>4. USER CONDUCT</h2>
-    <p>When using this website, you agree to:</p>
-    <ul>
-      <li>Use the site for lawful purposes only.</li>
-      <li>Not attempt to hack, disrupt, or damage the website or its systems.</li>
-      <li>Not scrape, copy, or redistribute content without permission.</li>
-      <li>Respect the creative work of the author.</li>
-    </ul>
-    <h2>5. CONTENT DISCLAIMER</h2>
-    <p>Some stories may contain themes suitable for mature readers including violence, dark themes, or romance. Reader discretion is advised. VoomComix stories are works of fiction — any resemblance to real persons or events is purely coincidental.</p>
-    <h2>6. PRIVACY</h2>
-    <p>VoomComix does not collect personal data from readers. We do not require registration or login to read stories. We may use basic analytics to understand site traffic (no personal information is stored).</p>
-    <h2>7. CHANGES TO TERMS</h2>
-    <p>VoomComix reserves the right to update these Terms at any time. Continued use of the website after changes are posted constitutes acceptance of the updated terms.</p>
-    <h2>8. CONTACT</h2>
-    <p>For any questions regarding these terms, please contact us at: <strong style="color:var(--gold)">voomcomix@gmail.com</strong></p>
-  `
-};
-
-document.getElementById('page-content').innerHTML = content[page];
+// Highlight TOC on scroll
+const sections = document.querySelectorAll('.tc-section');
+const links    = document.querySelectorAll('.toc-list a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+  links.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+}, { passive: true });
 </script>
 </body>
 </html>
