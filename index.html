@@ -34,26 +34,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(15,13,20,.96
 #nav-user-area{display:flex;align-items:center;gap:8px;}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px 80px;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(192,57,43,.1) 0%,transparent 65%);}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(transparent,var(--bg));}
-.hero-tag{font-size:.68rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--gold2);margin-bottom:20px;display:flex;align-items:center;gap:10px;justify-content:center;position:relative;z-index:1;}
-.hero-tag::before,.hero-tag::after{content:'';width:28px;height:1px;background:var(--gold2);}
-.hero h1{font-family:'Bebas Neue';font-size:clamp(4rem,10vw,9.5rem);line-height:.9;letter-spacing:.04em;margin-bottom:22px;position:relative;z-index:1;}
-.hero h1 .outline{-webkit-text-stroke:2px var(--red2);color:transparent;}
-.hero-sub{font-size:.92rem;line-height:1.8;color:rgba(253,250,244,.45);max-width:500px;margin:0 auto 24px;position:relative;z-index:1;}
-.hero-search{display:flex;max-width:520px;width:100%;margin:0 auto 32px;position:relative;z-index:1;}
-.hero-search input{flex:1;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-right:none;color:var(--white);padding:13px 18px;font-family:'Rajdhani';font-size:.95rem;outline:none;border-radius:8px 0 0 8px;transition:border-color .2s;}
-.hero-search input::placeholder{color:var(--muted);}
-.hero-search input:focus{border-color:rgba(192,57,43,.5);}
-.hero-search button{background:var(--red);border:none;color:#fff;padding:0 22px;font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:0 8px 8px 0;transition:background .2s;}
-.hero-search button:hover{background:#a93226;}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
-.btn-hero-main{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 30px;border-radius:6px;border:none;transition:all .2s;}
-.btn-hero-main:hover{background:var(--red2);transform:translateY(-2px);}
-.btn-hero-ghost{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--white);padding:11px 28px;border:1.5px solid rgba(255,255,255,.2);border-radius:6px;transition:all .2s;}
-.btn-hero-ghost:hover{border-color:var(--white);}
-.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:52px;position:relative;z-index:1;flex-wrap:wrap;}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 0 60px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(transparent,var(--bg));z-index:1;pointer-events:none;}
 .hstat-v{font-family:'Bebas Neue';font-size:2.2rem;line-height:1;}
 .hstat-l{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
 
@@ -216,43 +198,50 @@ footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 2
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">India's Original Story Platform</div>
+<section class="hero" id="hero-section">
+  <!-- BG blur -->
+  <div id="hero-bg" style="position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(80px) brightness(.15);z-index:0;transition:background-image .5s;"></div>
 
-  <!-- TRENDING STORY CARD -->
-  <div id="hero-trending" style="margin-bottom:28px;position:relative;z-index:1;display:none;">
-    <div style="font-size:.6rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px;display:flex;align-items:center;gap:8px;justify-content:center;">
-      <span style="width:20px;height:1px;background:var(--gold2);display:inline-block;"></span>
-      🔥 Trending Right Now
-      <span style="width:20px;height:1px;background:var(--gold2);display:inline-block;"></span>
-    </div>
-    <div id="trending-card" onclick="location.href=trendingUrl" style="cursor:pointer;background:rgba(255,255,255,.05);border:1px solid rgba(192,57,43,.3);border-radius:14px;padding:18px 22px;max-width:480px;margin:0 auto;display:flex;gap:16px;align-items:center;backdrop-filter:blur(10px);transition:all .2s;"
-      onmouseover="this.style.borderColor='rgba(192,57,43,.7)';this.style.background='rgba(255,255,255,.08)'"
-      onmouseout="this.style.borderColor='rgba(192,57,43,.3)';this.style.background='rgba(255,255,255,.05)'">
-      <div id="trending-cover" style="width:56px;height:80px;border-radius:8px;background:var(--card2);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.8rem;"></div>
-      <div style="flex:1;min-width:0;text-align:left;">
-        <div style="font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red2);margin-bottom:4px;" id="trending-type"></div>
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.03em;line-height:1.1;color:var(--white);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="trending-title">Loading...</div>
-        <div style="font-size:.68rem;color:rgba(253,250,244,.45);margin-bottom:6px;" id="trending-author"></div>
-        <div style="display:flex;gap:12px;">
-          <span style="font-size:.62rem;color:var(--muted);" id="trending-views"></span>
-          <span style="font-size:.62rem;color:var(--muted);" id="trending-chapters"></span>
-        </div>
+  <div style="position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:center;" id="hero-inner">
+    <!-- LEFT -->
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+        <span style="width:28px;height:2px;background:var(--red2);display:inline-block;"></span>
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold2);">🔥 Trending Now</span>
       </div>
-      <div style="font-size:1.2rem;color:var(--red2);flex-shrink:0;">›</div>
+
+      <h1 id="t-title" style="font-family:'Bebas Neue';font-size:clamp(4rem,8vw,8rem);line-height:.88;letter-spacing:.03em;margin-bottom:20px;color:var(--white);">Loading...</h1>
+
+      <div id="t-badges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;"></div>
+
+      <p id="t-desc" style="font-family:'Libre Baskerville',Georgia,serif;font-size:.9rem;line-height:1.8;color:rgba(253,250,244,.55);max-width:540px;margin-bottom:32px;"></p>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <button id="t-read-btn" onclick="startReading()" style="font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:13px 28px;border:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;">📖 Start Reading</button>
+        <button onclick="location.href='stories.html'" style="font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--white);padding:12px 26px;border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:border-color .2s;">Browse All</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Cover -->
+    <div style="position:relative;display:flex;justify-content:center;" id="hero-cover-section">
+      <div style="position:relative;display:inline-block;">
+        <div id="t-cover-wrap" style="width:220px;height:320px;border-radius:4px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.7);background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:5rem;">
+          <img id="t-cover-img" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;"/>
+          <span id="t-cover-emoji">📖</span>
+        </div>
+        <!-- #1 badge -->
+        <div style="position:absolute;bottom:-12px;left:-12px;background:var(--white);color:#1a1410;border-radius:8px;padding:8px 14px;box-shadow:0 4px 16px rgba(0,0,0,.3);">
+          <div style="font-family:'Bebas Neue';font-size:2rem;line-height:1;color:var(--red2);">#1</div>
+          <div style="font-size:.52rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#6b5a4e;">This Week</div>
+        </div>
+        <!-- Trending badge -->
+        <div style="position:absolute;top:-12px;right:-12px;background:var(--red);color:#fff;padding:7px 14px;font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);">🔥 Trending</div>
+      </div>
     </div>
   </div>
 
-  <p class="hero-sub">Manga, Comics & Web Novels from Indian writers. Read free. Support creators. Discover your next obsession.</p>
-  <div class="hero-search">
-    <input type="text" id="hero-search" placeholder="Search manga, novels, authors..." onkeydown="if(event.key==='Enter')doSearch()"/>
-    <button onclick="doSearch()">Search</button>
-  </div>
-  <div class="hero-btns">
-    <button class="btn-hero-main" onclick="location.href='stories.html'">📚 Browse All Stories</button>
-    <button class="btn-hero-ghost" onclick="location.href='login.html'">✍️ Start Writing</button>
-  </div>
-  <div class="hero-stats">
+  <!-- Stats row -->
+  <div style="position:relative;z-index:1;display:flex;gap:48px;padding:48px 40px 0;flex-wrap:wrap;width:100%;max-width:1100px;margin:0 auto;" id="hero-stats-row">
     <div><div class="hstat-v" id="stat-stories">—</div><div class="hstat-l">Stories</div></div>
     <div><div class="hstat-v" id="stat-chapters">—</div><div class="hstat-l">Chapters</div></div>
     <div><div class="hstat-v" id="stat-writers">—</div><div class="hstat-l">Writers</div></div>
@@ -450,31 +439,44 @@ async function init(){
   const list=stories.data||[];
   const totalViews=list.reduce((a,s)=>a+(s.total_views||0),0);
 
-  // Trending story — most views
+  // Trending story hero — most views
   const trending=[...list].sort((a,b)=>(b.total_views||0)-(a.total_views||0))[0];
   if(trending){
     const te={novel:'📖',manga:'🎌',comic:'🗂️'};
-    const tl={novel:'Novel',manga:'Manga',comic:'Comic'};
-    window.trendingUrl=`story.html?id=${trending.id}`;
-    const covEl=document.getElementById('trending-cover');
+    window.trendingUrl='story.html?id='+trending.id;
+    window.trendingStory=trending;
+
+    // Big title
+    document.getElementById('t-title').textContent=trending.title;
+
+    // Cover + BG blur
+    const img=document.getElementById('t-cover-img');
     if(trending.cover_url){
-      covEl.innerHTML=`<img src="${esc(trending.cover_url)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.textContent='${te[trending.type]||'📖'}'"/>`;
+      img.src=trending.cover_url;
+      img.style.display='block';
+      document.getElementById('t-cover-emoji').style.display='none';
+      document.getElementById('hero-bg').style.backgroundImage='url('+trending.cover_url+')';
     } else {
-      covEl.textContent=te[trending.type]||'📖';
+      document.getElementById('t-cover-emoji').textContent=te[trending.type]||'📖';
     }
-    document.getElementById('trending-type').textContent=(tl[trending.type]||'Novel')+' · '+trending.language;
-    document.getElementById('trending-title').textContent=trending.title;
-    const author=trending.profiles?.display_name||trending.profiles?.username||'Anonymous';
-    document.getElementById('trending-author').textContent='by '+author+(trending.genre?' · '+trending.genre:'');
-    document.getElementById('trending-views').textContent='👁️ '+fmtNum(trending.total_views||0)+' views';
-    document.getElementById('trending-chapters').textContent='📄 '+(trending.total_chapters||0)+' chapters';
-    document.getElementById('hero-trending').style.display='block';
+
+    // Badges — genre, views, status
+    const bs='font-family:Rajdhani;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:3px;display:inline-flex;align-items:center;gap:6px;';
+    document.getElementById('t-badges').innerHTML=
+      '<span style="'+bs+'border:1px solid rgba(255,255,255,.2);color:rgba(253,250,244,.7);">'+(trending.genre||'Story')+'</span>'+
+      '<span style="'+bs+'background:rgba(255,255,255,.08);color:rgba(253,250,244,.6);">👁 '+fmtNum(trending.total_views||0)+'</span>'+
+      '<span style="'+bs+'border:1px solid rgba(255,255,255,.15);color:rgba(253,250,244,.5);">'+(trending.status||'Ongoing').toUpperCase()+'</span>';
+
+    // Description
+    const desc=trending.description||'';
+    document.getElementById('t-desc').textContent=desc.substring(0,220)+(desc.length>220?'...':'');
   }
 
-  document.getElementById('stat-stories').textContent=fmtNum(list.length);
-  document.getElementById('stat-chapters').textContent=fmtNum(chapters.count||0);
-  document.getElementById('stat-writers').textContent=fmtNum(writers.count||0);
-  document.getElementById('stat-reads').textContent=fmtNum(totalViews);
+  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  setEl('stat-stories',fmtNum(list.length));
+  setEl('stat-chapters',fmtNum(chapters.count||0));
+  setEl('stat-writers',fmtNum(writers.count||0));
+  setEl('stat-reads',fmtNum(totalViews));
 
   const sorted=[...list].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   document.getElementById('new-releases').innerHTML=sorted.slice(0,6).map(s=>card(s)).join('')||`<p style="color:var(--muted);padding:20px;">No stories yet.</p>`;
@@ -513,6 +515,19 @@ function rank(id,list){
     const cover=s.cover_url?`<img src="${esc(s.cover_url)}" class="rank-cover" onerror="this.outerHTML='<div class=rank-cover-fb>${te[s.type]||'📖'}</div>'">`:`<div class="rank-cover-fb">${te[s.type]||'📖'}</div>`;
     return`<div class="rank-row" onclick="location.href='story.html?id=${s.id}'"><div class="rank-n ${rc[i]||'rn-other'}">${i+1}</div>${cover}<div style="flex:1;min-width:0;"><div class="rank-title">${esc(s.title)}</div><div class="rank-views">👁️ ${fmtNum(s.total_views||0)}</div></div></div>`;
   }).join('');
+}
+
+async function startReading(){
+  const s=window.trendingStory;
+  if(!s){location.href='stories.html';return;}
+  // Get first chapter
+  const{data:chs}=await sb().from('chapters').select('id').eq('story_id',s.id).order('chapter_number',{ascending:true}).limit(1);
+  if(chs&&chs[0]){
+    const reader=(s.type==='manga'||s.type==='comic')?'manga-reader.html':'chapter.html';
+    location.href=reader+'?story='+s.id+'&chapter='+chs[0].id;
+  } else {
+    location.href='story.html?id='+s.id;
+  }
 }
 
 function doSearch(){
