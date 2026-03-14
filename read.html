@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Read — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root{
+  --bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;
+  --red:#e8341c;--red2:#ff4d2e;--white:#f5efe6;--muted:#8a7a6a;
+  --border:rgba(245,239,230,0.08);--radius:10px;
+  --font-size:18px;--line-height:1.9;--max-width:720px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+
+/* ── READ PROGRESS BAR ── */
+#progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--red),var(--red2));
+  z-index:9999;transition:width .1s;width:0%;
+}
+
+/* ── TOP NAV ── */
+#topnav{
+  position:fixed;top:3px;left:0;right:0;z-index:100;
+  background:rgba(14,14,18,.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  height:52px;display:flex;align-items:center;
+  padding:0 20px;gap:12px;
+  transition:transform .3s;
+}
+#topnav.hidden{transform:translateY(-100%);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;flex-shrink:0;}
+.nav-logo span{color:var(--red);}
+.nav-book-title{
+  font-size:13px;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex:1;color:rgba(245,239,230,.7);
+}
+.nav-chapter-info{
+  font-size:12px;color:var(--muted);
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;
+}
+.nav-btns{display:flex;gap:6px;flex-shrink:0;}
+.nav-btn{
+  padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);
+  background:var(--bg3);color:var(--white);
+  transition:all .2s;font-family:'Rajdhani',sans-serif;
+  text-transform:uppercase;letter-spacing:.3px;
+}
+.nav-btn:hover{border-color:var(--red);color:var(--red);}
+.nav-btn.red{background:var(--red);border-color:var(--red);color:#fff;}
+.nav-btn.red:hover{background:var(--red2);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* Settings toggle */
+#settings-panel{
+  position:fixed;top:52px;right:0;z-index:99;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:0 0 0 12px;
+  padding:16px 20px;width:260px;
+  display:none;
+}
+#settings-panel.open{display:block;}
+.setting-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;
+}
+.setting-row:last-child{border-bottom:none;}
+.setting-label{color:var(--muted);}
+.setting-val{display:flex;gap:6px;}
+.set-btn{
+  padding:4px 10px;border-radius:5px;font-size:11px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--white);cursor:pointer;transition:all .15s;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+}
+.set-btn:hover,.set-btn.active{background:var(--red);border-color:var(--red);}
+
+/* ── CHAPTER LIST PANEL ── */
+#chapter-drawer{
+  position:fixed;left:0;top:0;bottom:0;z-index:200;
+  width:300px;background:var(--bg2);
+  border-right:1px solid var(--border);
+  transform:translateX(-100%);transition:transform .3s;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+#chapter-drawer.open{transform:translateX(0);}
+.drawer-header{
+  padding:16px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.drawer-header h3{font-family:'Bebas Neue',sans-serif;font-size:20px;}
+.drawer-close{
+  background:none;border:none;color:var(--muted);
+  cursor:pointer;font-size:20px;
+}
+.drawer-list{flex:1;overflow-y:auto;padding:8px;}
+.drawer-item{
+  padding:10px 12px;border-radius:8px;cursor:pointer;
+  transition:all .2s;margin-bottom:3px;
+  border:1px solid transparent;font-size:13px;
+}
+.drawer-item:hover{background:var(--bg3);}
+.drawer-item.current{
+  background:rgba(232,52,28,.08);
+  border-color:rgba(232,52,28,.2);color:var(--red);font-weight:600;
+}
+.drawer-item-num{font-size:10px;color:var(--muted);margin-bottom:2px;font-family:'Rajdhani',sans-serif;font-weight:700;text-transform:uppercase;}
+
+/* Overlay */
+#drawer-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:199;display:none;
+}
+#drawer-overlay.open{display:block;}
+
+/* ── MAIN READER ── */
+#reader-wrap{
+  padding-top:52px;min-height:100vh;
+  display:flex;flex-direction:column;
+}
+
+/* Chapter header */
+#chapter-header{
+  padding:40px 24px 32px;
+  max-width:var(--max-width);margin:0 auto;width:100%;
+}
+.ch-book-link{
+  font-size:13px;color:var(--red);
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:12px;
+}
+.ch-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;color:var(--muted);letter-spacing:.5px;
+  margin-bottom:8px;
+}
+.ch-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(28px,5vw,48px);
+  letter-spacing:.5px;line-height:1.1;
+}
+.ch-date{font-size:12px;color:var(--muted);margin-top:10px;}
+
+/* Divider */
+.ch-divider{
+  max-width:var(--max-width);margin:0 auto;
+  width:100%;padding:0 24px;margin-bottom:32px;
+}
+.ch-divider hr{border:none;border-top:1px solid var(--border);}
+
+/* ── NOVEL CONTENT ── */
+#novel-content{
+  max-width:var(--max-width);margin:0 auto;
+  width:100%;padding:0 24px 60px;
+  font-size:var(--font-size);
+  line-height:var(--line-height);
+  color:rgba(245,239,230,.88);
+  font-family:'Merriweather',serif;
+}
+#novel-content p{margin-bottom:1.4em;}
+#novel-content p:first-child::first-letter{
+  font-size:3.2em;font-weight:700;float:left;
+  line-height:.85;margin-right:8px;margin-top:4px;
+  color:var(--red);font-family:'Bebas Neue',sans-serif;
+}
+
+/* Font themes */
+body.theme-serif  #novel-content{font-family:'Merriweather',serif;}
+body.theme-sans   #novel-content{font-family:'Noto Sans',sans-serif;}
+body.theme-mono   #novel-content{font-family:'Courier New',monospace;}
+body.size-sm  #novel-content{--font-size:15px;}
+body.size-md  #novel-content{--font-size:18px;}
+body.size-lg  #novel-content{--font-size:21px;}
+body.size-xl  #novel-content{--font-size:24px;}
+body.bg-dark  {background:#0e0e12;}
+body.bg-sepia {background:#1a1610;--white:#e8dcc8;}
+body.bg-white {background:#f5f5f0;--white:#1a1a1a;--bg:#f5f5f0;--bg2:#eaeae5;--bg3:#ddddd8;--card:#eeeeea;--border:rgba(0,0,0,0.1);--muted:#888;}
+
+/* ── MANGA / COMIC CONTENT ── */
+#manga-content{
+  display:none;
+  max-width:900px;margin:0 auto;
+  padding:0 16px 60px;
+}
+.manga-page{
+  margin-bottom:6px;width:100%;
+  display:block;border-radius:4px;
+  cursor:pointer;
+}
+.manga-page:last-child{margin-bottom:0;}
+.manga-page-num{
+  text-align:center;font-size:11px;color:var(--muted);
+  padding:6px 0 2px;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+
+/* ── BOTTOM NAV ── */
+#bottom-nav{
+  max-width:var(--max-width);margin:0 auto;
+  width:100%;padding:20px 24px 60px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.bottom-nav-btns{display:flex;gap:12px;justify-content:space-between;}
+.bottom-btn{
+  flex:1;padding:14px;border-radius:10px;
+  font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;
+  cursor:pointer;border:none;transition:all .2s;text-align:center;
+}
+.bottom-btn-prev{background:var(--bg3);color:var(--white);border:1px solid var(--border);}
+.bottom-btn-prev:hover{border-color:var(--red);}
+.bottom-btn-next{background:var(--red);color:#fff;}
+.bottom-btn-next:hover{background:var(--red2);}
+.bottom-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* Like + Comment section */
+.reaction-bar{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:14px 20px;
+}
+.like-btn{
+  display:flex;align-items:center;gap:8px;
+  background:none;border:1px solid var(--border);
+  border-radius:8px;padding:8px 16px;cursor:pointer;
+  font-size:14px;font-weight:600;color:var(--white);
+  transition:all .2s;
+}
+.like-btn:hover,.like-btn.liked{background:rgba(232,52,28,.12);border-color:rgba(232,52,28,.3);color:var(--red);}
+.reaction-divider{width:1px;height:24px;background:var(--border);}
+.comment-count{font-size:13px;color:var(--muted);}
+.share-quick{display:flex;gap:8px;margin-left:auto;}
+.share-q-btn{
+  padding:7px 12px;border-radius:7px;font-size:12px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .2s;
+  font-family:'Rajdhani',sans-serif;font-weight:600;text-transform:uppercase;
+}
+.share-q-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* Comment section */
+.comments-section{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:20px;
+}
+.comments-title{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:16px;}
+.comment-input-wrap{margin-bottom:16px;}
+.comment-input-wrap textarea{
+  width:100%;padding:12px 14px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;color:var(--white);
+  font-size:14px;line-height:1.6;
+  outline:none;resize:vertical;min-height:80px;
+  font-family:'Inter',sans-serif;
+}
+.comment-input-wrap textarea:focus{border-color:var(--red);}
+.comment-input-wrap textarea::placeholder{color:var(--muted);}
+.post-comment-btn{
+  margin-top:8px;padding:9px 20px;border-radius:8px;
+  background:var(--red);color:#fff;border:none;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.5px;transition:all .2s;
+}
+.post-comment-btn:hover{background:var(--red2);}
+.comment-item{
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.comment-item:last-child{border-bottom:none;}
+.comment-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.comment-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--red);display:flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;
+}
+.comment-username{font-size:13px;font-weight:600;}
+.comment-date{font-size:11px;color:var(--muted);margin-left:auto;}
+.comment-text{font-size:13px;color:rgba(245,239,230,.75);line-height:1.6;}
+
+/* ── LOADING ── */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s;max-width:260px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:rgba(34,197,94,.4);color:#86efac;}
+#toast.error{border-color:rgba(220,38,38,.4);color:#fca5a5;}
+
+@media(max-width:600px){
+  #novel-content{padding:0 16px 40px;font-size:16px;}
+  #chapter-header{padding:28px 16px 24px;}
+  .bottom-nav-btns{flex-direction:column;}
+  #settings-panel{width:220px;}
+}
+</style>
+</head>
+<body class="theme-serif size-md bg-dark">
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Chapter List Drawer -->
+<div id="drawer-overlay" onclick="closeDrawer()"></div>
+<div id="chapter-drawer">
+  <div class="drawer-header">
+    <h3>Chapters</h3>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-list" id="drawer-list">
+    <div class="skeleton" style="height:40px;margin-bottom:6px;border-radius:8px;"></div>
+    <div class="skeleton" style="height:40px;margin-bottom:6px;border-radius:8px;"></div>
+    <div class="skeleton" style="height:40px;margin-bottom:6px;border-radius:8px;"></div>
+  </div>
+</div>
+
+<!-- Settings Panel -->
+<div id="settings-panel">
+  <div class="setting-row">
+    <span class="setting-label">Font Size</span>
+    <div class="setting-val">
+      <button class="set-btn" onclick="setSetting('size','sm')">A-</button>
+      <button class="set-btn active" onclick="setSetting('size','md')">A</button>
+      <button class="set-btn" onclick="setSetting('size','lg')">A+</button>
+      <button class="set-btn" onclick="setSetting('size','xl')">A++</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">Font Style</span>
+    <div class="setting-val">
+      <button class="set-btn active" onclick="setSetting('theme','serif')">Serif</button>
+      <button class="set-btn" onclick="setSetting('theme','sans')">Sans</button>
+      <button class="set-btn" onclick="setSetting('theme','mono')">Mono</button>
+    </div>
+  </div>
+  <div class="setting-row">
+    <span class="setting-label">Background</span>
+    <div class="setting-val">
+      <button class="set-btn active" onclick="setSetting('bg','dark')" style="background:#0e0e12;border-color:#555;">Dark</button>
+      <button class="set-btn" onclick="setSetting('bg','sepia')" style="background:#2a2218;border-color:#6b5a3a;color:#e8dcc8;">Sepia</button>
+      <button class="set-btn" onclick="setSetting('bg','white')" style="background:#f5f5f0;border-color:#ccc;color:#333;">Light</button>
+    </div>
+  </div>
+</div>
+
+<!-- Top Nav -->
+<nav id="topnav">
+  <a href="index.html" class="nav-logo">VOOM<span>COMIX</span></a>
+  <div class="nav-book-title" id="nav-book-title">Loading...</div>
+  <div class="nav-chapter-info" id="nav-chapter-info">Chapter —</div>
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="toggleDrawer()" title="Chapter list">≡</button>
+    <button class="nav-btn" id="nav-prev" onclick="prevChapter()" disabled>‹ Prev</button>
+    <button class="nav-btn" id="nav-next" onclick="nextChapter()" disabled>Next ›</button>
+    <button class="nav-btn" onclick="toggleSettings()" title="Reading settings">⚙</button>
+    <a id="nav-back-book" href="#" class="nav-btn">Book Page</a>
+  </div>
+</nav>
+
+<!-- Reader Wrap -->
+<div id="reader-wrap">
+  <!-- Chapter Header -->
+  <div id="chapter-header">
+    <a class="ch-book-link" id="ch-book-link" href="#">← Back to Book</a>
+    <div class="ch-num" id="ch-num">Chapter —</div>
+    <h1 class="ch-title" id="ch-title">Loading...</h1>
+    <div class="ch-date" id="ch-date"></div>
+  </div>
+
+  <div class="ch-divider"><hr/></div>
+
+  <!-- Novel Content -->
+  <div id="novel-content">
+    <div class="skeleton" style="height:20px;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:90%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:95%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:85%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:32px;width:70%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:88%;"></div>
+    <div class="skeleton" style="height:20px;width:92%;"></div>
+  </div>
+
+  <!-- Manga / Comic Content -->
+  <div id="manga-content"></div>
+
+  <!-- Bottom Nav -->
+  <div id="bottom-nav">
+    <div class="bottom-nav-btns">
+      <button class="bottom-btn bottom-btn-prev" id="bot-prev" onclick="prevChapter()" disabled>‹ Previous Chapter</button>
+      <button class="bottom-btn bottom-btn-next" id="bot-next" onclick="nextChapter()" disabled>Next Chapter ›</button>
+    </div>
+
+    <!-- Reaction Bar -->
+    <div class="reaction-bar">
+      <button class="like-btn" id="like-btn" onclick="toggleLike()">
+        <span id="like-icon">♡</span>
+        <span id="like-count">0</span>
+      </button>
+      <div class="reaction-divider"></div>
+      <span class="comment-count" id="comment-count">0 comments</span>
+      <div class="share-quick">
+        <button class="share-q-btn" onclick="shareChapter('whatsapp')">📱</button>
+        <button class="share-q-btn" onclick="shareChapter('copy')">🔗</button>
+        <button class="share-q-btn" onclick="shareChapter('twitter')">🐦</button>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="comments-section">
+      <div class="comments-title">Comments</div>
+      <div class="comment-input-wrap" id="comment-input-wrap">
+        <textarea id="comment-text" placeholder="Write a comment..."></textarea>
+        <button class="post-comment-btn" onclick="postComment()">Post Comment</button>
+      </div>
+      <div id="comments-list">
+        <div class="skeleton" style="height:70px;border-radius:8px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:70px;border-radius:8px;"></div>
+      </div>
+    </div>
+
+    <!-- Back to book -->
+    <div style="text-align:center;padding:8px 0;">
+      <a id="back-to-book" href="#" style="font-size:13px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">← Back to Book Page</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════
+// STATE
+// ══════════════════════════
+let bookId      = null;
+let bookData    = null;
+let chapterNum  = 1;
+let chapterData = null;
+let allChapters = [];
+let currentUser = null;
+let isLiked     = false;
+let likeCount   = 0;
+
+// Reading settings
+let readSettings = JSON.parse(localStorage.getItem('vc_read_settings') || '{"size":"md","theme":"serif","bg":"dark"}');
+
+// ══════════════════════════
+// INIT
+// ══════════════════════════
+(async () => {
+  const params = new URLSearchParams(window.location.search);
+  bookId     = params.get('book');
+  chapterNum = parseInt(params.get('chapter')) || 1;
+
+  if (!bookId) { window.location.href = 'browse.html'; return; }
+
+  // Apply saved reading settings
+  applySettings(readSettings);
+  currentUser = await getCurrentUser();
+
+  await loadBookInfo();
+  await loadAllChapters();
+  await loadChapter(chapterNum);
+  setupScrollProgress();
+  setupNavHide();
+})();
+
+// ══════════════════════════
+// LOAD BOOK INFO
+// ══════════════════════════
+async function loadBookInfo() {
+  const { data } = await sb.from('books').select('id,title,type,cover_image').eq('id', bookId).single();
+  if (!data) { window.location.href = 'browse.html'; return; }
+  bookData = data;
+  document.title = `${data.title} — VoomComix`;
+  document.getElementById('nav-book-title').textContent = data.title;
+  document.getElementById('ch-book-link').href = `book-detail.html?id=${bookId}`;
+  document.getElementById('nav-back-book').href = `book-detail.html?id=${bookId}`;
+  document.getElementById('back-to-book').href  = `book-detail.html?id=${bookId}`;
+}
+
+// ══════════════════════════
+// LOAD ALL CHAPTERS
+// ══════════════════════════
+async function loadAllChapters() {
+  const { data } = await sb.from('chapters')
+    .select('id,chapter_number,title,is_published')
+    .eq('book_id', bookId)
+    .eq('is_published', true)
+    .order('chapter_number', { ascending: true });
+  allChapters = data || [];
+  renderDrawer();
+  updateNavButtons();
+}
+
+function renderDrawer() {
+  const list = document.getElementById('drawer-list');
+  if (!allChapters.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:16px;text-align:center;">No chapters yet.</p>';
+    return;
+  }
+  list.innerHTML = allChapters.map(ch => `
+  <div class="drawer-item ${ch.chapter_number === chapterNum ? 'current' : ''}"
+    id="draw-${ch.chapter_number}"
+    onclick="goToChapter(${ch.chapter_number})">
+    <div class="drawer-item-num">Chapter ${ch.chapter_number}</div>
+    <div>${ch.title || 'Chapter ' + ch.chapter_number}</div>
+  </div>`).join('');
+  // Scroll active into view
+  setTimeout(() => {
+    document.getElementById('draw-' + chapterNum)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, 200);
+}
+
+// ══════════════════════════
+// LOAD CHAPTER
+// ══════════════════════════
+async function loadChapter(num) {
+  chapterNum = num;
+  // Update URL without reload
+  const url = new URL(window.location);
+  url.searchParams.set('chapter', num);
+  window.history.pushState({}, '', url);
+
+  // Clear previous content
+  document.getElementById('novel-content').innerHTML = `
+    <div class="skeleton" style="height:20px;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:90%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;width:95%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:32px;width:80%;"></div>
+    <div class="skeleton" style="height:20px;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:20px;width:88%;"></div>`;
+  document.getElementById('manga-content').innerHTML = '';
+  document.getElementById('ch-title').textContent = 'Loading...';
+
+  const { data, error } = await sb.from('chapters')
+    .select('*')
+    .eq('book_id', bookId)
+    .eq('chapter_number', num)
+    .eq('is_published', true)
+    .single();
+
+  if (error || !data) {
+    document.getElementById('novel-content').innerHTML =
+      `<div style="text-align:center;color:var(--muted);padding:60px;font-size:15px;">
+        Chapter not found or not published yet.
+       </div>`;
+    return;
+  }
+  chapterData = data;
+  renderChapter(data);
+  updateNavButtons();
+  renderDrawer();
+  loadLikes();
+  loadComments();
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════
+// RENDER CHAPTER
+// ══════════════════════════
+function renderChapter(ch) {
+  const type = bookData?.type || 'novel';
+  const isImage = type === 'manga' || type === 'comic';
+
+  // Header
+  document.getElementById('nav-chapter-info').textContent = `Chapter ${ch.chapter_number}`;
+  document.getElementById('ch-num').textContent = `Chapter ${ch.chapter_number}`;
+  document.getElementById('ch-title').textContent = ch.title || `Chapter ${ch.chapter_number}`;
+  document.getElementById('ch-date').textContent = ch.published_at
+    ? 'Published ' + new Date(ch.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '';
+  document.title = `${ch.title || 'Chapter ' + ch.chapter_number} — ${bookData?.title || 'VoomComix'}`;
+
+  if (isImage) {
+    // Manga / Comic reader
+    document.getElementById('novel-content').style.display = 'none';
+    document.getElementById('manga-content').style.display = 'block';
+    const images = ch.images || [];
+    if (!images.length) {
+      document.getElementById('manga-content').innerHTML =
+        `<div style="text-align:center;color:var(--muted);padding:60px;">No pages uploaded for this chapter.</div>`;
+      return;
+    }
+    document.getElementById('manga-content').innerHTML = images.map((url, i) => `
+    <div>
+      <div class="manga-page-num">Page ${i + 1}</div>
+      <img class="manga-page" src="${url}" alt="Page ${i + 1}" loading="lazy"
+        onclick="openImageFull('${url}')"
+        onerror="this.style.display='none'"/>
+    </div>`).join('');
+  } else {
+    // Novel reader
+    document.getElementById('novel-content').style.display = 'block';
+    document.getElementById('manga-content').style.display = 'none';
+    const content = ch.content || '';
+    if (!content.trim()) {
+      document.getElementById('novel-content').innerHTML =
+        `<div style="text-align:center;color:var(--muted);padding:60px;">No content for this chapter.</div>`;
+      return;
+    }
+    // Split by newlines into paragraphs
+    const paras = content.split(/\n\n+/).filter(p => p.trim());
+    document.getElementById('novel-content').innerHTML = paras.length
+      ? paras.map(p => `<p>${p.replace(/\n/g, '<br/>')}</p>`).join('')
+      : `<p>${content}</p>`;
+  }
+}
+
+// Full image view for manga
+function openImageFull(url) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+  overlay.innerHTML = `<img src="${url}" style="max-width:95vw;max-height:95vh;object-fit:contain;border-radius:4px;"/>`;
+  overlay.onclick = () => document.body.removeChild(overlay);
+  document.body.appendChild(overlay);
+}
+
+// ══════════════════════════
+// NAV BUTTONS
+// ══════════════════════════
+function updateNavButtons() {
+  const hasPrev = allChapters.some(c => c.chapter_number === chapterNum - 1);
+  const hasNext = allChapters.some(c => c.chapter_number === chapterNum + 1);
+  document.getElementById('nav-prev').disabled = !hasPrev;
+  document.getElementById('nav-next').disabled = !hasNext;
+  document.getElementById('bot-prev').disabled = !hasPrev;
+  document.getElementById('bot-next').disabled = !hasNext;
+}
+
+function prevChapter() {
+  if (chapterNum > 1) loadChapter(chapterNum - 1);
+}
+function nextChapter() {
+  loadChapter(chapterNum + 1);
+}
+function goToChapter(num) {
+  loadChapter(num);
+  closeDrawer();
+}
+
+// ══════════════════════════
+// DRAWER
+// ══════════════════════════
+function toggleDrawer() {
+  document.getElementById('chapter-drawer').classList.toggle('open');
+  document.getElementById('drawer-overlay').classList.toggle('open');
+}
+function closeDrawer() {
+  document.getElementById('chapter-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+// ══════════════════════════
+// SETTINGS
+// ══════════════════════════
+function toggleSettings() {
+  document.getElementById('settings-panel').classList.toggle('open');
+}
+
+function setSetting(type, val) {
+  readSettings[type] = val;
+  localStorage.setItem('vc_read_settings', JSON.stringify(readSettings));
+  applySettings(readSettings);
+  // Update active button
+  document.querySelectorAll(`.setting-row .set-btn`).forEach(b => {
+    if (b.onclick && b.onclick.toString().includes(`'${type}'`)) {
+      b.classList.toggle('active', b.onclick.toString().includes(`'${val}'`));
+    }
+  });
+}
+
+function applySettings(s) {
+  const body = document.body;
+  // Remove old classes
+  body.classList.remove('size-sm','size-md','size-lg','size-xl');
+  body.classList.remove('theme-serif','theme-sans','theme-mono');
+  body.classList.remove('bg-dark','bg-sepia','bg-white');
+  body.classList.add(`size-${s.size||'md'}`);
+  body.classList.add(`theme-${s.theme||'serif'}`);
+  body.classList.add(`bg-${s.bg||'dark'}`);
+}
+
+// ══════════════════════════
+// SCROLL PROGRESS
+// ══════════════════════════
+function setupScrollProgress() {
+  window.addEventListener('scroll', () => {
+    const total   = document.body.scrollHeight - window.innerHeight;
+    const current = window.scrollY;
+    const pct     = total > 0 ? (current / total) * 100 : 0;
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }, { passive: true });
+}
+
+// Auto hide/show top nav on scroll
+function setupNavHide() {
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const current = window.scrollY;
+    const nav = document.getElementById('topnav');
+    if (current > lastScroll && current > 120) {
+      nav.classList.add('hidden');
+      document.getElementById('settings-panel').classList.remove('open');
+    } else {
+      nav.classList.remove('hidden');
+    }
+    lastScroll = current;
+  }, { passive: true });
+}
+
+// ══════════════════════════
+// LIKES
+// ══════════════════════════
+async function loadLikes() {
+  if (!chapterData) return;
+  const { count } = await sb.from('likes')
+    .select('*', { count: 'exact', head: true })
+    .eq('chapter_id', chapterData.id);
+  likeCount = count || 0;
+  document.getElementById('like-count').textContent = likeCount;
+
+  if (currentUser) {
+    const { data } = await sb.from('likes')
+      .select('id').eq('chapter_id', chapterData.id).eq('user_id', currentUser.id).single();
+    isLiked = !!data;
+    updateLikeBtn();
+  }
+}
+
+function updateLikeBtn() {
+  const btn = document.getElementById('like-btn');
+  document.getElementById('like-icon').textContent = isLiked ? '♥' : '♡';
+  btn.classList.toggle('liked', isLiked);
+}
+
+async function toggleLike() {
+  if (!currentUser) { showToast('Login to like chapters.', 'error'); return; }
+  if (!chapterData) return;
+
+  if (isLiked) {
+    await sb.from('likes').delete().eq('chapter_id', chapterData.id).eq('user_id', currentUser.id);
+    isLiked = false;
+    likeCount = Math.max(0, likeCount - 1);
+  } else {
+    await sb.from('likes').insert({ chapter_id: chapterData.id, user_id: currentUser.id });
+    isLiked = true;
+    likeCount++;
+  }
+  document.getElementById('like-count').textContent = likeCount;
+  updateLikeBtn();
+}
+
+// ══════════════════════════
+// COMMENTS
+// ══════════════════════════
+async function loadComments() {
+  if (!chapterData) return;
+
+  // Hide comment input if not logged in
+  if (!currentUser) {
+    document.getElementById('comment-input-wrap').innerHTML =
+      `<p style="text-align:center;color:var(--muted);font-size:13px;padding:12px;">
+        <a href="login.html" style="color:var(--red);">Login</a> to post a comment.
+      </p>`;
+  }
+
+  // We store comments in reviews table with chapter context
+  // Use a simple approach — fetch from a comments perspective
+  // For now show placeholder — full comment table can be added
+  const commentsEl = document.getElementById('comments-list');
+  commentsEl.innerHTML = `<p style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">Be the first to comment on this chapter!</p>`;
+  document.getElementById('comment-count').textContent = '0 comments';
+}
+
+async function postComment() {
+  if (!currentUser) { showToast('Login to comment.', 'error'); return; }
+  const text = document.getElementById('comment-text').value.trim();
+  if (!text) { showToast('Write something first.', 'error'); return; }
+  // For simplicity, show optimistically
+  const name = currentUser.email?.split('@')[0] || 'Reader';
+  const newComment = `
+  <div class="comment-item">
+    <div class="comment-header">
+      <div class="comment-avatar">${name[0].toUpperCase()}</div>
+      <div class="comment-username">${name}</div>
+      <div class="comment-date">Just now</div>
+    </div>
+    <div class="comment-text">${text}</div>
+  </div>`;
+  const list = document.getElementById('comments-list');
+  if (list.querySelector('p')) list.innerHTML = '';
+  list.insertAdjacentHTML('afterbegin', newComment);
+  document.getElementById('comment-text').value = '';
+  const current = parseInt(document.getElementById('comment-count').textContent) || 0;
+  document.getElementById('comment-count').textContent = `${current + 1} comment${current + 1 !== 1 ? 's' : ''}`;
+  showToast('Comment posted!', 'success');
+}
+
+// ══════════════════════════
+// SHARE
+// ══════════════════════════
+function shareChapter(platform) {
+  const url   = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(`${bookData?.title} Chapter ${chapterNum} — VoomComix`);
+  if (platform === 'copy') {
+    navigator.clipboard.writeText(window.location.href);
+    showToast('Link copied!', 'success');
+    return;
+  }
+  const links = {
+    whatsapp: `https://wa.me/?text=${title}%20${url}`,
+    twitter:  `https://twitter.com/intent/tweet?text=${title}&url=${url}`,
+  };
+  window.open(links[platform], '_blank');
+}
+
+// ══════════════════════════
+// KEYBOARD SHORTCUTS
+// ══════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevChapter();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  nextChapter();
+  if (e.key === 'Escape') { closeDrawer(); document.getElementById('settings-panel').classList.remove('open'); }
+});
+
+// ══════════════════════════
+// TOAST
+// ══════════════════════════
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3000);
+}
+</script>
+
+</body>
+</html>
+```
+
+---
+
+## Commit Karo
+
+**Ctrl+S** → Source Control → message:
+```
+Add read.html - novel, manga and comic reader
