@@ -3,141 +3,234 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>About — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<title>About Us — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0c0c10;--card:#16161e;--red:#e8312a;--gold:#f5a623;--teal:#00c4b4;--white:#f5f0e8;--muted:#7a7080;--border:rgba(255,255,255,0.07);}
+:root{--bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;--red:#e8341c;--red2:#ff4d2e;--gold:#d4820a;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);--radius:12px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;}
 a{text-decoration:none;color:inherit;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(12,12,16,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(232,49,42,0.15);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;}
-.logo .v{color:var(--red);}
-.nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
-.nav-r a:hover{color:var(--white);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,14,18,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 40px;gap:20px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;}
+.logo span{color:var(--red);}
+.btn{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Rajdhani',sans-serif;letter-spacing:.5px;text-transform:uppercase;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
 
 /* HERO */
-.about-hero{padding:100px 48px 60px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(232,49,42,.04) 0%,transparent 100%);}
-.about-hero-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 280px;gap:60px;align-items:center;}
-.hero-tag{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.hero-tag::before{content:'';width:20px;height:2px;background:var(--red);}
-.about-hero h1{font-family:'Bebas Neue';font-size:3.5rem;letter-spacing:.05em;line-height:1;margin-bottom:20px;}
+.about-hero{margin-top:60px;padding:88px 40px;text-align:center;background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.about-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(232,52,28,.07) 0%,transparent 65%);}
+.about-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,9vw,96px);letter-spacing:1px;position:relative;}
 .about-hero h1 span{color:var(--red);}
-.about-hero p{font-size:.95rem;line-height:1.85;color:rgba(245,240,232,.65);margin-bottom:14px;}
-/* Founder Card */
-.founder-card{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--gold);padding:28px 24px;text-align:center;}
-.founder-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--gold));display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;box-shadow:0 0 30px rgba(232,49,42,.2);}
-.founder-name{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;color:var(--gold);margin-bottom:4px;}
-.founder-title{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
-.founder-desc{font-family:'Rajdhani';font-size:.78rem;line-height:1.6;color:rgba(245,240,232,.5);}
-.founder-badge{display:inline-block;font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:4px 12px;border:1px solid rgba(245,166,35,.3);color:var(--gold);margin-top:12px;}
+.about-hero p{font-size:18px;color:rgba(245,239,230,.7);max-width:640px;margin:18px auto 0;line-height:1.75;position:relative;}
 
-/* CONTENT */
-.about-content{max-width:900px;margin:0 auto;padding:60px 48px;}
-h2{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;color:var(--gold);margin:40px 0 14px;}
-h2:first-child{margin-top:0;}
-p{font-size:.93rem;line-height:1.85;color:rgba(245,240,232,.62);margin-bottom:14px;}
-ul{padding-left:20px;margin-bottom:14px;}
-li{font-size:.9rem;line-height:1.8;color:rgba(245,240,232,.58);margin-bottom:6px;}
-.highlight{background:rgba(232,49,42,.06);border-left:3px solid var(--red);padding:16px 20px;margin:20px 0;font-size:.9rem;color:rgba(245,240,232,.72);line-height:1.7;}
-.divider{border:none;border-top:1px solid var(--border);margin:48px 0;}
+/* FOUNDER */
+.founder-section{max-width:960px;margin:0 auto;padding:72px 40px;display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:center;}
+.founder-avatar-wrap{text-align:center;}
+.founder-avatar{width:180px;height:180px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:72px;margin:0 auto 16px;border:4px solid rgba(232,52,28,.3);}
+.founder-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.5px;}
+.founder-title{font-size:12px;color:var(--red);font-family:'Rajdhani',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-top:4px;}
+.founder-bio h2{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.5px;margin-bottom:16px;}
+.founder-bio h2 span{color:var(--red);}
+.founder-bio p{font-size:15px;color:rgba(245,239,230,.78);line-height:1.8;margin-bottom:14px;}
 
-/* SOCIAL SECTION */
-.social-section{background:var(--card);border:1px solid var(--border);padding:32px;margin:40px 0;}
-.social-section h3{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;margin-bottom:6px;}
-.social-section h3 span{color:var(--red);}
-.social-section p{font-family:'Rajdhani';font-size:.78rem;color:var(--muted);margin-bottom:20px;}
-.social-btns{display:flex;gap:12px;flex-wrap:wrap;}
-.soc-btn{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 20px;border:1px solid var(--border);color:var(--muted);display:flex;align-items:center;gap:8px;transition:all .2s;}
-.soc-btn.ig:hover{border-color:#e1306c;color:#e1306c;}
-.soc-btn.fb:hover{border-color:#1877f2;color:#1877f2;}
-.soc-btn.yt:hover{border-color:#ff0000;color:#ff0000;}
+/* WHAT WE OFFER */
+.offer-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 40px;}
+.offer-section .inner{max-width:1060px;margin:0 auto;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.5px;margin-bottom:6px;}
+.sec-title span{color:var(--red);}
+.sec-sub{font-size:15px;color:var(--muted);margin-bottom:36px;}
+.offer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+.offer-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .2s;}
+.offer-card:hover{border-color:rgba(232,52,28,.3);transform:translateY(-2px);}
+.offer-icon{font-size:32px;margin-bottom:12px;}
+.offer-title{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;}
+.offer-desc{font-size:13px;color:var(--muted);line-height:1.65;}
 
-footer{border-top:1px solid var(--border);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;}
-.foot-logo .v{color:var(--red);}
-footer p{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);}
-.foot-links a{font-family:'Rajdhani';font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-left:16px;transition:color .2s;}
-.foot-links a:hover{color:var(--red);}
+/* VISION MISSION */
+.vm-section{max-width:960px;margin:0 auto;padding:72px 40px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.vm-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;}
+.vm-card.vision{border-top:3px solid var(--red);}
+.vm-card.mission{border-top:3px solid var(--gold);}
+.vm-card h3{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.5px;margin-bottom:14px;}
+.vm-card h3 span{color:var(--red);}
+.vm-card.mission h3 span{color:var(--gold);}
+.vm-card p{font-size:14px;color:rgba(245,239,230,.75);line-height:1.8;}
+
+/* SOCIAL */
+.social-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 40px;text-align:center;}
+.social-section h2{font-family:'Bebas Neue',sans-serif;font-size:32px;margin-bottom:8px;}
+.social-section p{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.social-links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.social-link{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 22px;border-radius:10px;
+  background:var(--card);border:1px solid var(--border);
+  font-size:14px;font-weight:600;transition:all .2s;
+  font-family:'Rajdhani',sans-serif;text-transform:uppercase;letter-spacing:.5px;
+}
+.social-link:hover{border-color:var(--red);color:var(--red);}
+.social-icon{font-size:20px;}
+
+/* CONTACT */
+.contact-section{max-width:760px;margin:0 auto;padding:72px 40px;text-align:center;}
+.contact-section h2{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:10px;}
+.contact-section h2 span{color:var(--red);}
+.contact-section p{font-size:15px;color:var(--muted);margin-bottom:32px;line-height:1.6;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left;}
+.contact-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;transition:all .2s;}
+.contact-card:hover{border-color:rgba(232,52,28,.3);}
+.contact-card .cc-icon{font-size:28px;margin-bottom:10px;}
+.contact-card h4{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;}
+.contact-card a{font-size:15px;font-weight:600;color:var(--red);}
+.contact-card p{font-size:12px;color:var(--muted);margin-top:4px;}
+
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 40px;text-align:center;}
+footer p{font-size:13px;color:var(--muted);}
+footer a{color:var(--red);}
 @media(max-width:768px){
-  nav,.about-hero,.about-content,footer{padding-left:20px;padding-right:20px;}
-  .about-hero-inner{grid-template-columns:1fr;}
-  .about-hero h1{font-size:2.5rem;}
+  .founder-section{grid-template-columns:1fr;text-align:center;gap:28px;padding:48px 20px;}
+  .vm-section{grid-template-columns:1fr;padding:48px 20px;}
+  .contact-grid{grid-template-columns:1fr;}
+  .offer-section,.social-section{padding:48px 20px;}
+  .contact-section{padding:48px 20px;}
+  #header{padding:0 20px;}
 }
 </style>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="v">C</span>OMIX</a>
-  <div class="nav-r">
-    <a href="stories.html">Stories</a>
-    <a href="about.html">About</a>
-    <a href="terms.html">Terms</a>
-  </div>
-</nav>
 
+<header id="header">
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div style="margin-left:auto;display:flex;gap:8px;">
+    <a href="index.html" class="btn btn-outline">Home</a>
+    <a href="login.html?tab=signup" class="btn btn-red">Join Free</a>
+  </div>
+</header>
+
+<!-- HERO -->
 <div class="about-hero">
-  <div class="about-hero-inner">
-    <div>
-      <div class="hero-tag">Our Story</div>
-      <h1>ABOUT <span>VOOMCOMIX</span></h1>
-      <p>VoomComix is an independent creative platform built on one simple belief — <strong style="color:var(--white)">great stories should be free to read.</strong></p>
-      <p>Born from a passion for storytelling, VoomComix brings original webnovels to readers in Hindi and English — raw, real, and written without a filter.</p>
-      <div class="highlight">Every story on VoomComix is 100% original — personally written, edited, and published. No AI-generated content. Real stories. Real emotions.</div>
-    </div>
-    <div class="founder-card">
-      <div class="founder-avatar">👑</div>
-      <div class="founder-name">Imtiyaz Sheikh</div>
-      <div class="founder-title">Founder & Creator</div>
-      <div class="founder-desc">VoomComix was created and is fully owned by Mr. Imtiyaz Sheikh, who manages all creative content, publishing, and platform development.</div>
-      <span class="founder-badge">✦ VoomComix Owner</span>
+  <h1>About <span>VoomComix</span></h1>
+  <p>India's original platform for manga, comics and webnovels — built to give Indian writers a stage and Indian readers a home.</p>
+</div>
+
+<!-- FOUNDER -->
+<div class="founder-section">
+  <div class="founder-avatar-wrap">
+    <div class="founder-avatar">I</div>
+    <div class="founder-name">Mr. Imtiyaz Sheikh</div>
+    <div class="founder-title">Founder & Owner</div>
+  </div>
+  <div class="founder-bio">
+    <h2>Built by One <span>Passion</span></h2>
+    <p>VoomComix was founded in 2024 by Mr. Imtiyaz Sheikh as a solo passion project — born out of a simple belief that India deserves its own dedicated platform for original manga, comics and novels written in Indian languages by Indian writers.</p>
+    <p>What started as a single-person vision has grown into a platform that connects original storytellers with readers across India. Every feature, every rule and every design decision on VoomComix reflects a commitment to originality, creativity and fair rewards for writers.</p>
+    <p>VoomComix is 100% free for readers — always. And for writers, it offers a transparent path to earning real revenue from the stories they pour their hearts into.</p>
+  </div>
+</div>
+
+<!-- WHAT WE OFFER -->
+<div class="offer-section">
+  <div class="inner">
+    <div class="sec-title">What We <span>Offer</span></div>
+    <div class="sec-sub">Everything VoomComix gives to readers and writers — for free.</div>
+    <div class="offer-grid">
+      <div class="offer-card">
+        <div class="offer-icon">📚</div>
+        <div class="offer-title">Original Webnovels</div>
+        <div class="offer-desc">Read original novels written by Indian authors — action, romance, fantasy, thriller and more genres in all Indian languages.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">⚔️</div>
+        <div class="offer-title">Multiple Genres</div>
+        <div class="offer-desc">Action, fantasy, romance, thriller, horror, comedy, drama, sci-fi, supernatural, slice of life, historical, sports and more.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">📖</div>
+        <div class="offer-title">Clean Reading Experience</div>
+        <div class="offer-desc">Distraction-free reader with adjustable font size, font style and background themes. Built for long reading sessions.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">🆓</div>
+        <div class="offer-title">100% Free — Always</div>
+        <div class="offer-desc">Every single book, manga and comic on VoomComix is completely free to read. No subscription, no paywall, no hidden fees.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">🔄</div>
+        <div class="offer-title">Regular Chapter Updates</div>
+        <div class="offer-desc">Writers schedule chapter releases — new content drops daily. Follow a book and never miss an update.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">🎌</div>
+        <div class="offer-title">Manga & Comic Stories</div>
+        <div class="offer-desc">Not just text — VoomComix supports manga and comic-style stories with image panels, in any Indian language.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">🇮🇳</div>
+        <div class="offer-title">All Indian Languages</div>
+        <div class="offer-desc">Hindi, English, Marathi, Telugu, Tamil, Kannada, Malayalam, Bengali, Gujarati, Punjabi, Odia, Urdu and more.</div>
+      </div>
+      <div class="offer-card">
+        <div class="offer-icon">💰</div>
+        <div class="offer-title">Writer Revenue</div>
+        <div class="offer-desc">Original writers earn 60% of AdSense revenue from their book once they qualify. Paid monthly, directly to bank.</div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="about-content">
-  <h2>WHO IS BEHIND VOOMCOMIX?</h2>
-  <p><strong style="color:var(--gold)">Mr. Imtiyaz Sheikh</strong> is the sole creator, writer, and owner of VoomComix. Every story you read on this platform — from concept to final chapter — is crafted personally by him.</p>
-  <p>His vision: a space where original Indian storytelling gets the spotlight it deserves. Stories that are bold, culturally rooted, and completely free for readers everywhere.</p>
+<!-- VISION & MISSION -->
+<div class="vm-section">
+  <div class="vm-card vision">
+    <h3>Our <span>Vision</span></h3>
+    <p>To become India's most trusted and loved platform for original storytelling — a place where every Indian writer, regardless of language or background, can share their imagination with the world and build a sustainable creative career.</p>
+    <p>We envision a future where Indian manga, comics and webnovels are read globally — and where the writers behind them are recognized and rewarded fairly for their work.</p>
+  </div>
+  <div class="vm-card mission">
+    <h3>Our <span>Mission</span></h3>
+    <p>To provide a completely free, high-quality reading experience for every reader — while giving writers the tools, platform and revenue they deserve for creating original content.</p>
+    <p>Our mission is to protect originality, celebrate creativity and build a community where great stories rise to the top — not based on who can pay the most, but based on the quality of the writing.</p>
+  </div>
+</div>
 
-  <h2>OUR MISSION</h2>
-  <p>To build a home for original stories — without paywalls, without subscriptions, without ads. A platform where the story always comes first.</p>
+<!-- SOCIAL -->
+<div class="social-section">
+  <h2>Follow VoomComix</h2>
+  <p>Stay updated with new releases, writer spotlights and platform news across our social channels.</p>
+  <div class="social-links">
+    <a href="https://www.facebook.com/Voomcomix" target="_blank" class="social-link"><span class="social-icon">📘</span>Facebook</a>
+    <a href="https://www.instagram.com/voomcomix/" target="_blank" class="social-link"><span class="social-icon">📸</span>Instagram</a>
+    <a href="https://www.youtube.com/@VoomComix" target="_blank" class="social-link"><span class="social-icon">▶️</span>YouTube</a>
+    <a href="https://in.pinterest.com/voomcomix/" target="_blank" class="social-link"><span class="social-icon">📌</span>Pinterest</a>
+  </div>
+</div>
 
-  <h2>WHAT WE OFFER</h2>
-  <ul>
-    <li>📚 Original webnovels in Hindi & English</li>
-    <li>⚔️ Multiple genres — action, fantasy, romance, thriller and more</li>
-    <li>📖 Clean, distraction-free reading experience</li>
-    <li>🆓 100% free — always</li>
-    <li>🔄 Regular chapter updates</li>
-    <li>🎌 Manga & comic reading style stories in Hindi</li>
-  </ul>
-
-  <hr class="divider"/>
-
-  <div class="social-section">
-    <h3>FOLLOW <span>VOOMCOMIX</span></h3>
-    <p>Stay updated with new chapters, story launches, and announcements</p>
-    <div class="social-btns">
-      <a href="https://instagram.com/voomcomix" target="_blank" class="soc-btn ig">📷 Instagram</a>
-      <a href="https://facebook.com/voomcomix" target="_blank" class="soc-btn fb">📘 Facebook</a>
-      <a href="https://youtube.com/@voomcomix" target="_blank" class="soc-btn yt">▶ YouTube</a>
+<!-- CONTACT -->
+<div class="contact-section">
+  <h2>Get in <span>Touch</span></h2>
+  <p>Have a question, partnership proposal or feedback? We would love to hear from you.</p>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="cc-icon">💬</div>
+      <h4>General Help</h4>
+      <a href="mailto:help@voomcomix.in">help@voomcomix.in</a>
+      <p>For reader and writer support queries</p>
+    </div>
+    <div class="contact-card">
+      <div class="cc-icon">📜</div>
+      <h4>Contracts & Licensing</h4>
+      <a href="mailto:contract@voomcomix.in">contract@voomcomix.in</a>
+      <p>For story adaptation and content contracts</p>
     </div>
   </div>
-
-  <h2>CONTACT</h2>
-  <p>For collaborations, feedback, or just to say hi — reach out at:<br/>
-  <strong style="color:var(--gold)">📧 voomcomix@gmail.com</strong></p>
-  <p>Or visit: <a href="https://voomcomix.in" style="color:var(--red);">voomcomix.in</a></p>
 </div>
 
 <footer>
-  <a href="index.html" class="foot-logo"><span class="v">V</span>OOMCOMIX</a>
-  <p>© 2024 VoomComix · Created & owned by Mr. Imtiyaz Sheikh</p>
-  <div class="foot-links">
-    <a href="stories.html">Stories</a>
-    <a href="terms.html">Terms</a>
-  </div>
+  <p>© 2024–2026 VoomComix. Founded by Mr. Imtiyaz Sheikh. · <a href="terms.html">Terms</a> · <a href="privacy-policy.html">Privacy</a> · <a href="index.html">Home</a></p>
 </footer>
+
 </body>
 </html>
