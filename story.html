@@ -4,177 +4,604 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Story — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0f14;--card:#141420;--card2:#1a1a28;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+:root{--bg:#f7f4f0;--white:#fff;--ink:#1a1410;--red:#c0392b;--gold:#d4820a;--teal:#0a7c6e;--muted:#6b5a4e;--border:#ddd5c8;--card:#fff;}
+body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;}
 a{text-decoration:none;color:inherit;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.2);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;}
-.logo span{color:var(--red);}
-.nav-r a{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-left:24px;transition:color .2s;}
-.nav-r a:hover{color:var(--white);}
+button{cursor:pointer;font-family:'Rajdhani';}
 
-/* STORY HERO */
-.story-hero{padding:90px 40px 0;background:linear-gradient(180deg,rgba(230,48,34,.04) 0%,transparent 100%);border-bottom:1px solid var(--border);}
-.story-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:200px 1fr;gap:40px;padding-bottom:40px;}
-.story-cover-big{width:200px;height:280px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:5rem;flex-shrink:0;border:2px solid var(--border);box-shadow:8px 8px 0 var(--red);}
-.story-info h1{font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.04em;line-height:1.1;margin-bottom:10px;}
-.story-meta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-.meta-badge{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);}
-.meta-genre{color:var(--gold);border-color:rgba(240,165,0,.2);}
-.meta-status-ongoing{color:var(--red);border-color:rgba(230,48,34,.3);}
-.meta-status-complete{color:#00a651;border-color:rgba(0,166,81,.3);}
-.meta-lang{color:var(--muted);}
-.story-desc{font-size:.9rem;line-height:1.8;color:rgba(253,250,244,.6);margin-bottom:20px;max-width:600px;}
-.story-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-.s-tag{font-family:'Rajdhani';font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);}
-.story-stats{display:flex;gap:24px;margin-bottom:24px;}
-.s-stat{text-align:center;}
-.s-stat-n{font-family:'Bebas Neue';font-size:1.6rem;line-height:1;}
-.s-stat-l{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
-.btn-start{font-family:'Rajdhani';font-size:.85rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 28px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);display:inline-block;transition:all .2s;cursor:pointer;}
-.btn-start:hover{background:var(--gold);color:#000;}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.1em;color:var(--ink);}
+.logo span{color:var(--red);}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-btn{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 16px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:6px;transition:all .2s;}
+.nav-btn:hover{background:var(--ink);color:#fff;}
+#nav-user-area{display:flex;align-items:center;gap:10px;}
+
+/* HERO */
+.story-hero{margin-top:64px;background:var(--white);border-bottom:1px solid var(--border);padding:40px;}
+.hero-inner{max-width:1100px;margin:0 auto;display:flex;gap:36px;align-items:flex-start;}
+.hero-cover{width:200px;flex-shrink:0;}
+.hero-cover-img{width:200px;height:280px;border-radius:10px;object-fit:cover;box-shadow:0 8px 32px rgba(0,0,0,.15);}
+.hero-cover-fb{width:200px;height:280px;border-radius:10px;background:linear-gradient(135deg,#e8ddd0,#d5c9b8);display:flex;align-items:center;justify-content:center;font-size:5rem;box-shadow:0 8px 32px rgba(0,0,0,.1);}
+.hero-info{flex:1;min-width:0;}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.badge{font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.b-novel{background:#d1fae5;color:#065f46;}
+.b-manga{background:#fce7f3;color:#9d174d;}
+.b-comic{background:#ede9fe;color:#5b21b6;}
+.b-ongoing{background:#fee2e2;color:var(--red);}
+.b-complete{background:#d1fae5;color:var(--teal);}
+.b-hiatus{background:#f3f4f6;color:#374151;}
+.b-lang{background:#fef3c7;color:#92400e;}
+.hero-title{font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.03em;line-height:1;margin-bottom:8px;color:var(--ink);}
+.hero-author{font-size:.78rem;font-weight:700;color:var(--muted);margin-bottom:6px;}
+.hero-author a{color:var(--teal);}
+.hero-genre{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:14px;}
+.hero-desc{font-size:.9rem;line-height:1.7;color:var(--muted);margin-bottom:20px;max-width:580px;}
+.hero-stats{display:flex;gap:20px;margin-bottom:22px;flex-wrap:wrap;}
+.hstat{text-align:center;}
+.hstat-v{font-family:'Bebas Neue';font-size:1.5rem;color:var(--ink);}
+.hstat-l{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1.5px solid transparent;transition:all .2s;white-space:nowrap;}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red);}
+.btn-red:hover{background:#a93226;}
+.btn-outline{background:var(--white);color:var(--ink);border-color:var(--border);}
+.btn-outline:hover{border-color:var(--ink);}
+.btn-teal{background:var(--teal);color:#fff;border-color:var(--teal);}
+.btn-teal:hover{background:#085f54;}
+.btn-liked{background:#fee2e2;color:var(--red);border-color:rgba(192,57,43,.3);}
+.btn-bookmarked{background:#d1fae5;color:var(--teal);border-color:rgba(10,124,110,.3);}
+.btn-sm{padding:7px 14px;font-size:.66rem;}
+
+/* TAGS */
+.tags-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;}
+.tag{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);border-radius:20px;color:var(--muted);}
+
+/* MAIN LAYOUT */
+.story-body{max-width:1100px;margin:0 auto;padding:32px 40px 80px;display:grid;grid-template-columns:1fr 320px;gap:28px;}
 
 /* CHAPTERS */
-.chapters-section{max-width:960px;margin:0 auto;padding:40px;}
-.ch-header{display:flex;align-items:center;gap:16px;margin-bottom:24px;}
-.ch-header h2{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.05em;}
-.ch-header h2 span{color:var(--red);}
-.ch-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(230,48,34,.4),transparent);}
-.ch-count{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.section-title{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
 
-.chapter-list{display:flex;flex-direction:column;gap:2px;}
-.chapter-row{background:var(--card);border:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .2s;position:relative;}
-.chapter-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red);transform:scaleY(0);transition:transform .2s;transform-origin:center;}
-.chapter-row:hover{border-color:rgba(230,48,34,.3);background:var(--card2);padding-left:26px;}
-.chapter-row:hover::before{transform:scaleY(1);}
-.ch-num{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.05em;color:var(--red);min-width:40px;}
-.ch-title{font-family:'Rajdhani';font-size:.9rem;font-weight:600;letter-spacing:.05em;flex:1;}
-.ch-meta{font-family:'Rajdhani';font-size:.68rem;color:var(--muted);text-align:right;}
-.ch-words{display:block;}
-.ch-date{display:block;}
-.ch-read{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-left:16px;}
+/* CHAPTER LIST */
+.ch-row{display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.ch-row:last-child{border-bottom:none;}
+.ch-row:hover{background:var(--bg);}
+.ch-num{font-family:'Bebas Neue';font-size:1rem;color:var(--red);min-width:30px;}
+.ch-info{flex:1;}
+.ch-title{font-size:.84rem;font-weight:700;}
+.ch-meta{font-size:.62rem;color:var(--muted);margin-top:2px;}
+.ch-arrow{color:var(--muted);font-size:.8rem;}
 
-footer{border-top:1px solid var(--border);padding:30px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.foot-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;}
-.foot-logo span{color:var(--red);}
-footer p{font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
+/* COMMENTS */
+.comment-form{padding:16px 18px;border-bottom:1px solid var(--border);}
+.comment-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Rajdhani';font-size:.88rem;outline:none;resize:none;min-height:70px;background:#fdfaf7;transition:border-color .2s;}
+.comment-input:focus{border-color:var(--red);}
+.comment-input:disabled{opacity:.5;cursor:not-allowed;}
+.comment-form-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.login-hint{font-size:.68rem;color:var(--muted);}
+.login-hint a{color:var(--red);}
 
-@media(max-width:700px){
-  nav{padding:0 20px;}
-  .story-inner{grid-template-columns:1fr;gap:20px;}
-  .story-cover-big{width:140px;height:200px;font-size:3.5rem;}
-  .story-hero,.chapters-section{padding-left:20px;padding-right:20px;}
+.comment{padding:14px 18px;border-bottom:1px solid var(--border);}
+.comment:last-child{border-bottom:none;}
+.comment-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;}
+.comment-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.comment-name{font-size:.78rem;font-weight:700;}
+.comment-time{font-size:.6rem;color:var(--muted);margin-left:auto;}
+.comment-text{font-size:.84rem;line-height:1.6;color:var(--ink);}
+
+/* SIDEBAR */
+.sidebar-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.sidebar-title{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--border);}
+.author-card{padding:16px;}
+.author-avatar{width:56px;height:56px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;margin:0 auto 10px;overflow:hidden;}
+.author-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.author-name{font-size:.9rem;font-weight:700;text-align:center;}
+.author-bio{font-size:.74rem;color:var(--muted);text-align:center;margin-top:4px;line-height:1.5;}
+.author-stats{display:flex;justify-content:center;gap:16px;margin-top:12px;}
+.astat-v{font-family:'Bebas Neue';font-size:1.2rem;text-align:center;}
+.astat-l{font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+
+/* RELATED */
+.rel-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.rel-item:last-child{border-bottom:none;}
+.rel-item:hover{background:var(--bg);}
+.rel-cover{width:36px;height:52px;border-radius:5px;object-fit:cover;flex-shrink:0;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.rel-info{flex:1;min-width:0;}
+.rel-title{font-size:.78rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rel-meta{font-size:.62rem;color:var(--muted);margin-top:2px;}
+
+/* EMPTY */
+.empty{text-align:center;padding:32px 20px;color:var(--muted);}
+.empty-ic{font-size:2rem;margin-bottom:8px;}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#1a1410;color:#fff;padding:12px 18px;border-radius:10px;font-size:.8rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:280px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:var(--teal);}
+#toast.err{background:var(--red);}
+
+/* SKELETON */
+.skel-hero{height:280px;background:linear-gradient(90deg,#e8ddd0 25%,#f0e8df 50%,#e8ddd0 75%);background-size:200%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+
+footer{background:var(--ink);color:rgba(255,255,255,.5);padding:32px 40px;text-align:center;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.footer-links{display:flex;justify-content:center;gap:24px;margin-bottom:12px;flex-wrap:wrap;}
+footer a{color:rgba(255,255,255,.3);transition:color .2s;}
+footer a:hover{color:#fff;}
+
+@media(max-width:768px){
+  nav{padding:0 16px;}
+  .story-hero{padding:24px 16px;}
+  .hero-inner{flex-direction:column;align-items:center;text-align:center;}
+  .hero-desc{max-width:100%;}
+  .hero-actions{justify-content:center;}
+  .hero-stats{justify-content:center;}
+  .story-body{padding:20px 16px 60px;grid-template-columns:1fr;}
+  .hero-cover{width:100%;display:flex;justify-content:center;}
+  footer{padding:24px 16px;}
+  .nav-links{display:none;}
 }
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav>
   <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
-  <div class="nav-r">
-    <a href="stories.html">← All Stories</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="stories.html">All Stories</a>
+    <a href="index.html#rankings">Rankings</a>
+    <a href="about.html">About</a>
+  </div>
+  <div id="nav-user-area">
+    <button class="btn btn-outline btn-sm" onclick="location.href='login.html'">Writer Login</button>
   </div>
 </nav>
 
-<div id="story-page">
-  <!-- Loaded by JS -->
+<!-- HERO (filled by JS) -->
+<div id="story-hero-section">
+  <div style="margin-top:64px;height:360px;background:var(--white);display:flex;align-items:center;justify-content:center;">
+    <div style="font-size:1.5rem;color:var(--muted);">Loading story...</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="story-body" id="story-body" style="display:none;">
+
+  <!-- LEFT: Chapters + Comments -->
+  <div>
+    <!-- CHAPTERS -->
+    <div class="card" id="chapters-card">
+      <div class="card-hd">
+        <span class="card-title" id="ch-card-title">Chapters</span>
+        <span id="ch-card-meta" style="font-size:.65rem;color:var(--muted);"></span>
+      </div>
+      <div id="chapters-list"></div>
+    </div>
+
+    <!-- COMMENTS -->
+    <div class="card">
+      <div class="card-hd"><span class="card-title">💬 Comments</span><span id="comments-count" style="font-size:.65rem;color:var(--muted);"></span></div>
+      <div class="comment-form">
+        <textarea class="comment-input" id="comment-input" placeholder="Write a comment..." rows="3"></textarea>
+        <div class="comment-form-footer">
+          <span class="login-hint" id="comment-hint"></span>
+          <button class="btn btn-red btn-sm" id="post-btn" onclick="postComment()">Post Comment</button>
+        </div>
+      </div>
+      <div id="comments-list"><div class="empty"><div class="empty-ic">⏳</div><div>Loading...</div></div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sidebar -->
+  <div>
+    <!-- Author -->
+    <div class="sidebar-card" id="author-card">
+      <div class="sidebar-title">✍️ About the Author</div>
+      <div class="author-card" id="author-inner"></div>
+    </div>
+
+    <!-- Story Info -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">📋 Story Info</div>
+      <div id="story-info-list" style="padding:12px 16px;"></div>
+    </div>
+
+    <!-- Related -->
+    <div class="sidebar-card" id="related-card">
+      <div class="sidebar-title">📚 More Like This</div>
+      <div id="related-list"></div>
+    </div>
+  </div>
 </div>
 
 <footer>
-  <a href="index.html" class="foot-logo">VOOM<span>COMIX</span></a>
-  <p>© 2024 VoomComix · All Rights Reserved</p>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="stories.html">Stories</a>
+    <a href="about.html">About</a><a href="terms.html">Terms</a>
+    <a href="mailto:help@voomcomix.in">Contact</a>
+  </div>
+  <div>© 2024 VoomComix · Read Comics &amp; Manga Online · Made in India 🇮🇳</div>
 </footer>
 
+<div id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
 <script>
-const SUPABASE_URL = 'https://gcpbvzyndmwdlvopftma.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SURL='https://gcpbvzyndmwdlvopftma.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+let _sb=null;
+const sb=()=>{if(_sb)return _sb;_sb=(typeof getSupabase==='function')?getSupabase():window.supabase.createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true}});return _sb;};
 
-const params = new URLSearchParams(location.search);
-const storyId = params.get('id');
+const params=new URLSearchParams(location.search);
+const storyId=params.get('id');
 
-function showNotFound() {
-  document.getElementById('story-page').innerHTML = '<div style="text-align:center;padding:200px 20px;font-family:Rajdhani;font-size:1rem;letter-spacing:.2em;color:#6a6478;text-transform:uppercase;">Story not found. <a href="stories.html" style="color:#e63022;">Back to Stories →</a></div>';
+let story=null;
+let currentUser=null;
+let currentProfile=null;
+let isLiked=false;
+let isBookmarked=false;
+
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;clearTimeout(t._t);t._t=setTimeout(()=>{t.className=''},3000);}
+function fmtNum(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(n||0);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';if(s<2592000)return Math.floor(s/86400)+'d ago';return new Date(d).toLocaleDateString('en-IN');}
+
+async function init(){
+  if(!storyId){location.href='stories.html';return;}
+
+  // Get user session
+  try{
+    const{data:{user}}=await sb().auth.getUser();
+    currentUser=user;
+    if(user){
+      const{data:prof}=await sb().from('profiles').select('*').eq('id',user.id).maybeSingle();
+      currentProfile=prof;
+      // Update nav
+      const area=document.getElementById('nav-user-area');
+      const name=prof?.display_name||prof?.username||'Writer';
+      const dash=prof?.role==='admin'?'admin.html':'writer-dashboard.html';
+      area.innerHTML=`<a href="${dash}" style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);padding:7px 14px;border:1.5px solid rgba(10,124,110,.3);border-radius:6px;">✍️ ${esc(name)}</a>`;
+    }
+  }catch(e){}
+
+  await loadStory();
 }
 
-async function loadStory() {
-  if (!storyId) { showNotFound(); return; }
+async function loadStory(){
+  try{
+    const{data:s,error}=await sb()
+      .from('stories')
+      .select(`*, profiles!author_id (id, display_name, username, bio, avatar_url, twitter)`)
+      .eq('id',storyId)
+      .single();
 
-  // Load story from Supabase
-  const { data: story, error } = await sb
-    .from('stories')
-    .select('*, profiles(username, display_name)')
-    .eq('id', storyId)
-    .single();
+    if(error||!s){
+      document.getElementById('story-hero-section').innerHTML=`<div style="margin-top:64px;padding:80px;text-align:center;"><div style="font-size:3rem;margin-bottom:16px;">📭</div><h2>Story not found</h2><p style="color:var(--muted);margin-top:8px;">This story may have been removed.</p><br/><a href="stories.html" style="color:var(--red);font-weight:700;">← Back to Stories</a></div>`;
+      return;
+    }
 
-  if (error || !story) { showNotFound(); return; }
+    story=s;
+    document.title=`${s.title} — VoomComix`;
 
-  // Track view
-  await sb.from('story_views').insert({ story_id: storyId }).catch(()=>{});
+    // Track view (fire and forget)
+    trackView(s.id);
 
-  // Load chapters
-  const { data: chapters } = await sb
-    .from('chapters')
-    .select('*')
-    .eq('story_id', storyId)
-    .order('chapter_number', { ascending: true });
+    // Check liked/bookmarked
+    if(currentUser){
+      const[{data:lk},{data:bk}]=await Promise.all([
+        sb().from('likes').select('id').eq('user_id',currentUser.id).eq('story_id',storyId).maybeSingle(),
+        sb().from('bookmarks').select('id').eq('user_id',currentUser.id).eq('story_id',storyId).maybeSingle()
+      ]);
+      isLiked=!!lk;isBookmarked=!!bk;
+    }
 
-  const chList = chapters || [];
-  document.title = story.title + ' — VoomComix';
-  const statusClass = 'meta-status-' + (story.status || 'ongoing');
-  const statusText = (story.status||'ongoing').charAt(0).toUpperCase() + (story.status||'ongoing').slice(1);
-  const authorName = story.profiles?.display_name || story.profiles?.username || 'VoomComix';
+    renderHero(s);
+    document.getElementById('story-body').style.display='grid';
+    renderStoryInfo(s);
+    renderAuthor(s.profiles);
+    await loadChapters(s);
+    await loadComments();
+    await loadRelated(s);
 
-  const chaptersHTML = chList.map((ch) => `
-  <div class="chapter-row" onclick="location.href='chapter.html?story=${story.id}&ch=${ch.id}'">
-    <span class="ch-num">CH ${ch.chapter_number}</span>
-    <span class="ch-title">${ch.title || 'Chapter ' + ch.chapter_number}</span>
-    <span class="ch-meta">
-      <span class="ch-words">${(ch.word_count||0).toLocaleString()} words</span>
-      <span class="ch-date">${new Date(ch.created_at).toLocaleDateString('en-IN')}</span>
-    </span>
-    <span class="ch-read">Read →</span>
-  </div>`).join('');
+  }catch(e){
+    console.error(e);
+    document.getElementById('story-hero-section').innerHTML=`<div style="margin-top:64px;padding:80px;text-align:center;color:var(--red);">Error loading story. Please refresh.</div>`;
+  }
+}
 
-  const coverHTML = story.cover_url
-    ? `<img src="${story.cover_url}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" alt="${story.title}"/>`
-    : `<span>${story.story_type==='manga'?'🎌':story.story_type==='comic'?'📚':'📖'}</span>`;
+function renderHero(s){
+  const typeClass={novel:'b-novel',manga:'b-manga',comic:'b-comic'};
+  const statusClass={ongoing:'b-ongoing',complete:'b-complete',hiatus:'b-hiatus'};
+  const typeLabel={novel:'Novel',manga:'Manga',comic:'Comic'};
+  const author=s.profiles;
+  const authorName=author?.display_name||author?.username||'Anonymous';
+  const typeEmoji={novel:'📖',manga:'🎌',comic:'🗂️'}[s.type]||'📖';
 
-  document.getElementById('story-page').innerHTML = `
+  const cover=s.cover_url
+    ?`<img class="hero-cover-img" src="${esc(s.cover_url)}" alt="${esc(s.title)}" onerror="this.outerHTML='<div class=hero-cover-fb>${typeEmoji}</div>'"/>`
+    :`<div class="hero-cover-fb">${typeEmoji}</div>`;
+
+  const tagsHtml=s.tags&&s.tags.length?`<div class="tags-row">${s.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:'';
+
+  const likeBtn=isLiked
+    ?`<button class="btn btn-liked" id="like-btn" onclick="toggleLike()">❤️ Liked (${fmtNum(s.total_followers||0)})</button>`
+    :`<button class="btn btn-outline" id="like-btn" onclick="toggleLike()">🤍 Like (${fmtNum(s.total_followers||0)})</button>`;
+
+  const bkBtn=isBookmarked
+    ?`<button class="btn btn-bookmarked" id="bk-btn" onclick="toggleBookmark()">🔖 Bookmarked</button>`
+    :`<button class="btn btn-outline" id="bk-btn" onclick="toggleBookmark()">🔖 Bookmark</button>`;
+
+  // Read button — for novel show "Start Reading Ch.1", for manga/comic show "Read Chapter 1"
+  const readLabel=s.type==='novel'?'📖 Start Reading':'🎌 Read Chapter 1';
+
+  document.getElementById('story-hero-section').innerHTML=`
   <div class="story-hero">
-    <div class="story-inner">
-      <div class="story-cover-big" style="background:#1a0a05;">${coverHTML}</div>
-      <div class="story-info">
-        <h1>${story.title}</h1>
-        <div class="story-meta-row">
-          <span class="meta-badge meta-genre">${story.genre || 'General'}</span>
-          <span class="meta-badge ${statusClass}">${statusText}</span>
-          <span class="meta-badge meta-lang">${story.language || 'English'}</span>
+    <div class="hero-inner">
+      <div class="hero-cover">${cover}</div>
+      <div class="hero-info">
+        <div class="hero-badges">
+          <span class="badge ${typeClass[s.type]||'b-novel'}">${typeLabel[s.type]||'Novel'}</span>
+          <span class="badge ${statusClass[s.status]||'b-ongoing'}">${s.status||'Ongoing'}</span>
+          ${s.language?`<span class="badge b-lang">${esc(s.language)}</span>`:''}
         </div>
-        <div class="story-desc">${story.description || ''}</div>
-        <div class="story-stats">
-          <div class="s-stat"><div class="s-stat-n">${chList.length}</div><div class="s-stat-l">Chapters</div></div>
-          <div class="s-stat"><div class="s-stat-n">${story.view_count || 0}</div><div class="s-stat-l">Views</div></div>
-          <div class="s-stat"><div class="s-stat-n">✍️</div><div class="s-stat-l">${authorName}</div></div>
+        <h1 class="hero-title">${esc(s.title)}</h1>
+        <div class="hero-author">by <a href="#">${esc(authorName)}</a></div>
+        ${s.genre?`<div class="hero-genre">${esc(s.genre)}</div>`:''}
+        <p class="hero-desc">${esc(s.description||'')}</p>
+        <div class="hero-stats">
+          <div class="hstat"><div class="hstat-v">${fmtNum(s.total_views||0)}</div><div class="hstat-l">Views</div></div>
+          <div class="hstat"><div class="hstat-v">${s.total_chapters||0}</div><div class="hstat-l">Chapters</div></div>
+          <div class="hstat"><div class="hstat-v">${fmtNum(s.total_followers||0)}</div><div class="hstat-l">Likes</div></div>
         </div>
-        ${chList.length > 0 ? `<a href="chapter.html?story=${story.id}&ch=${chList[0].id}" class="btn-start">📖 Start Reading</a>` : '<span style="font-family:Rajdhani;color:#6a6478;">No chapters yet</span>'}
+        <div class="hero-actions">
+          <button class="btn btn-red" onclick="readFirst()">${readLabel}</button>
+          ${likeBtn}
+          ${bkBtn}
+          <button class="btn btn-outline" onclick="shareStory()">🔗 Share</button>
+        </div>
+        ${tagsHtml}
       </div>
     </div>
-  </div>
-  <div class="chapters-section">
-    <div class="ch-header">
-      <h2>CHAPTER <span>LIST</span></h2>
-      <div class="ch-line"></div>
-      <span class="ch-count">${chList.length} chapters</span>
-    </div>
-    <div class="chapter-list">${chaptersHTML || '<p style="font-family:Rajdhani;color:#6a6478;padding:20px;">No chapters yet.</p>'}</div>
   </div>`;
 }
 
-loadStory();
+function renderStoryInfo(s){
+  const info=[
+    {l:'Type',v:s.type||'—'},
+    {l:'Language',v:s.language||'—'},
+    {l:'Genre',v:s.genre||'—'},
+    {l:'Status',v:s.status||'—'},
+    {l:'Chapters',v:s.total_chapters||0},
+    {l:'Published',v:new Date(s.created_at).toLocaleDateString('en-IN')},
+    {l:'Last Updated',v:new Date(s.updated_at||s.created_at).toLocaleDateString('en-IN')},
+  ];
+  document.getElementById('story-info-list').innerHTML=info.map(i=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">${i.l}</span>
+      <span style="font-size:.8rem;font-weight:700;text-transform:capitalize;">${esc(String(i.v))}</span>
+    </div>`).join('').replace(/border-bottom[^;]+;[^}]+}\s*$/, '');
+}
+
+function renderAuthor(author){
+  if(!author){document.getElementById('author-card').style.display='none';return;}
+  const name=author.display_name||author.username||'Anonymous';
+  const av=author.avatar_url
+    ?`<div class="author-avatar"><img src="${esc(author.avatar_url)}" alt="${esc(name)}"/></div>`
+    :`<div class="author-avatar">${name[0].toUpperCase()}</div>`;
+  document.getElementById('author-inner').innerHTML=`
+    ${av}
+    <div class="author-name">${esc(name)}</div>
+    ${author.bio?`<div class="author-bio">${esc(author.bio)}</div>`:''}
+    ${author.twitter?`<div style="margin-top:8px;text-align:center;"><a href="https://twitter.com/${author.twitter.replace('@','')}" target="_blank" style="font-size:.68rem;font-weight:700;color:var(--teal);">🐦 ${esc(author.twitter)}</a></div>`:''}
+  `;
+}
+
+async function loadChapters(s){
+  const{data:chs}=await sb().from('chapters').select('id,chapter_number,title,word_count,published_at').eq('story_id',s.id).order('chapter_number',{ascending:true});
+  const list=chs||[];
+  const isVisual=s.type==='manga'||s.type==='comic';
+
+  document.getElementById('ch-card-title').textContent=`${s.type==='novel'?'📖':'🖼️'} Chapters (${list.length})`;
+  document.getElementById('ch-card-meta').textContent=isVisual?'Click chapter to read':'';
+
+  if(!list.length){
+    document.getElementById('chapters-list').innerHTML=`<div class="empty"><div class="empty-ic">📄</div><div>No chapters yet. Check back soon!</div></div>`;
+    return;
+  }
+
+  document.getElementById('chapters-list').innerHTML=list.map(ch=>{
+    const meta=isVisual?`Image chapter`:`${(ch.word_count||0).toLocaleString()} words`;
+    const date=ch.published_at?new Date(ch.published_at).toLocaleDateString('en-IN'):'';
+    const reader=isVisual?`manga-reader.html?story=${s.id}&chapter=${ch.id}`:`chapter.html?story=${s.id}&chapter=${ch.id}`;
+    return`<div class="ch-row" onclick="location.href='${reader}'">
+      <div class="ch-num">${ch.chapter_number}</div>
+      <div class="ch-info">
+        <div class="ch-title">${esc(ch.title)}</div>
+        <div class="ch-meta">${meta} · ${date}</div>
+      </div>
+      <div class="ch-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadComments(){
+  const{data:comments}=await sb()
+    .from('comments')
+    .select(`id,content,created_at,profiles!user_id(display_name,username,avatar_url)`)
+    .eq('story_id',storyId)
+    .order('created_at',{ascending:false})
+    .limit(50);
+
+  const list=comments||[];
+  document.getElementById('comments-count').textContent=list.length+' comments';
+
+  // Comment form state
+  const input=document.getElementById('comment-input');
+  const hint=document.getElementById('comment-hint');
+  const btn=document.getElementById('post-btn');
+  if(currentUser){
+    input.disabled=false;
+    input.placeholder='Write a comment...';
+    hint.innerHTML='';
+    btn.style.display='inline-flex';
+  }else{
+    input.disabled=true;
+    input.placeholder='Login to comment';
+    hint.innerHTML=`<a href="login.html">Login</a> to join the discussion`;
+    btn.style.display='none';
+  }
+
+  if(!list.length){
+    document.getElementById('comments-list').innerHTML=`<div class="empty"><div class="empty-ic">💬</div><div>No comments yet. Be the first!</div></div>`;
+    return;
+  }
+
+  document.getElementById('comments-list').innerHTML=list.map(c=>{
+    const prof=c.profiles;
+    const name=prof?.display_name||prof?.username||'Reader';
+    const av=prof?.avatar_url
+      ?`<div class="comment-avatar"><img src="${esc(prof.avatar_url)}"/></div>`
+      :`<div class="comment-avatar">${name[0].toUpperCase()}</div>`;
+    return`<div class="comment">
+      <div class="comment-top">${av}<span class="comment-name">${esc(name)}</span><span class="comment-time">${timeAgo(c.created_at)}</span></div>
+      <div class="comment-text">${esc(c.content)}</div>
+    </div>`;
+  }).join('');
+}
+
+async function postComment(){
+  if(!currentUser){toast('Please login to comment','err');return;}
+  const input=document.getElementById('comment-input');
+  const text=input.value.trim();
+  if(!text){toast('Write something first!','err');return;}
+  if(text.length>1000){toast('Comment too long (max 1000 chars)','err');return;}
+
+  const btn=document.getElementById('post-btn');
+  btn.disabled=true;btn.textContent='Posting...';
+
+  try{
+    await sb().from('comments').insert({story_id:storyId,user_id:currentUser.id,content:text});
+    input.value='';
+    await loadComments();
+    toast('Comment posted! ✓');
+  }catch(e){toast('Error posting comment','err');}
+  btn.disabled=false;btn.textContent='Post Comment';
+}
+
+async function loadRelated(s){
+  const{data:rel}=await sb()
+    .from('stories')
+    .select('id,title,type,cover_url,genre,total_views,profiles!author_id(display_name,username)')
+    .eq('approval_status','approved')
+    .eq('genre',s.genre||'')
+    .neq('id',storyId)
+    .order('total_views',{ascending:false})
+    .limit(5);
+
+  const list=rel||[];
+  if(!list.length){document.getElementById('related-card').style.display='none';return;}
+
+  const typeEmoji={novel:'📖',manga:'🎌',comic:'🗂️'};
+  document.getElementById('related-list').innerHTML=list.map(r=>{
+    const cover=r.cover_url
+      ?`<img src="${esc(r.cover_url)}" style="width:36px;height:52px;border-radius:5px;object-fit:cover;" onerror="this.outerHTML='<div class=rel-cover>${typeEmoji[r.type]||'📖'}</div>'"/>`
+      :`<div class="rel-cover">${typeEmoji[r.type]||'📖'}</div>`;
+    const author=r.profiles?.display_name||r.profiles?.username||'—';
+    return`<div class="rel-item" onclick="location.href='story.html?id=${r.id}'">
+      ${cover}
+      <div class="rel-info">
+        <div class="rel-title">${esc(r.title)}</div>
+        <div class="rel-meta">by ${esc(author)} · ${fmtNum(r.total_views||0)} views</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ACTIONS ──
+async function toggleLike(){
+  if(!currentUser){toast('Login to like stories','err');return;}
+  const btn=document.getElementById('like-btn');
+  if(!btn)return;
+  try{
+    if(isLiked){
+      await sb().from('likes').delete().eq('user_id',currentUser.id).eq('story_id',storyId);
+      isLiked=false;
+      const newCount=(story.total_followers||1)-1;
+      story.total_followers=newCount;
+      btn.className='btn btn-outline';btn.textContent=`🤍 Like (${fmtNum(newCount)})`;
+      toast('Like removed');
+    }else{
+      await sb().from('likes').insert({user_id:currentUser.id,story_id:storyId});
+      isLiked=true;
+      const newCount=(story.total_followers||0)+1;
+      story.total_followers=newCount;
+      btn.className='btn btn-liked';btn.textContent=`❤️ Liked (${fmtNum(newCount)})`;
+      toast('Liked! ❤️');
+    }
+    // Update count in DB
+    await sb().from('stories').update({total_followers:story.total_followers}).eq('id',storyId);
+  }catch(e){toast('Error','err');}
+}
+
+async function toggleBookmark(){
+  if(!currentUser){toast('Login to bookmark stories','err');return;}
+  const btn=document.getElementById('bk-btn');
+  if(!btn)return;
+  try{
+    if(isBookmarked){
+      await sb().from('bookmarks').delete().eq('user_id',currentUser.id).eq('story_id',storyId);
+      isBookmarked=false;
+      btn.className='btn btn-outline';btn.textContent='🔖 Bookmark';
+      toast('Bookmark removed');
+    }else{
+      await sb().from('bookmarks').insert({user_id:currentUser.id,story_id:storyId});
+      isBookmarked=true;
+      btn.className='btn btn-bookmarked';btn.textContent='🔖 Bookmarked';
+      toast('Bookmarked! 🔖');
+    }
+  }catch(e){toast('Error','err');}
+}
+
+function readFirst(){
+  if(!story||!story.total_chapters){toast('No chapters yet!','err');return;}
+  // Get first chapter from list
+  const firstLink=document.querySelector('.ch-row');
+  if(firstLink)firstLink.click();
+}
+
+function shareStory(){
+  const url=location.href;
+  if(navigator.share){
+    navigator.share({title:story?.title||'VoomComix Story',url});
+  }else{
+    navigator.clipboard.writeText(url).then(()=>toast('Link copied! 🔗'));
+  }
+}
+
+async function trackView(sid){
+  try{
+    // Increment views (simple, not unique)
+    const{data:s}=await sb().from('stories').select('total_views').eq('id',sid).single();
+    if(s) await sb().from('stories').update({total_views:(s.total_views||0)+1}).eq('id',sid);
+  }catch(e){}
+}
+
+init();
 </script>
 </body>
 </html>
