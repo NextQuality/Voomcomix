@@ -218,7 +218,31 @@ footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 2
 <!-- HERO -->
 <section class="hero">
   <div class="hero-tag">India's Original Story Platform</div>
-  <h1>READ<br/><span class="outline">STORIES</span><br/>THAT HIT</h1>
+
+  <!-- TRENDING STORY CARD -->
+  <div id="hero-trending" style="margin-bottom:28px;position:relative;z-index:1;display:none;">
+    <div style="font-size:.6rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px;display:flex;align-items:center;gap:8px;justify-content:center;">
+      <span style="width:20px;height:1px;background:var(--gold2);display:inline-block;"></span>
+      🔥 Trending Right Now
+      <span style="width:20px;height:1px;background:var(--gold2);display:inline-block;"></span>
+    </div>
+    <div id="trending-card" onclick="location.href=trendingUrl" style="cursor:pointer;background:rgba(255,255,255,.05);border:1px solid rgba(192,57,43,.3);border-radius:14px;padding:18px 22px;max-width:480px;margin:0 auto;display:flex;gap:16px;align-items:center;backdrop-filter:blur(10px);transition:all .2s;"
+      onmouseover="this.style.borderColor='rgba(192,57,43,.7)';this.style.background='rgba(255,255,255,.08)'"
+      onmouseout="this.style.borderColor='rgba(192,57,43,.3)';this.style.background='rgba(255,255,255,.05)'">
+      <div id="trending-cover" style="width:56px;height:80px;border-radius:8px;background:var(--card2);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1.8rem;"></div>
+      <div style="flex:1;min-width:0;text-align:left;">
+        <div style="font-size:.56rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red2);margin-bottom:4px;" id="trending-type"></div>
+        <div style="font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.03em;line-height:1.1;color:var(--white);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="trending-title">Loading...</div>
+        <div style="font-size:.68rem;color:rgba(253,250,244,.45);margin-bottom:6px;" id="trending-author"></div>
+        <div style="display:flex;gap:12px;">
+          <span style="font-size:.62rem;color:var(--muted);" id="trending-views"></span>
+          <span style="font-size:.62rem;color:var(--muted);" id="trending-chapters"></span>
+        </div>
+      </div>
+      <div style="font-size:1.2rem;color:var(--red2);flex-shrink:0;">›</div>
+    </div>
+  </div>
+
   <p class="hero-sub">Manga, Comics & Web Novels from Indian writers. Read free. Support creators. Discover your next obsession.</p>
   <div class="hero-search">
     <input type="text" id="hero-search" placeholder="Search manga, novels, authors..." onkeydown="if(event.key==='Enter')doSearch()"/>
@@ -324,8 +348,8 @@ footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 2
       </div>
       <div class="contract-info">
         <div class="ci-title">📬 Contact Directly</div>
-        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong>contract@voomcomix.in</strong> — Story rights & contracts</span></div>
-        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong>help@voomcomix.in</strong> — General support</span></div>
+        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f3c30312b2d3e3c2b1f293030323c30323627713631">[email&#160;protected]</a></strong> — Story rights & contracts</span></div>
+        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a121f160a3a0c1515171915171302541314">[email&#160;protected]</a></strong> — General support</span></div>
         <div style="margin-top:10px;font-size:.72rem;color:var(--muted);">We respond within 2–3 business days.</div>
       </div>
     </div>
@@ -380,8 +404,8 @@ footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 2
       <h4>Company</h4>
       <a href="about.html">About Us</a>
       <a href="terms.html">Terms of Use</a>
-      <a href="mailto:help@voomcomix.in">Contact</a>
-      <a href="mailto:contract@voomcomix.in">Contracts</a>
+      <a href="/cdn-cgi/l/email-protection#e38b868f93a3958c8c8e808c8e8a9bcd8a8d">Contact</a>
+      <a href="/cdn-cgi/l/email-protection#dfbcb0b1abadbebcab9fa9b0b0b2bcb0b2b6a7f1b6b1">Contracts</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -392,7 +416,7 @@ footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 2
 
 <div id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vc-config.js"></script>
 <script>
 const SURL='https://gcpbvzyndmwdlvopftma.supabase.co';
@@ -425,6 +449,27 @@ async function init(){
 
   const list=stories.data||[];
   const totalViews=list.reduce((a,s)=>a+(s.total_views||0),0);
+
+  // Trending story — most views
+  const trending=[...list].sort((a,b)=>(b.total_views||0)-(a.total_views||0))[0];
+  if(trending){
+    const te={novel:'📖',manga:'🎌',comic:'🗂️'};
+    const tl={novel:'Novel',manga:'Manga',comic:'Comic'};
+    window.trendingUrl=`story.html?id=${trending.id}`;
+    const covEl=document.getElementById('trending-cover');
+    if(trending.cover_url){
+      covEl.innerHTML=`<img src="${esc(trending.cover_url)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.textContent='${te[trending.type]||'📖'}'"/>`;
+    } else {
+      covEl.textContent=te[trending.type]||'📖';
+    }
+    document.getElementById('trending-type').textContent=(tl[trending.type]||'Novel')+' · '+trending.language;
+    document.getElementById('trending-title').textContent=trending.title;
+    const author=trending.profiles?.display_name||trending.profiles?.username||'Anonymous';
+    document.getElementById('trending-author').textContent='by '+author+(trending.genre?' · '+trending.genre:'');
+    document.getElementById('trending-views').textContent='👁️ '+fmtNum(trending.total_views||0)+' views';
+    document.getElementById('trending-chapters').textContent='📄 '+(trending.total_chapters||0)+' chapters';
+    document.getElementById('hero-trending').style.display='block';
+  }
 
   document.getElementById('stat-stories').textContent=fmtNum(list.length);
   document.getElementById('stat-chapters').textContent=fmtNum(chapters.count||0);
@@ -483,15 +528,4 @@ async function submitContract(){
   const btn=document.querySelector('.cf-submit');btn.disabled=true;btn.textContent='Sending...';
   try{await sb().from('contract_applications').insert({name,email,phone:document.getElementById('cf-phone').value,platform:document.getElementById('cf-platform').value,story_name:story,purpose:document.getElementById('cf-purpose').value,message:document.getElementById('cf-message').value,created_at:new Date().toISOString()});}catch(e){}
   const subject=encodeURIComponent(`Contract Application: ${story}`);
-  const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${document.getElementById('cf-phone').value}\nPlatform: ${document.getElementById('cf-platform').value}\nStory: ${story}\nPurpose: ${document.getElementById('cf-purpose').value}\n\nMessage:\n${document.getElementById('cf-message').value}`);
-  window.open(`mailto:contract@voomcomix.in?subject=${subject}&body=${body}`,'_blank');
-  ['cf-name','cf-email','cf-phone','cf-platform','cf-story','cf-message'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('cf-purpose').value='';
-  toast('Application submitted! We will contact you soon. ✓');
-  btn.disabled=false;btn.textContent='📨 Submit Application';
-}
-
-init();
-</script>
-</body>
-</html>
+  const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${document.getElementById('cf-phone').value}\nPlatform: ${document.getElementById('cf-platform').value}\nStory: ${story}\nPurpose: ${document.getElementById('cf-purpose').value}\n\nMessage:\n${document.getElementById('cf-message').val
