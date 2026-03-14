@@ -3,617 +3,495 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>VoomComix — Stories That Hit Different</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<title>VoomComix — Read Manga, Comics & Novels Online</title>
+<meta name="description" content="VoomComix — India's platform for original manga, comics and web novels. Read free stories from Indian writers."/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --bg:#ffffff;
-  --bg2:#f7f4f0;
-  --bg3:#ede5d8;
-  --card:#ffffff;
-  --card2:#faf5ee;
-  --ink:#1a1410;
-  --ink2:#2e2318;
-  --red:#c0392b;
-  --red2:#e74c3c;
-  --gold:#d4820a;
-  --gold2:#f0a500;
-  --teal:#0a7c6e;
-  --muted:#6b5a4e;
-  --border:#ddd5c8;
-  --border2:#c4b09a;
-  --shadow:rgba(60,40,20,0.10);
-}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--ink);font-family:'Libre Baskerville',serif;overflow-x:hidden;}
+:root{--bg:#0f0d14;--card:#16131e;--card2:#1d1929;--red:#c0392b;--red2:#e04030;--gold:#d4820a;--gold2:#f0a500;--teal:#0a7c6e;--white:#fdfaf4;--muted:#7a6a7a;--border:rgba(255,255,255,.07);--light-bg:#f7f4f0;--light-ink:#1a1410;--light-border:#ddd5c8;}
+body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'Rajdhani';}
 img{display:block;}
+section{padding:80px 40px;}
 
-/* ===== NAVBAR ===== */
-nav{background:var(--ink);border-bottom:3px solid var(--red);padding:0 48px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3);}
-.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;color:#f5efe6;display:flex;align-items:center;}
-.logo .v{color:var(--red);}
-.logo .c{color:var(--gold2);}
-.nav-tags{display:flex;gap:6px;}
-.nav-tag{font-family:'Rajdhani';font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);transition:all .2s;cursor:pointer;display:inline-block;}
-.nav-tag:hover{border-color:var(--gold2);color:var(--gold2);}
-.nav-r{display:flex;align-items:center;gap:20px;}
-.nav-r a{font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);transition:color .2s;}
-.nav-r a:hover{color:#f5efe6;}
-.nav-cta{background:var(--red)!important;color:#fff!important;padding:8px 20px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(15,13,20,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(192,57,43,.15);height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Bebas Neue';font-size:1.9rem;letter-spacing:.1em;color:var(--white);}
+.logo span{color:var(--red2);}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-links a{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-search-wrap{display:flex;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .2s;}
+.nav-search-wrap:focus-within{border-color:rgba(192,57,43,.5);}
+.nav-search-wrap input{background:transparent;border:none;outline:none;padding:7px 12px;font-family:'Rajdhani';font-size:.82rem;color:var(--white);width:180px;}
+.nav-search-wrap input::placeholder{color:var(--muted);}
+.nav-search-wrap button{background:transparent;border:none;padding:0 10px;color:var(--muted);font-size:.9rem;}
+.nav-btn{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 16px;border:1.5px solid rgba(255,255,255,.15);color:var(--white);border-radius:6px;transition:all .2s;background:transparent;}
+.nav-btn.filled{background:var(--red);border-color:var(--red);color:#fff;}
+.nav-btn.filled:hover{background:#a93226;}
+#nav-user-area{display:flex;align-items:center;gap:8px;}
 
-/* ===== HERO ===== */
-.hero{position:relative;overflow:hidden;border-bottom:2px solid var(--border);background:var(--ink);}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.15;filter:blur(3px);}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(26,20,16,.98) 0%,rgba(26,20,16,.75) 55%,rgba(26,20,16,.2) 100%);}
-.hero-inner{position:relative;z-index:1;padding:60px 48px;display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center;min-height:440px;}
-.hero-label{font-family:'Rajdhani';font-size:.68rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--red2);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.hero-label::before{content:'';width:20px;height:2px;background:var(--red2);}
-.fire{animation:flick .8s ease-in-out infinite alternate;}
-@keyframes flick{from{transform:scale(1)}to{transform:scale(1.1) rotate(3deg)}}
-.hero h1{font-family:'Bebas Neue';font-size:clamp(2.8rem,5vw,5rem);line-height:.95;letter-spacing:.04em;color:#ffffff;margin-bottom:18px;}
-.hero h1 .red{color:var(--red2);}
-.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
-.hm{font-family:'Rajdhani';font-size:.7rem;font-weight:700;letter-spacing:.12em;padding:3px 10px;border:1px solid;}
-.hm.genre{color:var(--gold2);border-color:rgba(240,165,0,.3);}
-.hm.views{color:#5dd6c8;border-color:rgba(93,214,200,.3);}
-.hm.status{color:var(--red2);border-color:rgba(231,76,60,.3);}
-.hero-desc{font-size:.88rem;line-height:1.8;color:rgba(245,239,230,.55);max-width:500px;margin-bottom:26px;}
-.hero-btns{display:flex;gap:12px;}
-.btn-red{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:11px 26px;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%);transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
-.btn-red:hover{background:var(--gold);transform:translateY(-2px);}
-.btn-outline{font-family:'Rajdhani';font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:#f5efe6;padding:10px 24px;border:1px solid rgba(245,239,230,.3);transition:all .2s;display:inline-block;}
-.btn-outline:hover{border-color:#f5efe6;}
-.hero-cover-wrap{display:flex;justify-content:center;align-items:center;}
-.hero-book{width:270px;height:380px;position:relative;box-shadow:20px 20px 60px rgba(0,0,0,.7);transform:perspective(600px) rotateY(-8deg);transition:transform .4s;}
-.hero-book:hover{transform:perspective(600px) rotateY(-2deg) scale(1.02);}
-.hero-book img,.hero-book .book-fb{width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;color:#fff;}
-.hero-book .book-fb{display:flex;align-items:center;justify-content:center;font-size:5rem;}
-.hero-book::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:16px;background:linear-gradient(90deg,#333,#555);border-radius:2px 0 0 2px;}
-.hero-trending-badge{position:absolute;top:-10px;right:-10px;background:var(--red);color:#fff;font-family:'Bebas Neue';font-size:.95rem;letter-spacing:.1em;padding:7px 12px;}
-.hero-rank{position:absolute;bottom:-10px;left:16px;background:var(--ink);border:1px solid rgba(255,255,255,.15);padding:6px 14px;}
-.hero-rank span{font-family:'Bebas Neue';font-size:1.3rem;color:var(--gold2);}
-.hero-rank small{font-family:'Rajdhani';font-size:.58rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);display:block;margin-top:-4px;}
-.hero-dots{position:absolute;bottom:16px;left:48px;display:flex;gap:8px;z-index:2;}
-.hdot{width:22px;height:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:all .3s;}
-.hdot.active{width:40px;background:var(--red);}
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 20px 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(192,57,43,.1) 0%,transparent 65%);}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(transparent,var(--bg));}
+.hero-tag{font-size:.68rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--gold2);margin-bottom:20px;display:flex;align-items:center;gap:10px;justify-content:center;position:relative;z-index:1;}
+.hero-tag::before,.hero-tag::after{content:'';width:28px;height:1px;background:var(--gold2);}
+.hero h1{font-family:'Bebas Neue';font-size:clamp(4rem,10vw,9.5rem);line-height:.9;letter-spacing:.04em;margin-bottom:22px;position:relative;z-index:1;}
+.hero h1 .outline{-webkit-text-stroke:2px var(--red2);color:transparent;}
+.hero-sub{font-size:.92rem;line-height:1.8;color:rgba(253,250,244,.45);max-width:500px;margin:0 auto 24px;position:relative;z-index:1;}
+.hero-search{display:flex;max-width:520px;width:100%;margin:0 auto 32px;position:relative;z-index:1;}
+.hero-search input{flex:1;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-right:none;color:var(--white);padding:13px 18px;font-family:'Rajdhani';font-size:.95rem;outline:none;border-radius:8px 0 0 8px;transition:border-color .2s;}
+.hero-search input::placeholder{color:var(--muted);}
+.hero-search input:focus{border-color:rgba(192,57,43,.5);}
+.hero-search button{background:var(--red);border:none;color:#fff;padding:0 22px;font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:0 8px 8px 0;transition:background .2s;}
+.hero-search button:hover{background:#a93226;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+.btn-hero-main{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:var(--red);color:#fff;padding:12px 30px;border-radius:6px;border:none;transition:all .2s;}
+.btn-hero-main:hover{background:var(--red2);transform:translateY(-2px);}
+.btn-hero-ghost{font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--white);padding:11px 28px;border:1.5px solid rgba(255,255,255,.2);border-radius:6px;transition:all .2s;}
+.btn-hero-ghost:hover{border-color:var(--white);}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:52px;position:relative;z-index:1;flex-wrap:wrap;}
+.hstat-v{font-family:'Bebas Neue';font-size:2.2rem;line-height:1;}
+.hstat-l{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
 
-/* ===== CONTINUE READING ===== */
-.continue-section{padding:32px 48px;background:var(--ink2);border-bottom:2px solid rgba(255,255,255,.06);}
-.continue-section h3{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.06em;color:#f5efe6;margin-bottom:16px;}
-.continue-section h3 span{color:var(--gold2);}
-.continue-grid{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
-.continue-grid::-webkit-scrollbar{display:none;}
-.continue-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:12px 14px;display:flex;gap:12px;align-items:center;min-width:260px;max-width:280px;flex-shrink:0;cursor:pointer;transition:all .2s;}
-.continue-card:hover{border-color:rgba(240,165,0,.4);}
-.cc-cover{width:36px;height:50px;border-radius:2px 4px 4px 2px;object-fit:cover;flex-shrink:0;}
-.cc-cover-fb{width:36px;height:50px;border-radius:2px 4px 4px 2px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
-.cc-info{flex:1;min-width:0;}
-.cc-title{font-family:'Rajdhani';font-size:.82rem;font-weight:700;color:#f5efe6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cc-progress{font-family:'Rajdhani';font-size:.65rem;color:rgba(245,239,230,.45);margin-top:2px;}
-.cc-bar{height:2px;background:rgba(255,255,255,.1);margin-top:6px;border-radius:2px;}
-.cc-bar-fill{height:100%;background:var(--gold2);border-radius:2px;}
-.cc-type{font-family:'Rajdhani';font-size:.55rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;background:rgba(192,57,43,.3);color:var(--red2);margin-top:4px;display:inline-block;}
+/* MARQUEE */
+.marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:12px 0;background:rgba(192,57,43,.03);}
+.marquee-inner{display:flex;gap:48px;animation:scroll 25s linear infinite;white-space:nowrap;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.m-item{font-size:.68rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(253,250,244,.18);display:flex;align-items:center;gap:16px;flex-shrink:0;}
+.m-dot{width:4px;height:4px;background:var(--red);border-radius:50%;}
 
-/* ===== SECTION COMMON ===== */
-.sec{padding:60px 48px;}
-.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
-.sec-head h2{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.05em;white-space:nowrap;color:var(--ink);}
-.sec-head h2 span{color:var(--red);}
-.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
-.sec-link{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);white-space:nowrap;}
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:36px;}
+.sec-head h2{font-family:'Bebas Neue';font-size:2.6rem;letter-spacing:.05em;white-space:nowrap;}
+.sec-head h2 span{color:var(--red2);}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(192,57,43,.4),transparent);}
+.sec-link{font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red2);white-space:nowrap;}
+.sec-link:hover{opacity:.7;}
 
-/* ===== BOOK CARDS ===== */
-.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:22px;}
-.book-card{cursor:pointer;transition:transform .3s;}
-.book-card:hover{transform:translateY(-5px);}
-.book-cover-wrap{position:relative;width:100%;aspect-ratio:2/3;margin-bottom:10px;box-shadow:4px 6px 20px var(--shadow);border-radius:3px 6px 6px 3px;}
-.book-cover-wrap img,.book-cover-fb{width:100%;height:100%;object-fit:cover;border-radius:3px 6px 6px 3px;}
-.book-cover-fb{display:flex;align-items:center;justify-content:center;font-size:2.6rem;}
-.book-cover-wrap::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:10px;background:linear-gradient(90deg,rgba(0,0,0,.25),rgba(0,0,0,.08));border-radius:3px 0 0 3px;z-index:1;}
-.book-cover-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.15) 0%,transparent 50%);border-radius:3px 6px 6px 3px;z-index:2;pointer-events:none;}
-.b-badge{position:absolute;top:7px;left:7px;font-family:'Rajdhani';font-size:.52rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:2px 7px;z-index:3;}
-.b-type{position:absolute;bottom:7px;right:7px;font-family:'Rajdhani';font-size:.52rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;background:rgba(26,20,16,.75);color:rgba(245,239,230,.8);z-index:3;}
-.badge-ongoing{background:var(--red);color:#fff;}
-.badge-complete{background:#0a7c6e;color:#fff;}
-.book-title{font-family:'Rajdhani';font-size:.85rem;font-weight:700;color:var(--ink);margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.book-genre{font-family:'Rajdhani';font-size:.62rem;color:var(--gold);letter-spacing:.08em;margin-bottom:3px;}
-.book-meta{font-family:'Rajdhani';font-size:.6rem;color:var(--muted);display:flex;gap:8px;align-items:center;}
-.book-like{background:none;border:none;cursor:pointer;font-size:.75rem;color:var(--muted);font-family:'Rajdhani';font-weight:700;padding:0;transition:color .2s;display:flex;align-items:center;gap:3px;}
-.book-like:hover,.book-like.liked{color:var(--red);}
+/* STORY CARDS */
+.stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+.story-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .25s;position:relative;}
+.story-card:hover{border-color:rgba(192,57,43,.4);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.5),3px 3px 0 var(--red);}
+.sc-cover{width:100%;aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--card2);}
+.sc-cover img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.story-card:hover .sc-cover img{transform:scale(1.05);}
+.sc-cover-fb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.sc-type{position:absolute;top:8px;left:8px;font-size:.52rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 8px;border-radius:4px;}
+.sct-novel{background:rgba(209,250,229,.92);color:#065f46;}
+.sct-manga{background:rgba(252,231,243,.92);color:#9d174d;}
+.sct-comic{background:rgba(237,233,254,.92);color:#5b21b6;}
+.sc-status{position:absolute;bottom:8px;left:8px;font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
+.scs-ongoing{background:rgba(192,57,43,.9);color:#fff;}
+.scs-complete{background:rgba(10,124,110,.9);color:#fff;}
+.scs-hiatus{background:rgba(107,90,78,.8);color:#fff;}
+.sc-body{padding:12px;}
+.sc-title{font-size:.86rem;font-weight:700;line-height:1.3;margin-bottom:3px;color:var(--white);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.sc-author{font-size:.62rem;color:var(--muted);margin-bottom:5px;}
+.sc-genre{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;}
+.sc-stats{display:flex;gap:8px;}
+.sc-stat{font-size:.6rem;color:var(--muted);}
 
-/* ===== GET STARTED ===== */
-.hiw-sec{padding:80px 48px;background:var(--bg2);border-top:2px solid var(--border);}
-.section-title{text-align:center;font-family:'Bebas Neue';font-size:2.8rem;letter-spacing:.06em;color:var(--ink);margin-bottom:8px;}
-.section-title span{color:var(--red);}
-.section-sub{text-align:center;font-family:'Rajdhani';font-size:.92rem;color:var(--muted);letter-spacing:.06em;margin-bottom:52px;}
-.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:960px;margin:0 auto;}
-.hiw-card{background:var(--card);border:1px solid var(--border);padding:44px 28px 36px;text-align:center;position:relative;transition:box-shadow .3s;}
-.hiw-card:hover{box-shadow:0 8px 32px var(--shadow);}
-.hiw-step{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue';font-size:.8rem;letter-spacing:.2em;background:var(--red);color:#fff;padding:4px 18px;white-space:nowrap;}
-.hiw-icon{font-size:3rem;margin-bottom:18px;display:block;}
-.hiw-card h3{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.05em;color:var(--ink);margin-bottom:10px;}
-.hiw-card p{font-family:'Rajdhani';font-size:.86rem;line-height:1.75;color:var(--muted);}
-.cta-center{text-align:center;margin-top:48px;}
-.cta-center a{display:inline-block;font-family:'Rajdhani';font-size:1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:var(--red);color:#fff;padding:16px 52px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:all .2s;}
-.cta-center a:hover{background:var(--gold);transform:translateY(-2px);}
+/* RANKINGS */
+.rankings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.rank-col{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.rank-col-hd{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.rank-col-title{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.05em;}
+.rank-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.rank-row:last-child{border-bottom:none;}
+.rank-row:hover{background:rgba(255,255,255,.03);}
+.rank-n{font-family:'Bebas Neue';font-size:1.2rem;min-width:26px;text-align:center;}
+.rn-1{color:var(--gold2);}
+.rn-2{color:rgba(192,192,192,.9);}
+.rn-3{color:#cd7f32;}
+.rn-other{color:var(--muted);}
+.rank-cover{width:30px;height:44px;border-radius:4px;object-fit:cover;flex-shrink:0;background:var(--card2);}
+.rank-cover-fb{width:30px;height:44px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.9rem;background:var(--card2);flex-shrink:0;}
+.rank-title{font-size:.76rem;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-views{font-size:.58rem;color:var(--muted);}
 
-/* ===== AUTHOR TOOLS ===== */
-.author-sec{padding:80px 48px;background:var(--bg);}
-.author-block{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;border:1px solid var(--border);margin-bottom:28px;overflow:hidden;}
-.author-block.flip .author-block-img{order:2;}
-.author-block.flip .author-block-text{order:1;}
-.author-block-img{background:linear-gradient(135deg,var(--ink2),#3a2818);display:flex;align-items:center;justify-content:center;font-size:7rem;min-height:240px;}
-.author-block-img.green{background:linear-gradient(135deg,#162616,#243824);}
-.author-block-img.blue{background:linear-gradient(135deg,#161624,#242438);}
-.author-block-text{padding:44px 48px;display:flex;flex-direction:column;justify-content:center;}
-.author-block-text h3{font-family:'Bebas Neue';font-size:2rem;letter-spacing:.05em;color:var(--ink);margin-bottom:14px;line-height:1.1;}
-.author-block-text h3 span{color:var(--red);}
-.author-block-text p{font-family:'Rajdhani';font-size:.9rem;line-height:1.8;color:var(--muted);margin-bottom:22px;}
-.author-block-text a{display:inline-block;font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red);border-bottom:1px solid var(--red);padding-bottom:3px;transition:color .2s;width:fit-content;}
-.author-block-text a:hover{color:var(--gold);}
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;transition:border-color .2s;}
+.feature-card:hover{border-color:rgba(192,57,43,.3);}
+.feature-ic{font-size:2.2rem;margin-bottom:14px;}
+.feature-title{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.04em;margin-bottom:6px;}
+.feature-desc{font-size:.78rem;line-height:1.6;color:var(--muted);}
 
-/* ===== RANKINGS ===== */
-.rank-sec{padding:60px 48px;}
-.rank-sec.alt{background:var(--bg2);}
-.rank-sec-head{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
-.rank-sec-head h2{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.05em;color:var(--ink);}
-.rank-sec-head h2 span{color:var(--red);}
-.rank-badge{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--red);color:#fff;padding:4px 14px;flex-shrink:0;}
-.rank-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.rank-item{background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;}
-.rank-item:hover{border-color:var(--border2);box-shadow:0 4px 16px var(--shadow);}
-.rank-num{font-family:'Bebas Neue';font-size:1.6rem;min-width:32px;line-height:1;}
-.rank-num.top1{color:var(--gold);}
-.rank-num.top2{color:#888;}
-.rank-num.top3{color:#b87333;}
-.rank-num.rest{color:var(--border2);}
-.rank-cover{width:32px;height:44px;border-radius:2px 4px 4px 2px;object-fit:cover;flex-shrink:0;}
-.rank-cover-fb{width:32px;height:44px;border-radius:2px 4px 4px 2px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.rank-info{flex:1;min-width:0;}
-.rank-title{font-family:'Rajdhani';font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
-.rank-meta{font-family:'Rajdhani';font-size:.62rem;color:var(--muted);margin-top:2px;}
-.rank-views{font-family:'Rajdhani';font-size:.68rem;font-weight:700;color:var(--teal);text-align:right;white-space:nowrap;}
+/* AUTHOR TOOLS */
+.author-tools{background:linear-gradient(135deg,#16131e,#1d1929);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.at-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.at-left h2{font-family:'Bebas Neue';font-size:3rem;letter-spacing:.04em;line-height:1;margin-bottom:16px;}
+.at-left h2 span{color:var(--red2);}
+.at-left p{font-size:.84rem;line-height:1.7;color:rgba(253,250,244,.5);margin-bottom:24px;}
+.at-cta{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;padding:12px 24px;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .2s;}
+.at-cta:hover{background:#a93226;}
+.guidelines{display:flex;flex-direction:column;gap:12px;}
+.guideline{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:border-color .2s;}
+.guideline:hover{border-color:rgba(192,57,43,.3);}
+.gl-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.gl-ic{font-size:1.3rem;}
+.gl-title{font-family:'Bebas Neue';font-size:1.05rem;letter-spacing:.04em;}
+.gl-badge{font-size:.54rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:rgba(192,57,43,.2);color:var(--red2);}
+.gl-desc{font-size:.74rem;line-height:1.6;color:var(--muted);}
+.ai-policy{background:rgba(212,130,10,.08);border:1px solid rgba(212,130,10,.2);border-radius:10px;padding:16px 18px;margin-top:20px;}
+.ai-policy-title{font-size:.66rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;}
+.ai-policy-text{font-size:.74rem;line-height:1.6;color:rgba(253,250,244,.45);}
 
-/* ===== READER FEATURES ===== */
-.reader-sec{padding:80px 48px;background:var(--ink);border-top:3px solid var(--red);}
-.reader-sec .section-title{color:#f5efe6;}
-.reader-sec .section-title span{color:var(--gold2);}
-.reader-sec .section-sub{color:rgba(245,239,230,.4);}
-.reader-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1040px;margin:0 auto 48px;}
-.reader-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:36px 28px;text-align:center;transition:all .3s;}
-.reader-card:hover{background:rgba(255,255,255,.07);border-color:rgba(240,165,0,.3);transform:translateY(-4px);}
-.reader-icon{font-size:2.6rem;margin-bottom:18px;display:block;}
-.reader-card h3{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.05em;color:#f5efe6;margin-bottom:12px;}
-.reader-card p{font-family:'Rajdhani';font-size:.85rem;line-height:1.75;color:rgba(245,239,230,.45);}
-.cta-gold{text-align:center;}
-.cta-gold a{display:inline-block;font-family:'Rajdhani';font-size:1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;background:var(--gold2);color:var(--ink);padding:16px 52px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:all .2s;}
-.cta-gold a:hover{background:var(--red);color:#fff;transform:translateY(-2px);}
+/* CONTRACT */
+.contract-section{background:var(--light-bg);color:var(--light-ink);}
+.contract-intro{font-size:.88rem;line-height:1.7;color:var(--muted);margin-bottom:28px;max-width:600px;}
+.contract-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+.contract-info{background:#fff;border:1px solid var(--light-border);border-radius:12px;padding:22px;margin-bottom:14px;}
+.ci-title{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.04em;color:var(--light-ink);margin-bottom:6px;}
+.ci-desc{font-size:.76rem;line-height:1.6;color:var(--muted);margin-bottom:14px;}
+.ci-point{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
+.ci-point-ic{font-size:.9rem;flex-shrink:0;margin-top:1px;}
+.ci-point-text{font-size:.74rem;line-height:1.5;color:var(--muted);}
+.contract-form{background:#fff;border:1px solid var(--light-border);border-radius:12px;padding:22px;}
+.cf-title{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.04em;color:var(--light-ink);margin-bottom:14px;}
+.fg{margin-bottom:11px;}
+.fg label{display:block;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.fg input,.fg textarea,.fg select{width:100%;padding:9px 11px;border:1.5px solid var(--light-border);border-radius:7px;font-family:'Rajdhani';font-size:.86rem;outline:none;transition:border-color .2s;color:var(--light-ink);background:#fdfaf7;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);}
+.fg textarea{resize:vertical;min-height:80px;line-height:1.5;}
+.g2c{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.cf-submit{width:100%;padding:11px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;transition:background .2s;margin-top:4px;cursor:pointer;}
+.cf-submit:hover{background:#a93226;}
 
-/* ===== FOOTER ===== */
-footer{background:var(--ink2);padding:40px 48px;border-top:1px solid rgba(255,255,255,.05);}
-.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px;}
-.f-logo{font-family:'Bebas Neue';font-size:1.7rem;letter-spacing:.1em;color:#f5efe6;margin-bottom:8px;}
-.f-logo .v{color:var(--red);}
-.f-logo .c{color:var(--gold2);}
-.f-desc{font-family:'Rajdhani';font-size:.78rem;line-height:1.7;color:rgba(245,239,230,.45);max-width:230px;margin-bottom:16px;}
-.f-social{display:flex;gap:10px;}
-.f-soc{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);transition:all .2s;}
-.f-soc:hover{color:#fff;border-color:rgba(255,255,255,.4);}
-.f-soc.ig:hover{border-color:#e1306c;color:#e1306c;}
-.f-soc.fb:hover{border-color:#1877f2;color:#1877f2;}
-.f-soc.yt:hover{border-color:#ff0000;color:#ff0000;}
-.f-col h4{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:rgba(245,239,230,.3);margin-bottom:14px;}
-.f-col a{display:block;font-family:'Rajdhani';font-size:.78rem;font-weight:600;color:rgba(245,239,230,.45);margin-bottom:9px;transition:color .2s;}
-.f-col a:hover{color:var(--red);}
-.f-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.f-bottom p{font-family:'Rajdhani';font-size:.68rem;color:rgba(245,239,230,.25);letter-spacing:.06em;}
+/* FOOTER */
+footer{background:#0a0810;border-top:1px solid var(--border);padding:48px 40px 24px;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.foot-brand p{font-size:.72rem;line-height:1.6;color:var(--muted);max-width:240px;margin-top:10px;}
+.foot-social{display:flex;gap:8px;margin-top:12px;}
+.foot-social a{width:32px;height:32px;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--muted);transition:all .2s;}
+.foot-social a:hover{border-color:var(--red2);color:var(--red2);}
+.foot-col h4{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(253,250,244,.25);margin-bottom:12px;}
+.foot-col a{display:block;font-size:.72rem;font-weight:600;color:var(--muted);margin-bottom:8px;transition:color .2s;}
+.foot-col a:hover{color:var(--white);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-bottom p{font-size:.62rem;color:rgba(253,250,244,.18);letter-spacing:.06em;}
 
-@media(max-width:960px){
-  nav{padding:0 20px;}
-  .nav-tags{display:none;}
-  .hero-inner{grid-template-columns:1fr;padding:40px 20px;min-height:auto;gap:24px;}
-  .hero-book{width:160px;height:220px;}
-  .hero-cover-wrap{justify-content:flex-start;}
-  .continue-section,.sec,.rank-sec,.hiw-sec,.author-sec,.reader-sec{padding-left:20px;padding-right:20px;}
-  .books-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
-  .rank-list{grid-template-columns:1fr;}
-  .hiw-grid{grid-template-columns:1fr;}
-  .author-block{grid-template-columns:1fr;}
-  .author-block.flip .author-block-img{order:0;}
-  .author-block.flip .author-block-text{order:0;}
-  .author-block-text{padding:32px 24px;}
-  .reader-grid{grid-template-columns:1fr;}
-  .footer-grid{grid-template-columns:1fr 1fr;}
-  footer{padding:30px 20px;}
-}
-@media(max-width:560px){
-  .footer-grid{grid-template-columns:1fr;}
-}
+/* SKELETON */
+.skel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;animation:pulse 1.5s infinite;}
+.skel-cover{width:100%;aspect-ratio:3/4;background:var(--card2);}
+.skel-body{padding:12px;}
+.skel-line{height:9px;background:var(--card2);border-radius:4px;margin-bottom:7px;}
+.skel-line.w70{width:70%;}
+.skel-line.w50{width:50%;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+#toast{position:fixed;bottom:24px;right:24px;background:#1a1410;color:#fff;padding:12px 18px;border-radius:10px;font-size:.8rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:280px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:var(--teal);}
+#toast.err{background:var(--red);}
+
+@media(max-width:900px){.rankings-grid{grid-template-columns:1fr;}.at-grid{grid-template-columns:1fr;}.contract-grid{grid-template-columns:1fr;}.footer-top{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){nav{padding:0 16px;}section{padding:60px 16px;}.nav-links,.nav-search-wrap{display:none;}.hero h1{font-size:3.8rem;}.stories-grid{grid-template-columns:repeat(2,1fr);gap:12px;}footer{padding:40px 16px 20px;}.footer-top{grid-template-columns:1fr;}.g2c{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="index.html" class="logo"><span class="v">V</span>OOM<span class="c">C</span>OMIX</a>
-  <div class="nav-tags">
-    <a href="stories.html?type=comic" class="nav-tag">📚 Comic Hindi</a>
-    <a href="stories.html?type=manga" class="nav-tag">🎌 Manga Hindi</a>
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="stories.html">All Stories</a>
+    <a href="#rankings">Rankings</a>
+    <a href="#author-tools">Write</a>
+    <a href="#contract">Get Contract</a>
   </div>
-  <div class="nav-r">
-    <a href="stories.html">Stories</a>
-    <a href="become-writer.html" style="color:var(--gold2)!important;">✍️ Create Story</a>
-    <a href="login.html" style="border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:4px;">Login</a>
-    <a href="stories.html" class="nav-cta">📖 Read Free</a>
+  <div class="nav-right">
+    <div class="nav-search-wrap">
+      <input type="text" id="nav-search" placeholder="Search stories..." onkeydown="if(event.key==='Enter')doSearch()"/>
+      <button onclick="doSearch()">🔍</button>
+    </div>
+    <div id="nav-user-area">
+      <button class="nav-btn filled" onclick="location.href='login.html'">Writer Login</button>
+    </div>
   </div>
 </nav>
 
-<!-- TRENDING HERO -->
-<div class="hero" id="hero">
-  <div class="hero-bg" id="hero-bg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-label"><span class="fire">🔥</span> Trending Now</div>
-      <h1 id="hero-title">LOADING<br/><span class="red">STORY</span></h1>
-      <div class="hero-meta" id="hero-meta"></div>
-      <div class="hero-desc" id="hero-desc">Loading...</div>
-      <div class="hero-btns">
-        <a href="#" id="hero-btn" class="btn-red">📖 Start Reading</a>
-        <a href="stories.html" class="btn-outline">Browse All</a>
-      </div>
-    </div>
-    <div class="hero-cover-wrap">
-      <div class="hero-book" id="hero-book">
-        <div class="book-fb" id="hero-book-inner" style="background:#2a1a10;font-size:5rem;">📖</div>
-        <div class="hero-trending-badge">🔥 TRENDING</div>
-        <div class="hero-rank"><span>#1</span><small>This Week</small></div>
-      </div>
-    </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">India's Original Story Platform</div>
+  <h1>READ<br/><span class="outline">STORIES</span><br/>THAT HIT</h1>
+  <p class="hero-sub">Manga, Comics & Web Novels from Indian writers. Read free. Support creators. Discover your next obsession.</p>
+  <div class="hero-search">
+    <input type="text" id="hero-search" placeholder="Search manga, novels, authors..." onkeydown="if(event.key==='Enter')doSearch()"/>
+    <button onclick="doSearch()">Search</button>
   </div>
-  <div class="hero-dots" id="hero-dots"></div>
-</div>
-
-<!-- CONTINUE READING -->
-<div class="continue-section" id="continue-sec" style="display:none;">
-  <h3>CONTINUE <span>READING</span></h3>
-  <div class="continue-grid" id="continue-grid"></div>
-</div>
-
-<!-- FEATURED STORIES -->
-<section class="sec">
-  <div class="sec-head">
-    <h2>FEATURED <span>STORIES</span></h2>
-    <div class="sec-line"></div>
-    <a href="stories.html" class="sec-link">View All →</a>
+  <div class="hero-btns">
+    <button class="btn-hero-main" onclick="location.href='stories.html'">📚 Browse All Stories</button>
+    <button class="btn-hero-ghost" onclick="location.href='login.html'">✍️ Start Writing</button>
   </div>
-  <div class="books-grid" id="books-grid"></div>
-</section>
-
-<!-- TOP 10 HINDI RANKINGS -->
-<section class="rank-sec">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>HINDI</span> RANKINGS</h2>
-    <span class="rank-badge">🇮🇳 HINDI</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-hindi"></div>
-</section>
-
-<!-- TOP 10 ENGLISH RANKINGS -->
-<section class="rank-sec alt">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>ENGLISH</span> RANKINGS</h2>
-    <span class="rank-badge" style="background:var(--teal);">🌐 ENGLISH</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-english"></div>
-</section>
-
-<!-- TOP 10 OVERALL RANKINGS -->
-<section class="rank-sec">
-  <div class="rank-sec-head">
-    <h2>TOP 10 <span>OVERALL</span> RANKINGS</h2>
-    <span class="rank-badge" style="background:var(--gold);">🏆 ALL TIME</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="rank-list" id="rank-all"></div>
-</section>
-
-<!-- GET STARTED -->
-<section class="hiw-sec">
-  <div class="section-title">GET <span>STARTED</span></div>
-  <div class="section-sub">Apni kahani duniya tak pahunchao — teen aasaan steps mein</div>
-  <div class="hiw-grid">
-    <div class="hiw-card">
-      <span class="hiw-step">Step 1</span>
-      <span class="hiw-icon">📝</span>
-      <h3>Create Account</h3>
-      <p>Writer account banao, apna profile set karo aur apni writing journey shuru karo bilkul free mein.</p>
-    </div>
-    <div class="hiw-card">
-      <span class="hiw-step">Step 2</span>
-      <span class="hiw-icon">✍️</span>
-      <h3>Write Your Story</h3>
-      <p>Novel, manga ya comic — jo bhi tumhara andaz ho. Hamare easy editor mein chapters add karo aur publish karo.</p>
-    </div>
-    <div class="hiw-card">
-      <span class="hiw-step">Step 3</span>
-      <span class="hiw-icon">🚀</span>
-      <h3>Publish & Earn</h3>
-      <p>Story publish karo, readers tak pahuncho aur AdSense revenue sharing se seedha UPI mein paise kamao.</p>
-    </div>
-  </div>
-  <div class="cta-center">
-    <a href="become-writer.html">✍️ Create Story Now</a>
+  <div class="hero-stats">
+    <div><div class="hstat-v" id="stat-stories">—</div><div class="hstat-l">Stories</div></div>
+    <div><div class="hstat-v" id="stat-chapters">—</div><div class="hstat-l">Chapters</div></div>
+    <div><div class="hstat-v" id="stat-writers">—</div><div class="hstat-l">Writers</div></div>
+    <div><div class="hstat-v" id="stat-reads">—</div><div class="hstat-l">Total Reads</div></div>
   </div>
 </section>
 
-<!-- AUTHOR TOOLS -->
-<section class="author-sec">
-  <div class="section-title">AUTHOR'S <span>TOOLS</span></div>
-  <div class="section-sub">Har writer ke liye — sab kuch ek hi jagah</div>
+<!-- MARQUEE -->
+<div class="marquee"><div class="marquee-inner">
+  <span class="m-item">Manga <span class="m-dot"></span></span><span class="m-item">Comics <span class="m-dot"></span></span><span class="m-item">Web Novels <span class="m-dot"></span></span><span class="m-item">Hindi Stories <span class="m-dot"></span></span><span class="m-item">English Stories <span class="m-dot"></span></span><span class="m-item">Action <span class="m-dot"></span></span><span class="m-item">Romance <span class="m-dot"></span></span><span class="m-item">Fantasy <span class="m-dot"></span></span><span class="m-item">Thriller <span class="m-dot"></span></span><span class="m-item">Made in India 🇮🇳 <span class="m-dot"></span></span>
+  <span class="m-item">Manga <span class="m-dot"></span></span><span class="m-item">Comics <span class="m-dot"></span></span><span class="m-item">Web Novels <span class="m-dot"></span></span><span class="m-item">Hindi Stories <span class="m-dot"></span></span><span class="m-item">English Stories <span class="m-dot"></span></span><span class="m-item">Action <span class="m-dot"></span></span><span class="m-item">Romance <span class="m-dot"></span></span><span class="m-item">Fantasy <span class="m-dot"></span></span><span class="m-item">Thriller <span class="m-dot"></span></span><span class="m-item">Made in India 🇮🇳 <span class="m-dot"></span></span>
+</div></div>
 
-  <div class="author-block">
-    <div class="author-block-img">📚</div>
-    <div class="author-block-text">
-      <h3>POWERFUL <span>STORY EDITOR</span></h3>
-      <p>Clean aur distraction-free editor se sirf writing par focus karo. Novel text, manga pages, comic panels — sab ek hi dashboard se manage karo. Auto-save, chapter reordering, aur draft mode — sab available hai bilkul free.</p>
-      <a href="become-writer.html">Start Writing →</a>
-    </div>
-  </div>
+<!-- NEW RELEASES -->
+<section>
+  <div class="sec-head"><h2>NEW <span>RELEASES</span></h2><div class="sec-line"></div><a href="stories.html" class="sec-link">View All →</a></div>
+  <div id="new-releases" class="stories-grid"><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div><div class="skel-line w50"></div></div></div><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div></div>
+</section>
 
-  <div class="author-block flip">
-    <div class="author-block-img green">📊</div>
-    <div class="author-block-text">
-      <h3>TRACK YOUR <span>GROWTH</span></h3>
-      <p>Real-time analytics dekho — kitne log padh rahe hain, kaun sa chapter sabse popular hai, aur views time ke saath kaise badh rahe hain. Data se apni writing strategy improve karo aur readers ki pasand samjho.</p>
-      <a href="become-writer.html">See Dashboard →</a>
-    </div>
-  </div>
+<!-- HOT MANGA -->
+<section style="padding-top:0;">
+  <div class="sec-head"><h2>HOT <span>MANGA</span></h2><div class="sec-line"></div><a href="stories.html?type=manga" class="sec-link">See All →</a></div>
+  <div id="hot-manga" class="stories-grid"><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div></div>
+</section>
 
-  <div class="author-block">
-    <div class="author-block-img blue">💰</div>
-    <div class="author-block-text">
-      <h3>EARN FROM YOUR <span>STORIES</span></h3>
-      <p>VoomComix ke AdSense revenue sharing program mein join karo. Jitne views, utni earnings. Har mahine UPI ke zariye directly tumhare account mein transparent payment. India ke writers ke liye bana ek fair platform.</p>
-      <a href="become-writer.html">Join as Writer →</a>
-    </div>
+<!-- TOP NOVELS -->
+<section style="padding-top:0;">
+  <div class="sec-head"><h2>TOP <span>NOVELS</span></h2><div class="sec-line"></div><a href="stories.html?type=novel" class="sec-link">See All →</a></div>
+  <div id="top-novels" class="stories-grid"><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div><div class="skel"><div class="skel-cover"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line w70"></div></div></div></div>
+</section>
+
+<!-- RANKINGS -->
+<section id="rankings" style="background:var(--card2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="sec-head"><h2>🏆 <span>RANKINGS</span></h2><div class="sec-line"></div></div>
+  <div class="rankings-grid">
+    <div class="rank-col"><div class="rank-col-hd"><span style="font-size:1.3rem;">🌏</span><span class="rank-col-title">Overall Top 10</span></div><div id="rank-overall"></div></div>
+    <div class="rank-col"><div class="rank-col-hd"><span style="font-size:1.3rem;">🇮🇳</span><span class="rank-col-title">Hindi Top 10</span></div><div id="rank-hindi"></div></div>
+    <div class="rank-col"><div class="rank-col-hd"><span style="font-size:1.3rem;">🇬🇧</span><span class="rank-col-title">English Top 10</span></div><div id="rank-english"></div></div>
   </div>
 </section>
 
 <!-- READER FEATURES -->
-<section class="reader-sec">
-  <div class="section-title">READER <span>FEATURES</span></div>
-  <div class="section-sub">VoomComix par padhna ek alag hi experience hai</div>
-  <div class="reader-grid">
-    <div class="reader-card">
-      <span class="reader-icon">📖</span>
-      <h3>Free to Read — Always</h3>
-      <p>Koi subscription nahi, koi paywall nahi. VoomComix ki saari stories bilkul free hain — kabhi bhi, kahin se bhi padho bina kisi account ke.</p>
+<section>
+  <div class="sec-head"><h2>WHY <span>VOOMCOMIX</span></h2><div class="sec-line"></div></div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-ic">📱</div><div class="feature-title">Read Anywhere</div><div class="feature-desc">Works on all devices — mobile, tablet, desktop. No app download needed. Just open and read.</div></div>
+    <div class="feature-card"><div class="feature-ic">🆓</div><div class="feature-title">Always Free</div><div class="feature-desc">All stories are completely free to read. No subscription, no paywall, no hidden charges ever.</div></div>
+    <div class="feature-card"><div class="feature-ic">🌐</div><div class="feature-title">Indian Languages</div><div class="feature-desc">Stories in Hindi, English, Marathi, Bengali, Tamil, Telugu and more Indian languages.</div></div>
+    <div class="feature-card"><div class="feature-ic">🎌</div><div class="feature-title">Manga & Comics</div><div class="feature-desc">Full manga reader with vertical scroll, page flip for comics, and clean text reader for novels.</div></div>
+    <div class="feature-card"><div class="feature-ic">🔖</div><div class="feature-title">Bookmarks & Likes</div><div class="feature-desc">Save your favourite stories, track your reading progress, and like chapters to support writers.</div></div>
+    <div class="feature-card"><div class="feature-ic">💰</div><div class="feature-title">Writers Earn</div><div class="feature-desc">Writers earn 50–70% of AdSense revenue based on story views. Paid monthly via UPI directly.</div></div>
+  </div>
+</section>
+
+<!-- AUTHOR TOOLS -->
+<section class="author-tools" id="author-tools">
+  <div class="at-grid">
+    <div class="at-left">
+      <h2>START<br/><span>WRITING</span><br/>TODAY</h2>
+      <p>Join VoomComix as a writer. Publish manga, comics or web novels. Build your audience and earn from your stories. No gatekeeping — your story goes live immediately after posting.</p>
+      <a href="login.html" class="at-cta">✍️ Create Your Story →</a>
+      <div class="ai-policy">
+        <div class="ai-policy-title">⚠️ AI Content Policy</div>
+        <div class="ai-policy-text">Maximum <strong style="color:var(--gold2);">20% AI allowed</strong> per story (grammar/clarity only). At least <strong style="color:var(--gold2);">80% must be original</strong> content. No copy-paste from other platforms. No cross-posting the same story on other sites. Violation = permanent account ban.</div>
+      </div>
     </div>
-    <div class="reader-card">
-      <span class="reader-icon">🇮🇳</span>
-      <h3>Hindi & English Content</h3>
-      <p>India ka dedicated platform jahan novels, manga aur comics dono Hindi aur English mein available hain — ek hi jagah par.</p>
-    </div>
-    <div class="reader-card">
-      <span class="reader-icon">📱</span>
-      <h3>Read on Any Device</h3>
-      <p>Mobile, tablet ya desktop — VoomComix har device par perfectly kaam karta hai. Koi app install karne ki zarurat nahi.</p>
-    </div>
-    <div class="reader-card">
-      <span class="reader-icon">🔖</span>
-      <h3>Continue Reading</h3>
-      <p>Jahan chhoda wahan se shuru karo. Tumhari reading progress automatically save hoti hai — wapis aao aur continue karo.</p>
-    </div>
-    <div class="reader-card">
-      <span class="reader-icon">🏆</span>
-      <h3>Weekly Rankings</h3>
-      <p>Har hafte fresh rankings — sabse popular stories dekhte raho. Hindi aur English dono mein alag alag rankings available hain.</p>
-    </div>
-    <div class="reader-card">
-      <span class="reader-icon">✨</span>
-      <h3>Fresh Stories Weekly</h3>
-      <p>Regular updates — naye chapters aur nayi stories har hafte. Talented writers ki nayi duniyaon mein kho jao, hamesha.</p>
+    <div>
+      <div style="font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Story Guidelines</div>
+      <div class="guidelines">
+        <div class="guideline"><div class="gl-header"><span class="gl-ic">📗</span><span class="gl-title">Short Story</span><span class="gl-badge">2–12 Chapters</span></div><div class="gl-desc">Perfect for YouTubers and creators who want to make video content. Short, punchy, complete arc. Ideal for buying story rights for adaptation.</div></div>
+        <div class="guideline"><div class="gl-header"><span class="gl-ic">📘</span><span class="gl-title">Mid Story</span><span class="gl-badge">40–50 Chapters</span></div><div class="gl-desc">A full story arc with character development and a satisfying ending. Great for readers who want depth without an endless commitment.</div></div>
+        <div class="guideline"><div class="gl-header"><span class="gl-ic">📕</span><span class="gl-title">Long Story</span><span class="gl-badge">100+ Chapters</span></div><div class="gl-desc">Epic long-form stories with unlimited chapters. Build a loyal fanbase, maximize views, and earn the most from revenue sharing.</div></div>
+        <div class="guideline"><div class="gl-header"><span class="gl-ic">🚫</span><span class="gl-title">Not Allowed</span></div><div class="gl-desc">No plagiarism. No cross-posting. No adult/18+ content. Account banned permanently if violated. All stories reviewed periodically.</div></div>
+      </div>
     </div>
   </div>
-  <div class="cta-gold">
-    <a href="stories.html">📖 Explore All Stories</a>
+</section>
+
+<!-- CONTRACT SECTION -->
+<section class="contract-section" id="contract">
+  <div class="sec-head"><h2 style="color:var(--light-ink);">GET <span style="color:var(--red);">CONTRACT</span></h2><div class="sec-line" style="background:linear-gradient(90deg,rgba(192,57,43,.4),transparent);"></div></div>
+  <p class="contract-intro">Are you a YouTuber, filmmaker, or content creator? Purchase story rights from VoomComix writers to create video content, audio stories, or adaptations. Apply below and we'll connect you with the right author.</p>
+  <div class="contract-grid">
+    <div>
+      <div class="contract-info">
+        <div class="ci-title">📋 What You Get</div>
+        <div class="ci-desc">Story rights for video, audio, or written adaptations from VoomComix original stories.</div>
+        <div class="ci-point"><span class="ci-point-ic">✅</span><span class="ci-point-text">Rights to adapt story for YouTube videos or Shorts</span></div>
+        <div class="ci-point"><span class="ci-point-ic">✅</span><span class="ci-point-text">Audio story / podcast rights</span></div>
+        <div class="ci-point"><span class="ci-point-ic">✅</span><span class="ci-point-text">Direct connection with the original writer</span></div>
+        <div class="ci-point"><span class="ci-point-ic">✅</span><span class="ci-point-text">Exclusive or non-exclusive license options</span></div>
+        <div class="ci-point"><span class="ci-point-ic">❌</span><span class="ci-point-text">Not for republishing full story text</span></div>
+      </div>
+      <div class="contract-info">
+        <div class="ci-title">📬 Contact Directly</div>
+        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong>contract@voomcomix.in</strong> — Story rights & contracts</span></div>
+        <div class="ci-point"><span class="ci-point-ic">📧</span><span class="ci-point-text"><strong>help@voomcomix.in</strong> — General support</span></div>
+        <div style="margin-top:10px;font-size:.72rem;color:var(--muted);">We respond within 2–3 business days.</div>
+      </div>
+    </div>
+    <div class="contract-form">
+      <div class="cf-title">📝 Apply for Story Rights</div>
+      <div class="fg"><label>Your Name *</label><input type="text" id="cf-name" placeholder="Full name"/></div>
+      <div class="g2c">
+        <div class="fg"><label>Email *</label><input type="email" id="cf-email" placeholder="your@email.com"/></div>
+        <div class="fg"><label>Phone / WhatsApp</label><input type="tel" id="cf-phone" placeholder="+91 98765..."/></div>
+      </div>
+      <div class="fg"><label>Platform / Channel</label><input type="text" id="cf-platform" placeholder="YouTube channel name or link"/></div>
+      <div class="fg"><label>Story Name *</label><input type="text" id="cf-story" placeholder="Which story are you interested in?"/></div>
+      <div class="fg"><label>Purpose</label>
+        <select id="cf-purpose"><option value="">Select purpose...</option><option value="youtube">YouTube Video / Short</option><option value="audio">Audio Story / Podcast</option><option value="animation">Animation / Motion Comic</option><option value="film">Short Film / Web Series</option><option value="other">Other</option></select>
+      </div>
+      <div class="fg"><label>Message</label><textarea id="cf-message" placeholder="Tell us about your project..."></textarea></div>
+      <button class="cf-submit" onclick="submitContract()">📨 Submit Application</button>
+      <div style="font-size:.62rem;color:var(--muted);margin-top:8px;text-align:center;">We typically respond within 2–3 business days</div>
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-grid">
-    <div>
-      <div class="f-logo"><span class="v">V</span>OOM<span class="c">C</span>OMIX</div>
-      <div class="f-desc">Original manga & comics in Hindi & English. Free to read, always. Raw storytelling with zero filter.</div>
-      <div class="f-social">
-        <a href="https://instagram.com/voomcomix" target="_blank" class="f-soc ig" title="Instagram">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-        <a href="https://facebook.com/voomcomix" target="_blank" class="f-soc fb" title="Facebook">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a href="https://youtube.com/@voomcomix" target="_blank" class="f-soc yt" title="YouTube">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-        </a>
+  <div class="footer-top">
+    <div class="foot-brand">
+      <div class="logo">VOOM<span>COMIX</span></div>
+      <p>India's platform for original manga, comics and web novels. Supporting Indian writers since 2024.</p>
+      <div class="foot-social">
+        <a href="#" title="Instagram">📸</a>
+        <a href="#" title="Twitter">🐦</a>
+        <a href="#" title="YouTube">▶️</a>
+        <a href="#" title="Telegram">✈️</a>
       </div>
     </div>
-    <div class="f-col">
-      <h4>Navigate</h4>
-      <a href="index.html">Home</a>
+    <div class="foot-col">
+      <h4>Read</h4>
       <a href="stories.html">All Stories</a>
-      <a href="manga-reader.html">Manga Reader</a>
-      <a href="comic-reader.html">Comic Reader</a>
-      <a href="terms.html">Terms</a>
+      <a href="stories.html?type=manga">Manga</a>
+      <a href="stories.html?type=comic">Comics</a>
+      <a href="stories.html?type=novel">Novels</a>
+      <a href="#rankings">Rankings</a>
     </div>
-    <div class="f-col">
-      <h4>Genres</h4>
-      <a href="stories.html">Action</a>
-      <a href="stories.html">Fantasy</a>
-      <a href="stories.html">Romance</a>
-      <a href="stories.html">Thriller</a>
-      <a href="stories.html">Hindi Stories</a>
-    </div>
-    <div class="f-col">
-      <h4>Writers</h4>
-      <a href="become-writer.html">Create Story</a>
+    <div class="foot-col">
+      <h4>Write</h4>
       <a href="login.html">Writer Login</a>
-      <a href="login.html">Admin Login</a>
-      <a href="terms.html">Guidelines</a>
+      <a href="login.html">Create Account</a>
+      <a href="#author-tools">Guidelines</a>
+      <a href="#contract">Get Contract</a>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <a href="about.html">About Us</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="mailto:help@voomcomix.in">Contact</a>
+      <a href="mailto:contract@voomcomix.in">Contracts</a>
     </div>
   </div>
-  <div class="f-bottom">
-    <p>© 2025 VoomComix — All Rights Reserved. Created & owned by VoomComix.</p>
-    <a href="terms.html" style="font-family:Rajdhani;font-size:.65rem;color:rgba(245,239,230,.25);letter-spacing:.12em;text-transform:uppercase;">Terms</a>
+  <div class="footer-bottom">
+    <p>© 2024 VoomComix. All rights reserved. Made with ❤️ in India 🇮🇳</p>
+    <p>Read free manga, comics & web novels online</p>
   </div>
 </footer>
 
+<div id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
 <script>
-// Load stories from Supabase (approved ones only)
-const SUPABASE_URL = 'https://gcpbvzyndmwdlvopftma.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SURL='https://gcpbvzyndmwdlvopftma.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+let _sb=null;
+const sb=()=>{if(_sb)return _sb;_sb=(typeof getSupabase==='function')?getSupabase():window.supabase.createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true}});return _sb;};
 
-async function loadStories() {
-  // Try Supabase first
-  try {
-    const { data, error } = await sb.from('stories')
-      .select('*, profiles(username, display_name)')
-      .eq('approval_status', 'approved')
-      .order('created_at', { ascending: false });
-    if (!error && data && data.length > 0) {
-      return data.map(s => ({
-        id: s.id,
-        title: s.title,
-        genre: s.genre || 'General',
-        type: s.story_type || 'novel',
-        status: s.status || 'ongoing',
-        description: s.description || '',
-        cover: s.cover_url || '',
-        coverColor: '#2a1a10',
-        coverEmoji: s.story_type === 'manga' ? '🎌' : s.story_type === 'comic' ? '📚' : '📖',
-        views: s.view_count || 0,
-        likes: s.like_count || 0,
-        isTrending: s.is_trending || false,
-        chapters: [],
-        author: s.profiles?.display_name || 'VoomComix',
-        language: s.language || 'english',
-        created_at: s.created_at
-      }));
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;clearTimeout(t._t);t._t=setTimeout(()=>{t.className=''},3000);}
+function fmtNum(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return String(n||0);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+async function init(){
+  try{
+    const{data:{user}}=await sb().auth.getUser();
+    if(user){
+      const{data:prof}=await sb().from('profiles').select('display_name,username,role').eq('id',user.id).maybeSingle();
+      if(prof){
+        const name=prof.display_name||prof.username||'Writer';
+        const dash=prof.role==='admin'?'admin.html':'writer-dashboard.html';
+        document.getElementById('nav-user-area').innerHTML=`<a href="${dash}" style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;padding:6px 14px;border:1.5px solid rgba(74,222,128,.3);border-radius:6px;">✍️ ${esc(name)}</a>`;
+      }
     }
-  } catch(e) { console.log('Supabase load failed, using local data'); }
-  // Fallback to localStorage
-  try {
-    const local = JSON.parse(localStorage.getItem('voomcomix_stories') || '[]');
-    if (local.length > 0) return local;
-  } catch(e) {}
-  return [];
+  }catch(e){}
+
+  const[stories,chapters,writers]=await Promise.all([
+    sb().from('stories').select('id,title,type,cover_url,genre,language,status,total_views,total_chapters,total_followers,created_at,profiles!author_id(display_name,username)').eq('approval_status','approved'),
+    sb().from('chapters').select('id',{count:'exact',head:true}),
+    sb().from('profiles').select('id',{count:'exact',head:true}).eq('role','writer')
+  ]);
+
+  const list=stories.data||[];
+  const totalViews=list.reduce((a,s)=>a+(s.total_views||0),0);
+
+  document.getElementById('stat-stories').textContent=fmtNum(list.length);
+  document.getElementById('stat-chapters').textContent=fmtNum(chapters.count||0);
+  document.getElementById('stat-writers').textContent=fmtNum(writers.count||0);
+  document.getElementById('stat-reads').textContent=fmtNum(totalViews);
+
+  const sorted=[...list].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  document.getElementById('new-releases').innerHTML=sorted.slice(0,6).map(s=>card(s)).join('')||`<p style="color:var(--muted);padding:20px;">No stories yet.</p>`;
+
+  const manga=list.filter(s=>s.type==='manga').sort((a,b)=>(b.total_views||0)-(a.total_views||0));
+  document.getElementById('hot-manga').innerHTML=manga.slice(0,4).map(s=>card(s)).join('')||`<p style="color:var(--muted);padding:20px;">No manga yet.</p>`;
+
+  const novels=list.filter(s=>s.type==='novel').sort((a,b)=>(b.total_views||0)-(a.total_views||0));
+  document.getElementById('top-novels').innerHTML=novels.slice(0,4).map(s=>card(s)).join('')||`<p style="color:var(--muted);padding:20px;">No novels yet.</p>`;
+
+  const byViews=[...list].sort((a,b)=>(b.total_views||0)-(a.total_views||0));
+  rank('rank-overall',byViews.slice(0,10));
+  rank('rank-hindi',byViews.filter(s=>s.language==='Hindi'||s.language==='Hindi + English').slice(0,10));
+  rank('rank-english',byViews.filter(s=>s.language==='English').slice(0,10));
 }
 
-let stories = [];
-// Load and render everything after stories load
-loadStories().then(data => {
-  stories = data;
-
-// ===== HERO =====
-const trending = [...stories].sort((a,b)=>(b.isTrending?1:0)-(a.isTrending?1:0));
-let hIdx=0;
-function renderHero(i){
-  const s=trending[i]||trending[0];if(!s)return;
-  const words=s.title.split(' ');
-  const half=Math.ceil(words.length/2);
-  document.getElementById('hero-title').innerHTML=words.slice(0,half).join(' ')+'<br/><span class="red">'+words.slice(half).join(' ')+'</span>';
-  document.getElementById('hero-meta').innerHTML=`<span class="hm genre">${s.genre}</span><span class="hm views">👁 ${s.views}</span><span class="hm status">${s.status.toUpperCase()}</span>`;
-  document.getElementById('hero-desc').textContent=s.description;
-  const readUrl=s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
-  document.getElementById('hero-btn').href=readUrl;
-  const bi=document.getElementById('hero-book-inner');
-  if(s.cover&&s.cover.trim()){bi.innerHTML=`<img src="${s.cover}" style="width:100%;height:100%;object-fit:cover;border-radius:2px 6px 6px 2px;"/>`;bi.style.background='';}
-  else{bi.style.background=s.coverColor||'#2a1a10';bi.innerHTML=`<span style="font-size:5rem">${s.coverEmoji||'📖'}</span>`;}
-  if(s.cover)document.getElementById('hero-bg').style.backgroundImage=`url(${s.cover})`;
-  else document.getElementById('hero-bg').style.backgroundImage='';
-  document.querySelectorAll('.hdot').forEach((d,j)=>d.classList.toggle('active',j===i));
-}
-const dotsEl=document.getElementById('hero-dots');
-trending.slice(0,5).forEach((_,i)=>{
-  const d=document.createElement('div');d.className='hdot'+(i===0?' active':'');
-  d.onclick=()=>{hIdx=i;renderHero(i);};dotsEl.appendChild(d);
-});
-if(trending.length)renderHero(0);
-setInterval(()=>{hIdx=(hIdx+1)%Math.min(trending.length||1,5);renderHero(hIdx);},5000);
-
-// ===== CONTINUE READING =====
-(function(){
-  const history=JSON.parse(localStorage.getItem('vc-history')||'[]');
-  if(!history.length)return;
-  document.getElementById('continue-sec').style.display='block';
-  const grid=document.getElementById('continue-grid');
-  grid.innerHTML=history.slice(0,6).map(h=>{
-    const s=stories.find(x=>x.id===h.storyId);if(!s)return '';
-    const pct=Math.min(100,Math.round((h.chIdx/(s.chapters.length||1))*100));
-    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" class="cc-cover" alt=""/>`:`<div class="cc-cover-fb" style="background:${s.coverColor||'#2a1a10'}">${s.coverEmoji||'📖'}</div>`;
-    const url=s.type==='manga'?`manga-reader.html?id=${s.id}&ch=${h.chId}`:s.type==='comic'?`comic-reader.html?id=${s.id}&ch=${h.chId}`:`chapter.html?story=${s.id}&ch=${h.chId}`;
-    return `<div class="continue-card" onclick="location.href='${url}'">${cover}<div class="cc-info"><div class="cc-title">${s.title}</div><div class="cc-progress">Ch ${h.chId} · ${pct}% read</div><div class="cc-bar"><div class="cc-bar-fill" style="width:${pct}%"></div></div><span class="cc-type">${s.type||'novel'}</span></div></div>`;
-  }).join('');
-})();
-
-// ===== BOOKS GRID =====
-(function(){
-  const grid=document.getElementById('books-grid');
-  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
-  stories.forEach((s,i)=>{
-    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" alt="${s.title}"/>`:`<div class="book-cover-fb" style="background:${s.coverColor||'#e4d9c8'}">${s.coverEmoji||'📖'}</div>`;
-    const isLiked=likes[s.id];
-    const readUrl=s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
-    grid.innerHTML+=`<div class="book-card" style="animation:fadeUp .4s ease ${i*.07}s both">
-      <div class="book-cover-wrap" onclick="location.href='${readUrl}'">${cover}
-        <span class="b-badge badge-${s.status}">${s.status.charAt(0).toUpperCase()+s.status.slice(1)}</span>
-        <span class="b-type">${(s.type||'novel').toUpperCase()}</span>
-      </div>
-      <div class="book-title" onclick="location.href='${readUrl}'">${s.title}</div>
-      <div class="book-genre">${s.genre}</div>
-      <div class="book-meta">
-        <span>📖 ${s.chapters?s.chapters.length:0} Ch</span>
-        <button class="book-like ${isLiked?'liked':''}" onclick="toggleLike('${s.id}',this)">♥ <span id="lc-${s.id}">${s.likes||0}</span></button>
-      </div>
-    </div>`;
-  });
-})();
-
-function toggleLike(id,btn){
-  const likes=JSON.parse(localStorage.getItem('vc-likes')||'{}');
-  const d=loadData();const s=d.find(x=>x.id===id);if(!s)return;
-  if(likes[id]){delete likes[id];s.likes=Math.max(0,(s.likes||1)-1);btn.classList.remove('liked');}
-  else{likes[id]=1;s.likes=(s.likes||0)+1;btn.classList.add('liked');}
-  localStorage.setItem('vc-likes',JSON.stringify(likes));
-  localStorage.setItem('voomcomix_stories',JSON.stringify(d));
-  document.getElementById('lc-'+id).textContent=s.likes;
+function card(s){
+  const tc={novel:'sct-novel',manga:'sct-manga',comic:'sct-comic'};
+  const sc={ongoing:'scs-ongoing',complete:'scs-complete',hiatus:'scs-hiatus'};
+  const tl={novel:'Novel',manga:'Manga',comic:'Comic'};
+  const te={novel:'📖',manga:'🎌',comic:'🗂️'};
+  const author=s.profiles?.display_name||s.profiles?.username||'Anonymous';
+  const cover=s.cover_url?`<img src="${esc(s.cover_url)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=sc-cover-fb>${te[s.type]||'📖'}</div>'">`:`<div class="sc-cover-fb">${te[s.type]||'📖'}</div>`;
+  return`<div class="story-card" onclick="location.href='story.html?id=${s.id}'">
+    <div class="sc-cover">${cover}<span class="sc-type ${tc[s.type]||'sct-novel'}">${tl[s.type]||'Novel'}</span><span class="sc-status ${sc[s.status]||'scs-ongoing'}">${s.status||'ongoing'}</span></div>
+    <div class="sc-body"><div class="sc-title">${esc(s.title)}</div><div class="sc-author">by ${esc(author)}</div>${s.genre?`<div class="sc-genre">${esc(s.genre)}</div>`:''}<div class="sc-stats"><span class="sc-stat">👁️ ${fmtNum(s.total_views||0)}</span><span class="sc-stat">📄 ${s.total_chapters||0} ch</span></div></div>
+  </div>`;
 }
 
-// ===== 3 SEPARATE RANKINGS =====
-function rankHTML(list,empty){
-  if(!list.length)return`<p style="font-family:Rajdhani;color:var(--muted);font-size:.85rem;padding:20px;grid-column:1/-1;">${empty}</p>`;
-  return list.slice(0,10).map((s,i)=>{
-    const nc=i===0?'top1':i===1?'top2':i===2?'top3':'rest';
-    const cover=s.cover&&s.cover.trim()?`<img src="${s.cover}" class="rank-cover" alt=""/>`:`<div class="rank-cover-fb" style="background:${s.coverColor||'#e4d9c8'}">${s.coverEmoji||'📖'}</div>`;
-    const readUrl=s.type==='manga'?`manga-reader.html?id=${s.id}`:s.type==='comic'?`comic-reader.html?id=${s.id}`:`story.html?id=${s.id}`;
-    return`<div class="rank-item" onclick="location.href='${readUrl}'">${cover}<span class="rank-num ${nc}">${i+1}</span><div class="rank-info"><div class="rank-title">${s.title}</div><div class="rank-meta">${s.genre} · ${s.chapters?s.chapters.length:0} Ch</div></div><div class="rank-views">👁 ${s.views||'0'}</div></div>`;
+function rank(id,list){
+  const el=document.getElementById(id);
+  const te={novel:'📖',manga:'🎌',comic:'🗂️'};
+  const rc=['rn-1','rn-2','rn-3'];
+  if(!list.length){el.innerHTML=`<div style="padding:20px;text-align:center;font-size:.76rem;color:var(--muted);">No stories yet</div>`;return;}
+  el.innerHTML=list.map((s,i)=>{
+    const cover=s.cover_url?`<img src="${esc(s.cover_url)}" class="rank-cover" onerror="this.outerHTML='<div class=rank-cover-fb>${te[s.type]||'📖'}</div>'">`:`<div class="rank-cover-fb">${te[s.type]||'📖'}</div>`;
+    return`<div class="rank-row" onclick="location.href='story.html?id=${s.id}'"><div class="rank-n ${rc[i]||'rn-other'}">${i+1}</div>${cover}<div style="flex:1;min-width:0;"><div class="rank-title">${esc(s.title)}</div><div class="rank-views">👁️ ${fmtNum(s.total_views||0)}</div></div></div>`;
   }).join('');
 }
-const hindi=stories.filter(s=>s.genre&&(s.genre.toLowerCase().includes('hindi')||s.language==='hindi'));
-const english=stories.filter(s=>!(s.genre&&s.genre.toLowerCase().includes('hindi'))&&s.language!=='hindi');
-const allTop=[...stories].sort((a,b)=>(parseInt(b.views)||0)-(parseInt(a.views)||0));
-document.getElementById('rank-hindi').innerHTML=rankHTML(hindi,'Hindi stories jald aa rahi hain! ✍️');
-document.getElementById('rank-english').innerHTML=rankHTML(english,'English stories coming soon!');
-document.getElementById('rank-all').innerHTML=rankHTML(allTop,'No stories yet.');
 
-  document.head.insertAdjacentHTML('beforeend','<style>@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}</style>');
-}); // end loadStories().then
+function doSearch(){
+  const q=(document.getElementById('hero-search')?.value||document.getElementById('nav-search')?.value||'').trim();
+  location.href=q?`stories.html?q=${encodeURIComponent(q)}`:'stories.html';
+}
+
+async function submitContract(){
+  const name=document.getElementById('cf-name').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  const story=document.getElementById('cf-story').value.trim();
+  if(!name||!email||!story){toast('Name, Email and Story name are required!','err');return;}
+  const btn=document.querySelector('.cf-submit');btn.disabled=true;btn.textContent='Sending...';
+  try{await sb().from('contract_applications').insert({name,email,phone:document.getElementById('cf-phone').value,platform:document.getElementById('cf-platform').value,story_name:story,purpose:document.getElementById('cf-purpose').value,message:document.getElementById('cf-message').value,created_at:new Date().toISOString()});}catch(e){}
+  const subject=encodeURIComponent(`Contract Application: ${story}`);
+  const body=encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${document.getElementById('cf-phone').value}\nPlatform: ${document.getElementById('cf-platform').value}\nStory: ${story}\nPurpose: ${document.getElementById('cf-purpose').value}\n\nMessage:\n${document.getElementById('cf-message').value}`);
+  window.open(`mailto:contract@voomcomix.in?subject=${subject}&body=${body}`,'_blank');
+  ['cf-name','cf-email','cf-phone','cf-platform','cf-story','cf-message'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cf-purpose').value='';
+  toast('Application submitted! We will contact you soon. ✓');
+  btn.disabled=false;btn.textContent='📨 Submit Application';
+}
+
+init();
 </script>
 </body>
 </html>
