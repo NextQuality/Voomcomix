@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Book — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root{
+  --bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;
+  --red:#e8341c;--red2:#ff4d2e;--gold:#d4820a;--white:#f5efe6;
+  --muted:#8a7a6a;--border:rgba(245,239,230,0.08);
+  --green:#22c55e;--radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+
+/* ── HEADER ── */
+#header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(14,14,18,.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  height:60px;display:flex;align-items:center;
+  padding:0 24px;gap:16px;
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;}
+.logo span{color:var(--red);}
+.header-nav{display:flex;gap:4px;flex:1;justify-content:center;}
+.header-nav a{padding:7px 14px;border-radius:6px;font-size:13px;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.5px;transition:all .2s;}
+.header-nav a:hover{color:var(--white);background:var(--bg3);}
+.btn{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Rajdhani',sans-serif;letter-spacing:.5px;text-transform:uppercase;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:var(--red2);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+.btn-sm{padding:6px 14px;font-size:12px;}
+
+/* ── HERO BANNER ── */
+#book-hero{
+  margin-top:60px;
+  min-height:380px;position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;
+}
+.hero-bg-blur{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  filter:blur(24px);opacity:.25;transform:scale(1.1);
+  z-index:0;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,var(--bg) 30%,rgba(14,14,18,.6) 100%);
+  z-index:1;
+}
+.hero-content{
+  position:relative;z-index:2;
+  display:flex;gap:32px;align-items:flex-end;
+  padding:32px 60px 40px;width:100%;
+}
+.book-cover-wrap{
+  flex-shrink:0;
+  width:160px;
+  filter:drop-shadow(0 8px 32px rgba(0,0,0,.6));
+}
+.book-cover-wrap img{
+  width:160px;height:220px;border-radius:10px;
+  object-fit:cover;border:2px solid rgba(255,255,255,.1);
+}
+.book-cover-placeholder{
+  width:160px;height:220px;border-radius:10px;
+  background:var(--bg3);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--muted);text-align:center;padding:16px;
+}
+.book-meta{flex:1;}
+.book-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.badge{
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;
+  font-family:'Rajdhani',sans-serif;text-transform:uppercase;letter-spacing:.5px;
+}
+.badge-type-novel{background:rgba(212,130,10,.2);color:#fcd34d;}
+.badge-type-manga{background:rgba(232,52,28,.2);color:#fca5a5;}
+.badge-type-comic{background:rgba(59,130,246,.2);color:#93c5fd;}
+.badge-warning{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.2);}
+.badge-lang{background:rgba(34,197,94,.1);color:#86efac;border:1px solid rgba(34,197,94,.15);}
+.badge-length{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.book-title-main{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(28px,5vw,52px);
+  letter-spacing:.5px;line-height:1;
+  margin-bottom:10px;
+}
+.book-author-row{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;font-size:14px;color:rgba(245,239,230,.7);
+}
+.author-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+.book-stats-row{
+  display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px;
+}
+.book-stat{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;color:rgba(245,239,230,.7);
+}
+.book-stat strong{color:var(--white);font-size:15px;}
+.book-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-follow{
+  padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;
+  cursor:pointer;border:none;transition:all .25s;
+  font-family:'Rajdhani',sans-serif;letter-spacing:.5px;text-transform:uppercase;
+}
+.btn-follow.following{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.3);}
+.btn-follow.not-following{background:var(--red);color:#fff;}
+.btn-follow:hover{opacity:.85;}
+
+/* ── MAIN LAYOUT ── */
+.main-layout{
+  display:grid;grid-template-columns:1fr 320px;
+  gap:24px;padding:32px 60px;max-width:1400px;margin:0 auto;
+}
+
+/* ── TABS ── */
+.tabs{
+  display:flex;gap:0;background:var(--bg2);
+  border:1px solid var(--border);border-radius:10px;
+  padding:4px;margin-bottom:24px;
+}
+.tab-btn{
+  flex:1;padding:10px;border-radius:7px;
+  border:none;background:none;cursor:pointer;
+  color:var(--muted);font-family:'Rajdhani',sans-serif;
+  font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  transition:all .2s;
+}
+.tab-btn.active{background:var(--red);color:#fff;}
+
+/* ── ABOUT TAB ── */
+.about-section{margin-bottom:24px;}
+.about-section h3{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
+  margin-bottom:12px;letter-spacing:.3px;
+}
+.about-text{
+  font-size:15px;line-height:1.8;color:rgba(245,239,230,.8);
+  white-space:pre-wrap;
+}
+.genre-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.genre-tag{
+  padding:5px 14px;border-radius:20px;font-size:12px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .2s;
+  font-family:'Rajdhani',sans-serif;font-weight:600;
+}
+.genre-tag:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* ── CHAPTERS TAB ── */
+.chapters-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;flex-wrap:wrap;gap:10px;
+}
+.chapters-count{font-size:13px;color:var(--muted);}
+.chapter-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:14px 18px;margin-bottom:8px;
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:all .2s;
+}
+.chapter-item:hover{border-color:rgba(232,52,28,.3);background:var(--bg3);}
+.chapter-num{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--red);min-width:36px;
+}
+.chapter-info{flex:1;}
+.chapter-title{font-size:14px;font-weight:600;margin-bottom:3px;}
+.chapter-date{font-size:11px;color:var(--muted);}
+.chapter-arrow{color:var(--muted);font-size:18px;}
+
+/* ── REVIEWS TAB ── */
+.review-form{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:20px;margin-bottom:20px;
+}
+.review-form h4{font-size:15px;font-weight:600;margin-bottom:14px;}
+.star-rating{display:flex;gap:6px;margin-bottom:14px;}
+.star{font-size:24px;cursor:pointer;transition:transform .1s;filter:grayscale(1);opacity:.4;}
+.star.active,.star:hover{filter:none;opacity:1;transform:scale(1.1);}
+.review-form textarea{
+  width:100%;padding:12px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:8px;
+  color:var(--white);font-size:14px;line-height:1.6;
+  outline:none;resize:vertical;min-height:90px;
+  font-family:'Inter',sans-serif;
+}
+.review-form textarea:focus{border-color:var(--red);}
+.review-form textarea::placeholder{color:var(--muted);}
+.review-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:16px;margin-bottom:10px;
+}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.review-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;
+}
+.review-username{font-size:14px;font-weight:600;}
+.review-date{font-size:11px;color:var(--muted);margin-left:auto;}
+.review-stars{font-size:14px;margin-bottom:6px;}
+.review-text{font-size:13px;color:rgba(245,239,230,.75);line-height:1.6;}
+
+/* ── SIDEBAR ── */
+.sidebar-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;margin-bottom:16px;
+}
+.sidebar-card h4{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;
+  margin-bottom:14px;letter-spacing:.3px;
+}
+.related-book{
+  display:flex;gap:10px;margin-bottom:12px;
+  cursor:pointer;transition:all .2s;padding:8px;
+  border-radius:8px;
+}
+.related-book:hover{background:var(--bg3);}
+.related-cover{
+  width:44px;height:60px;border-radius:5px;
+  object-fit:cover;background:var(--bg3);flex-shrink:0;
+}
+.related-info{flex:1;overflow:hidden;}
+.related-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.related-author{font-size:11px;color:var(--muted);}
+.related-views{font-size:11px;color:var(--red);}
+
+/* ── SHARE BUTTONS ── */
+.share-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.share-btn{
+  flex:1;padding:9px;border-radius:8px;font-size:12px;font-weight:600;
+  text-align:center;cursor:pointer;border:1px solid var(--border);
+  background:var(--bg3);color:var(--white);transition:all .2s;
+  font-family:'Rajdhani',sans-serif;text-transform:uppercase;letter-spacing:.3px;
+}
+.share-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* ── SKELETON ── */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s;max-width:280px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{border-color:rgba(34,197,94,.4);color:#86efac;}
+#toast.error{border-color:rgba(220,38,38,.4);color:#fca5a5;}
+
+@media(max-width:900px){
+  .hero-content{padding:24px 20px 32px;gap:20px;}
+  .book-cover-wrap img{width:120px;height:165px;}
+  .main-layout{grid-template-columns:1fr;padding:20px;}
+  .header-nav{display:none;}
+}
+@media(max-width:480px){
+  .book-cover-wrap img{width:90px;height:124px;}
+  .book-title-main{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <nav class="header-nav">
+    <a href="index.html">Home</a>
+    <a href="browse.html?type=manga">Manga</a>
+    <a href="browse.html?type=comic">Comic</a>
+    <a href="browse.html?type=novel">Novel</a>
+    <a href="browse.html">All Stories</a>
+  </nav>
+  <div style="display:flex;gap:8px;margin-left:auto;" id="header-auth"></div>
+</header>
+
+<!-- HERO BANNER -->
+<section id="book-hero">
+  <div class="hero-bg-blur" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="book-cover-wrap" id="cover-wrap">
+      <div class="book-cover-placeholder skeleton" style="height:220px;"></div>
+    </div>
+    <div class="book-meta" id="book-meta-section">
+      <div class="skeleton" style="height:20px;width:200px;margin-bottom:12px;"></div>
+      <div class="skeleton" style="height:52px;width:400px;margin-bottom:10px;"></div>
+      <div class="skeleton" style="height:16px;width:160px;margin-bottom:20px;"></div>
+      <div class="skeleton" style="height:44px;width:280px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="main-layout">
+
+  <!-- LEFT: Tabs -->
+  <div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('about')">About</button>
+      <button class="tab-btn" onclick="switchTab('chapters')">Chapters</button>
+      <button class="tab-btn" onclick="switchTab('reviews')">Reviews</button>
+    </div>
+
+    <!-- ABOUT TAB -->
+    <div id="tab-about">
+      <div class="about-section">
+        <h3>About This Book</h3>
+        <p class="about-text" id="about-text">Loading...</p>
+        <div class="genre-tags" id="genre-tags"></div>
+      </div>
+      <div class="about-section">
+        <h3>Book Details</h3>
+        <div id="book-details-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;"></div>
+      </div>
+    </div>
+
+    <!-- CHAPTERS TAB -->
+    <div id="tab-chapters" style="display:none;">
+      <div class="chapters-header">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:22px;">Chapters</h3>
+        <span class="chapters-count" id="chapters-count">Loading...</span>
+      </div>
+      <div id="chapters-list">
+        <div class="skeleton" style="height:64px;border-radius:10px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:64px;border-radius:10px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:64px;border-radius:10px;"></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS TAB -->
+    <div id="tab-reviews" style="display:none;">
+      <!-- Write review -->
+      <div class="review-form" id="review-form-wrap">
+        <h4>Write a Review</h4>
+        <div class="star-rating" id="star-rating">
+          <span class="star" onclick="setRating(1)">★</span>
+          <span class="star" onclick="setRating(2)">★</span>
+          <span class="star" onclick="setRating(3)">★</span>
+          <span class="star" onclick="setRating(4)">★</span>
+          <span class="star" onclick="setRating(5)">★</span>
+        </div>
+        <textarea id="review-text" placeholder="Share your thoughts about this book..."></textarea>
+        <button class="btn btn-red" style="margin-top:12px;width:100%;" onclick="submitReview()">Post Review</button>
+      </div>
+      <!-- Reviews list -->
+      <div id="reviews-list">
+        <div class="skeleton" style="height:100px;border-radius:10px;margin-bottom:10px;"></div>
+        <div class="skeleton" style="height:100px;border-radius:10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sidebar -->
+  <div>
+    <!-- Quick Stats -->
+    <div class="sidebar-card">
+      <h4>Book Stats</h4>
+      <div style="display:flex;flex-direction:column;gap:12px;" id="sidebar-stats">
+        <div class="skeleton" style="height:16px;"></div>
+        <div class="skeleton" style="height:16px;"></div>
+        <div class="skeleton" style="height:16px;"></div>
+      </div>
+    </div>
+
+    <!-- Share -->
+    <div class="sidebar-card">
+      <h4>Share</h4>
+      <div class="share-btns">
+        <div class="share-btn" onclick="shareBook('whatsapp')">📱 WhatsApp</div>
+        <div class="share-btn" onclick="shareBook('copy')">🔗 Copy Link</div>
+        <div class="share-btn" onclick="shareBook('twitter')">🐦 Twitter</div>
+        <div class="share-btn" onclick="shareBook('facebook')">📘 Facebook</div>
+      </div>
+    </div>
+
+    <!-- Related Books -->
+    <div class="sidebar-card">
+      <h4>More Like This</h4>
+      <div id="related-books">
+        <div class="skeleton" style="height:60px;border-radius:8px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:60px;border-radius:8px;margin-bottom:8px;"></div>
+        <div class="skeleton" style="height:60px;border-radius:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main-layout -->
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════
+// STATE
+// ══════════════════════════
+let bookId   = null;
+let bookData = null;
+let chapters = [];
+let currentUser = null;
+let userRating  = 0;
+let isFollowing = false;
+
+// ══════════════════════════
+// INIT
+// ══════════════════════════
+(async () => {
+  const params = new URLSearchParams(window.location.search);
+  bookId = params.get('id');
+  if (!bookId) { window.location.href = 'browse.html'; return; }
+
+  currentUser = await getCurrentUser();
+  renderHeaderAuth();
+
+  await loadBook();
+  loadChapters();
+  loadReviews();
+  loadRelated();
+  trackView();
+})();
+
+// ══════════════════════════
+// LOAD BOOK
+// ══════════════════════════
+async function loadBook() {
+  const { data, error } = await sb.from('books')
+    .select('*, users(id, full_name, username)')
+    .eq('id', bookId)
+    .single();
+  if (error || !data) { window.location.href = 'browse.html'; return; }
+  bookData = data;
+
+  // Update page title
+  document.title = `${data.title} — VoomComix`;
+
+  // Hero BG
+  if (data.cover_image) {
+    document.getElementById('hero-bg').style.backgroundImage = `url(${data.cover_image})`;
+  }
+
+  // Cover
+  document.getElementById('cover-wrap').innerHTML = data.cover_image
+    ? `<img src="${data.cover_image}" alt="${data.title}" loading="eager"/>`
+    : `<div class="book-cover-placeholder">No Cover Available</div>`;
+
+  // Check following
+  if (currentUser) {
+    const { data: fol } = await sb.from('followers')
+      .select('id').eq('book_id', bookId).eq('user_id', currentUser.id).single();
+    isFollowing = !!fol;
+  }
+
+  // Build meta
+  const authorName = data.users?.full_name || data.users?.username || 'Unknown';
+  const authorInit = authorName[0].toUpperCase();
+  const typeClass  = `badge-type-${data.type||'novel'}`;
+
+  document.getElementById('book-meta-section').innerHTML = `
+  <div class="book-badges">
+    <span class="badge ${typeClass}">${data.type||'novel'}</span>
+    ${data.length_type ? `<span class="badge badge-length">${data.length_type}</span>` : ''}
+    ${data.warning === '18+' ? `<span class="badge badge-warning">🔞 18+</span>` : '<span class="badge badge-lang">🌐 All Ages</span>'}
+    ${data.language ? `<span class="badge badge-lang">${data.language}</span>` : ''}
+  </div>
+  <h1 class="book-title-main">${data.title}</h1>
+  <div class="book-author-row">
+    <div class="author-avatar">${authorInit}</div>
+    <span>by <strong>${authorName}</strong></span>
+  </div>
+  <div class="book-stats-row">
+    <div class="book-stat">👁 <strong>${fmtNum(data.total_views||0)}</strong> Views</div>
+    <div class="book-stat">❤️ <strong>${fmtNum(data.total_followers||0)}</strong> Followers</div>
+    <div class="book-stat">⭐ <strong>${data.total_reviews||0}</strong> Reviews</div>
+  </div>
+  <div class="book-actions">
+    <button class="btn-follow ${isFollowing?'following':'not-following'}" id="follow-btn" onclick="toggleFollow()">
+      ${isFollowing ? '✓ Following' : '+ Follow'}
+    </button>
+    <a href="read.html?book=${bookId}&chapter=1" class="btn btn-red">▶ Start Reading</a>
+    <button class="btn btn-outline btn-sm" onclick="switchTab('reviews')">⭐ Review</button>
+  </div>`;
+
+  // About tab
+  document.getElementById('about-text').textContent = data.about || 'No description provided.';
+  document.getElementById('genre-tags').innerHTML = (data.genre||[])
+    .map(g => `<span class="genre-tag" onclick="window.location='browse.html?genre=${g}'">${g}</span>`).join('');
+
+  // Details grid
+  document.getElementById('book-details-grid').innerHTML = [
+    { label:'Type',     value: data.type||'—' },
+    { label:'Length',   value: data.length_type||'—' },
+    { label:'Language', value: data.language||'—' },
+    { label:'Rating',   value: data.warning||'All Ages' },
+    { label:'AI Usage', value: (data.ai_percentage||0)+'% (grammar only)' },
+    { label:'Book ID',  value: data.unique_code||'—' },
+  ].map(d => `
+  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;">
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-family:'Rajdhani',sans-serif;font-weight:700;">${d.label}</div>
+    <div style="font-size:14px;font-weight:600;">${d.value}</div>
+  </div>`).join('');
+
+  // Sidebar stats
+  document.getElementById('sidebar-stats').innerHTML = [
+    ['👁 Total Views',     fmtNum(data.total_views||0)],
+    ['❤️ Followers',       fmtNum(data.total_followers||0)],
+    ['⭐ Reviews',          data.total_reviews||0],
+    ['📖 Type',            data.type||'—'],
+    ['🌐 Language',        data.language||'—'],
+    ['📋 Book Code',       data.unique_code||'—'],
+  ].map(([label, value]) => `
+  <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+    <span style="color:var(--muted);">${label}</span>
+    <span style="font-weight:600;">${value}</span>
+  </div>`).join('');
+}
+
+// ══════════════════════════
+// LOAD CHAPTERS
+// ══════════════════════════
+async function loadChapters() {
+  const { data } = await sb.from('chapters')
+    .select('id, chapter_number, title, published_at, is_published')
+    .eq('book_id', bookId)
+    .eq('is_published', true)
+    .order('chapter_number', { ascending: true });
+  chapters = data || [];
+  document.getElementById('chapters-count').textContent = `${chapters.length} chapter${chapters.length !== 1 ? 's' : ''}`;
+  const list = document.getElementById('chapters-list');
+  if (!chapters.length) {
+    list.innerHTML = `<div style="text-align:center;color:var(--muted);padding:40px;font-size:14px;">No chapters published yet. Check back soon!</div>`;
+    return;
+  }
+  list.innerHTML = chapters.map(ch => `
+  <div class="chapter-item" onclick="window.location='read.html?book=${bookId}&chapter=${ch.chapter_number}'">
+    <div class="chapter-num">${ch.chapter_number}</div>
+    <div class="chapter-info">
+      <div class="chapter-title">${ch.title || `Chapter ${ch.chapter_number}`}</div>
+      <div class="chapter-date">${ch.published_at ? new Date(ch.published_at).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'}) : 'Recently published'}</div>
+    </div>
+    <div class="chapter-arrow">›</div>
+  </div>`).join('');
+}
+
+// ══════════════════════════
+// LOAD REVIEWS
+// ══════════════════════════
+async function loadReviews() {
+  const { data } = await sb.from('reviews')
+    .select('*, users(full_name, username)')
+    .eq('book_id', bookId)
+    .order('created_at', { ascending: false });
+  const reviews = data || [];
+
+  // Hide review form if not logged in or already reviewed
+  if (!currentUser) {
+    document.getElementById('review-form-wrap').innerHTML =
+      `<p style="text-align:center;color:var(--muted);font-size:14px;padding:20px;">
+        <a href="login.html" style="color:var(--red);">Login</a> to write a review.
+      </p>`;
+  } else {
+    const already = reviews.find(r => r.user_id === currentUser.id);
+    if (already) {
+      document.getElementById('review-form-wrap').innerHTML =
+        `<p style="text-align:center;color:var(--muted);font-size:13px;padding:16px;">You have already reviewed this book.</p>`;
+    }
+  }
+
+  const list = document.getElementById('reviews-list');
+  if (!reviews.length) {
+    list.innerHTML = `<div style="text-align:center;color:var(--muted);padding:32px;font-size:14px;">No reviews yet. Be the first!</div>`;
+    return;
+  }
+  list.innerHTML = reviews.map(r => {
+    const name = r.users?.full_name || r.users?.username || 'Reader';
+    return `
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">${name[0].toUpperCase()}</div>
+        <div>
+          <div class="review-username">${name}</div>
+        </div>
+        <div class="review-date">${new Date(r.created_at).toLocaleDateString('en-IN',{month:'short',day:'numeric',year:'numeric'})}</div>
+      </div>
+      <div class="review-stars">${'★'.repeat(r.rating||0)}${'☆'.repeat(5-(r.rating||0))}</div>
+      <div class="review-text">${r.comment || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════
+// SUBMIT REVIEW
+// ══════════════════════════
+function setRating(n) {
+  userRating = n;
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('active', i < n);
+  });
+}
+
+async function submitReview() {
+  if (!currentUser) return showToast('Please login to review.', 'error');
+  if (!userRating)  return showToast('Please select a star rating.', 'error');
+  const comment = document.getElementById('review-text').value.trim();
+
+  const { error } = await sb.from('reviews').insert({
+    book_id: bookId, user_id: currentUser.id,
+    rating: userRating, comment
+  });
+  if (error) {
+    if (error.code === '23505') return showToast('You have already reviewed this book.', 'error');
+    return showToast(error.message, 'error');
+  }
+  // Update review count on book
+  await sb.from('books').update({ total_reviews: (bookData.total_reviews||0) + 1 }).eq('id', bookId);
+  showToast('Review posted!', 'success');
+  loadReviews();
+}
+
+// ══════════════════════════
+// FOLLOW / UNFOLLOW
+// ══════════════════════════
+async function toggleFollow() {
+  if (!currentUser) { window.location.href = 'login.html'; return; }
+  const btn = document.getElementById('follow-btn');
+  if (isFollowing) {
+    const { error } = await sb.from('followers').delete()
+      .eq('book_id', bookId).eq('user_id', currentUser.id);
+    if (error) return showToast(error.message, 'error');
+    isFollowing = false;
+    await sb.from('books').update({ total_followers: Math.max(0,(bookData.total_followers||0)-1) }).eq('id', bookId);
+    btn.textContent = '+ Follow';
+    btn.className = 'btn-follow not-following';
+    showToast('Unfollowed.', 'success');
+  } else {
+    const { error } = await sb.from('followers').insert({ book_id: bookId, user_id: currentUser.id });
+    if (error) return showToast(error.message, 'error');
+    isFollowing = true;
+    await sb.from('books').update({ total_followers: (bookData.total_followers||0)+1 }).eq('id', bookId);
+    btn.textContent = '✓ Following';
+    btn.className = 'btn-follow following';
+    showToast('Following! You will get updates.', 'success');
+  }
+}
+
+// ══════════════════════════
+// LOAD RELATED BOOKS
+// ══════════════════════════
+async function loadRelated() {
+  if (!bookData) return;
+  const { data } = await sb.from('books')
+    .select('id, title, cover_image, total_views, users(username)')
+    .eq('type', bookData.type)
+    .neq('id', bookId)
+    .order('total_views', { ascending: false })
+    .limit(5);
+  const el = document.getElementById('related-books');
+  if (!data?.length) { el.innerHTML = '<p style="font-size:13px;color:var(--muted);">No related books yet.</p>'; return; }
+  el.innerHTML = data.map(b => `
+  <div class="related-book" onclick="window.location='book-detail.html?id=${b.id}'">
+    ${b.cover_image
+      ? `<img class="related-cover" src="${b.cover_image}" alt="${b.title}" loading="lazy"/>`
+      : `<div class="related-cover" style="display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);">—</div>`}
+    <div class="related-info">
+      <div class="related-title">${b.title}</div>
+      <div class="related-author">${b.users?.username||'—'}</div>
+      <div class="related-views">👁 ${fmtNum(b.total_views||0)}</div>
+    </div>
+  </div>`).join('');
+}
+
+// ══════════════════════════
+// TRACK VIEW
+// ══════════════════════════
+async function trackView() {
+  // Increment view count once per session
+  const key = `viewed_${bookId}`;
+  if (sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key, '1');
+  const { data: b } = await sb.from('books').select('total_views').eq('id', bookId).single();
+  if (b) await sb.from('books').update({ total_views: (b.total_views||0)+1 }).eq('id', bookId);
+}
+
+// ══════════════════════════
+// TABS
+// ══════════════════════════
+function switchTab(name) {
+  ['about','chapters','reviews'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['about','chapters','reviews'][i] === name);
+  });
+}
+
+// ══════════════════════════
+// SHARE
+// ══════════════════════════
+function shareBook(platform) {
+  const url   = encodeURIComponent(window.location.href);
+  const title = encodeURIComponent(bookData?.title || 'VoomComix');
+  const links = {
+    whatsapp: `https://wa.me/?text=${title}%20on%20VoomComix%20${url}`,
+    twitter:  `https://twitter.com/intent/tweet?text=Reading%20${title}%20on%20VoomComix&url=${url}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+    copy:     null,
+  };
+  if (platform === 'copy') {
+    navigator.clipboard.writeText(window.location.href);
+    showToast('Link copied!', 'success');
+    return;
+  }
+  window.open(links[platform], '_blank');
+}
+
+// ══════════════════════════
+// HEADER AUTH
+// ══════════════════════════
+async function renderHeaderAuth() {
+  const el = document.getElementById('header-auth');
+  if (currentUser) {
+    const profile = await getUserProfile(currentUser.id);
+    const init = (profile?.full_name || currentUser.email || 'U')[0].toUpperCase();
+    el.innerHTML = `
+    <div style="position:relative;">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;cursor:pointer;border:2px solid rgba(232,52,28,.3);"
+        onclick="document.getElementById('hdr-drop').classList.toggle('open')">${init}</div>
+      <div id="hdr-drop" style="position:absolute;top:44px;right:0;background:var(--bg3);border:1px solid var(--border);border-radius:10px;min-width:160px;padding:6px;display:none;z-index:200;">
+        ${profile?.role==='writer' ? '<a href="writer-dashboard.html" style="display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--white);" onmouseover="this.style.background=\'var(--bg2)\'" onmouseout="this.style.background=\'\'">Writer Dashboard</a>' : ''}
+        <a href="index.html" style="display:block;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--white);" onmouseover="this.style.background=\'var(--bg2)\'" onmouseout="this.style.background=\'\'">Home</a>
+        <button onclick="signOut()" style="display:block;width:100%;padding:8px 12px;border-radius:6px;font-size:13px;color:var(--white);background:none;border:none;cursor:pointer;text-align:left;" onmouseover="this.style.background=\'var(--bg2)\'" onmouseout="this.style.background=\'\'">Sign Out</button>
+      </div>
+    </div>`;
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#header-auth')) document.getElementById('hdr-drop')?.classList.remove('open');
+    });
+  } else {
+    el.innerHTML = `
+    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+    <a href="login.html?tab=signup" class="btn btn-red btn-sm">Sign Up</a>`;
+  }
+}
+
+// ══════════════════════════
+// UTILS
+// ══════════════════════════
+function fmtNum(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000)    return (n/1000).toFixed(1)+'K';
+  return n;
+}
+
+let toastTimer;
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = '', 3500);
+}
+</script>
+
+</body>
+</html>
+```
+
+---
+
+## Commit Karo
+
+**Ctrl+S** → Source Control → message:
+```
+Add book-detail.html - book page with chapters, reviews, follow
