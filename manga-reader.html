@@ -3,376 +3,304 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Manga Reader — VoomComix</title>
+<title>Reader — VoomComix</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#1a1410;--card:#211c17;--red:#c0392b;--gold:#d4820a;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);}
 *{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#0f0d14;--card:#16131e;--red:#c0392b;--red2:#e04030;--gold:#f0a500;--white:#fdfaf4;--muted:#7a6a7a;--border:rgba(255,255,255,.08);--teal:#0a7c6e;}
 body{background:var(--bg);color:var(--white);font-family:'Rajdhani',sans-serif;}
+body.light-mode{--bg:#f0ece6;--card:#fff;--white:#1a1410;--muted:#6b5a4e;--border:rgba(0,0,0,.1);}
 a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'Rajdhani';}
 
-/* NAV */
-#read-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;z-index:200;transition:width .1s;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,20,16,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;}
-.logo{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.1em;color:var(--white);}
-.logo .v{color:var(--red);}
-.nav-center{font-size:.75rem;font-weight:600;letter-spacing:.1em;color:var(--muted);text-align:center;}
-.nav-r{display:flex;align-items:center;gap:12px;}
-.nav-btn{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--muted);padding:5px 12px;cursor:pointer;transition:all .2s;}
-.nav-btn:hover{border-color:var(--red);color:var(--red);}
-.nav-btn.back{color:var(--white);border-color:rgba(245,239,230,.2);}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,13,20,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;padding:0 16px;gap:10px;transition:transform .3s;}
+.topbar.hide{transform:translateY(-100%);}
+body.light-mode .topbar{background:rgba(255,255,255,.97);}
+.tb-logo{font-family:'Bebas Neue';font-size:1.2rem;letter-spacing:.1em;color:var(--white);flex-shrink:0;}
+.tb-logo span{color:var(--red2);}
+.tb-sep{color:rgba(255,255,255,.2);font-size:.8rem;}
+.tb-story{font-size:.66rem;font-weight:700;color:var(--muted);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
+.tb-chapter{font-size:.68rem;font-weight:700;color:var(--white);flex-shrink:0;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:5px;}
+.tb-btn{background:transparent;border:1.5px solid var(--border);border-radius:6px;color:var(--muted);padding:4px 9px;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;white-space:nowrap;}
+.tb-btn:hover,.tb-btn.on{border-color:rgba(255,255,255,.4);color:var(--white);}
 
-/* CHAPTER HEADER */
-.ch-header{padding:74px 0 24px;text-align:center;border-bottom:1px solid var(--border);background:var(--card);}
-.ch-type-badge{font-size:.62rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;padding:4px 12px;background:rgba(192,57,43,.2);border:1px solid rgba(192,57,43,.3);color:var(--red);display:inline-block;margin-bottom:10px;}
-.ch-story-title{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.05em;margin-bottom:4px;}
-.ch-num{font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+.progress-bar{position:fixed;top:54px;left:0;right:0;z-index:99;height:3px;background:rgba(255,255,255,.07);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;transition:width .15s;}
 
-/* CHAPTER NAV BAR */
-.ch-nav{display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 32px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:54px;z-index:90;}
-.ch-select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);padding:7px 14px;font-family:'Rajdhani';font-size:.8rem;font-weight:600;letter-spacing:.06em;cursor:pointer;outline:none;}
-.ch-nav-btn{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);padding:7px 16px;cursor:pointer;transition:all .2s;}
-.ch-nav-btn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
-.ch-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
-.ch-page-count{font-size:.72rem;font-weight:600;letter-spacing:.1em;color:var(--muted);}
+.ch-dropdown{position:fixed;top:57px;left:0;right:0;z-index:98;background:rgba(15,13,20,.98);border-bottom:1px solid var(--border);padding:14px 20px;display:none;max-height:260px;overflow-y:auto;}
+body.light-mode .ch-dropdown{background:rgba(255,255,255,.98);}
+.ch-dropdown.open{display:block;}
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;}
+.ch-opt{padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:.66rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;background:transparent;color:var(--white);}
+.ch-opt:hover{border-color:var(--red2);color:var(--red2);}
+.ch-opt.cur{background:var(--red);border-color:var(--red);color:#fff;}
 
-/* MANGA SCROLL PAGES */
-.manga-wrap{max-width:800px;margin:0 auto;padding:0 0 80px;}
-.manga-page{width:100%;display:block;position:relative;background:var(--card);}
+.reader-wrap{padding-top:57px;}
+
+/* MANGA — vertical */
+.manga-pages{display:flex;flex-direction:column;align-items:center;gap:2px;max-width:800px;margin:0 auto;}
+.manga-page{width:100%;line-height:0;}
 .manga-page img{width:100%;height:auto;display:block;}
-.manga-page .empty-page{width:100%;min-height:500px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid var(--border);background:var(--card);}
-.manga-page .empty-page .page-num{font-family:'Bebas Neue';font-size:3rem;color:rgba(245,239,230,.05);margin-bottom:12px;}
-.manga-page .empty-page p{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,239,230,.15);}
+.page-err{width:100%;aspect-ratio:3/4;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.75rem;}
 
-/* PAGE NUMBER OVERLAY */
-.page-num-overlay{position:absolute;bottom:10px;right:12px;font-family:'Bebas Neue';font-size:.9rem;letter-spacing:.1em;color:rgba(245,239,230,.3);background:rgba(0,0,0,.4);padding:2px 8px;}
+/* COMIC — single page */
+.comic-reader{display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:calc(100vh - 57px);padding:16px 16px 0;}
+.comic-img-wrap{max-width:920px;width:100%;}
+.comic-img{width:100%;height:auto;max-height:calc(100vh - 140px);object-fit:contain;display:block;margin:0 auto;}
+.comic-nav{display:flex;align-items:center;justify-content:center;gap:16px;padding:16px 0 20px;}
+.cnav-btn{background:var(--card);border:1.5px solid var(--border);color:var(--white);padding:9px 22px;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:7px;transition:all .2s;}
+.cnav-btn:hover:not(:disabled){border-color:var(--white);}
+.cnav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.comic-counter{font-size:.75rem;font-weight:700;color:var(--muted);min-width:60px;text-align:center;}
 
-/* CHAPTER END */
-.chapter-end{text-align:center;padding:60px 20px;border-top:1px solid var(--border);}
-.chapter-end h3{font-family:'Bebas Neue';font-size:1.8rem;letter-spacing:.06em;margin-bottom:8px;}
-.chapter-end h3 span{color:var(--red);}
-.chapter-end p{font-size:.82rem;color:var(--muted);letter-spacing:.08em;margin-bottom:24px;}
-.end-btns{display:flex;gap:12px;justify-content:center;}
-.btn-r{font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;background:var(--red);color:#fff;border:none;cursor:pointer;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);transition:background .2s;}
-.btn-r:hover{background:var(--gold);}
-.btn-g{font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 24px;background:transparent;color:var(--white);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
-.btn-g:hover{border-color:var(--white);}
-
-/* LIKE / COMMENT SECTION */
-.interact-section{max-width:800px;margin:0 auto;padding:32px 20px;border-top:2px solid var(--border);}
-.interact-row{display:flex;gap:12px;align-items:center;margin-bottom:28px;}
-.like-btn{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;letter-spacing:.1em;padding:9px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
-.like-btn:hover,.like-btn.liked{border-color:var(--red);color:var(--red);background:rgba(192,57,43,.1);}
-.follow-btn{display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;letter-spacing:.1em;padding:9px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
-.follow-btn:hover,.follow-btn.following{border-color:var(--gold);color:var(--gold);background:rgba(212,130,10,.1);}
-.share-btn{font-size:.78rem;font-weight:700;letter-spacing:.1em;padding:9px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s;}
-.share-btn:hover{border-color:rgba(245,239,230,.3);color:var(--white);}
+/* CHAPTER NAV */
+.ch-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:800px;margin:24px auto 0;padding:0 16px 60px;}
+.cnb{display:flex;align-items:center;gap:6px;padding:11px 18px;border:1.5px solid var(--border);border-radius:9px;background:transparent;color:var(--white);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;cursor:pointer;}
+.cnb:hover:not(.off){border-color:var(--white);}
+.cnb.off{opacity:.3;cursor:not-allowed;pointer-events:none;}
+.cnb.main{background:var(--red);border-color:var(--red);}
+.cnb.main:hover{background:var(--red2);}
+.ch-nav-mid{font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;}
 
 /* COMMENTS */
-.comments-head{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;margin-bottom:16px;}
-.comments-head span{color:var(--red);}
-.comment-form{display:flex;gap:0;margin-bottom:24px;}
-.comment-form input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-right:none;color:var(--white);padding:10px 14px;font-family:'Rajdhani';font-size:.85rem;outline:none;}
-.comment-form input:focus{border-color:rgba(192,57,43,.4);}
-.comment-form input::placeholder{color:rgba(245,239,230,.2);}
-.comment-form button{background:var(--red);color:#fff;border:none;padding:10px 18px;font-family:'Rajdhani';font-size:.78rem;font-weight:700;letter-spacing:.12em;cursor:pointer;}
-.comment-list{display:flex;flex-direction:column;gap:12px;}
-.comment-item{background:rgba(255,255,255,.03);border:1px solid var(--border);padding:12px 16px;}
-.comment-user{font-size:.72rem;font-weight:700;letter-spacing:.1em;color:var(--gold);margin-bottom:4px;}
-.comment-text{font-size:.85rem;line-height:1.5;color:rgba(245,239,230,.7);}
-.comment-time{font-size:.62rem;color:rgba(245,239,230,.25);margin-top:4px;}
-.no-comments{font-size:.78rem;color:rgba(245,239,230,.2);letter-spacing:.1em;text-align:center;padding:20px;}
+.cmts{max-width:800px;margin:0 auto;padding:0 16px 80px;}
+.cmts-title{font-size:.66rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.cmt-form{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:13px;margin-bottom:12px;}
+.cmt-input{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Rajdhani';font-size:.84rem;outline:none;resize:none;min-height:60px;background:var(--bg);color:var(--white);transition:border-color .2s;}
+.cmt-input:focus{border-color:var(--red);}
+.cmt-input:disabled{opacity:.4;cursor:not-allowed;}
+.cmt{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px;margin-bottom:8px;}
+.cmt-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.cmt-av{width:25px;height:25px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;}
+.cmt-av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.cmt-name{font-size:.72rem;font-weight:700;}
+.cmt-time{font-size:.57rem;color:var(--muted);margin-left:auto;}
+.cmt-text{font-size:.8rem;line-height:1.6;}
 
-/* FLOAT */
-.float-top{position:fixed;bottom:24px;right:20px;background:var(--card);border:1px solid var(--border);width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;transition:border-color .2s;z-index:99;}
-.float-top:hover{border-color:var(--red);}
+#toast{position:fixed;bottom:20px;right:20px;background:#1a1410;color:#fff;padding:11px 15px;border-radius:8px;font-size:.76rem;font-weight:600;z-index:9999;transform:translateY(70px);opacity:0;transition:all .3s;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:var(--teal);}
+#toast.err{background:var(--red);}
 
-@media(max-width:600px){nav{padding:0 16px;}.ch-nav{flex-wrap:wrap;gap:8px;}}
+.empty{text-align:center;padding:28px;color:var(--muted);font-size:.78rem;}
+
+@media(max-width:600px){.tb-story,.tb-sep{display:none;}.ch-nav-mid{display:none;}}
 </style>
 </head>
 <body>
-<div id="read-progress"></div>
 
-<nav>
-  <a href="index.html" class="logo"><span class="v">V</span>OOMCOMIX</a>
-  <div class="nav-center" id="nav-title">Manga Reader</div>
-  <div class="nav-r">
-    <a href="#" id="back-btn" class="nav-btn back">← Back</a>
+<div class="topbar" id="topbar">
+  <a href="index.html" class="tb-logo">VOOM<span>COMIX</span></a>
+  <span class="tb-sep">›</span>
+  <span class="tb-story" id="tb-story"></span>
+  <span class="tb-sep">›</span>
+  <span class="tb-chapter" id="tb-chapter">Loading...</span>
+  <div class="tb-right">
+    <button class="tb-btn" id="btn-chl" onclick="toggleChList()">📋 Chapters</button>
+    <button class="tb-btn" id="btn-mode" onclick="toggleMode()" style="display:none;">📄 Pages</button>
+    <button class="tb-btn" id="btn-light" onclick="toggleLight()">☀️</button>
+    <button class="tb-btn" onclick="location.href='story.html?id='+storyId">📖 Story</button>
   </div>
-</nav>
-
-<div id="manga-main">
-  <div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">Loading…</div>
 </div>
 
-<div class="float-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+<div class="progress-bar"><div class="progress-fill" id="pfill"></div></div>
+
+<div class="ch-dropdown" id="ch-dropdown">
+  <div style="font-size:.56rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Jump to Chapter</div>
+  <div class="ch-grid" id="ch-grid"></div>
+</div>
+
+<div class="reader-wrap">
+  <div class="manga-pages" id="manga-pages"></div>
+  <div class="comic-reader" id="comic-reader">
+    <div class="comic-img-wrap">
+      <img class="comic-img" id="comic-img" src="" alt=""/>
+    </div>
+    <div class="comic-nav">
+      <button class="cnav-btn" id="cprev" onclick="comicPrev()">← Prev</button>
+      <span class="comic-counter" id="ccounter">—</span>
+      <button class="cnav-btn" id="cnext" onclick="comicNext()">Next →</button>
+    </div>
+  </div>
+
+  <div class="ch-nav">
+    <button class="cnb off" id="btn-prev" onclick="goPrev()">← Prev</button>
+    <div class="ch-nav-mid" id="ch-nav-mid">—</div>
+    <button class="cnb main off" id="btn-next" onclick="goNext()">Next →</button>
+  </div>
+
+  <div class="cmts">
+    <div class="cmts-title">💬 Chapter Comments</div>
+    <div class="cmt-form">
+      <textarea class="cmt-input" id="cmt-input" rows="3" placeholder="Write a comment..."></textarea>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:7px;">
+        <span style="font-size:.63rem;color:var(--muted);" id="cmt-hint"></span>
+        <button style="background:var(--red);color:#fff;border:none;border-radius:6px;padding:5px 13px;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;" id="cmt-btn" onclick="postComment()">Post</button>
+      </div>
+    </div>
+    <div id="cmts-list"><div class="empty">Loading...</div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="vc-config.js"></script>
 <script>
-const p = new URLSearchParams(location.search);
-const storyId = p.get('id');
-let chId = p.get('ch');          // can be UUID or chapter_number
-let allChapters = [];
-let storyData   = null;
+const SURL='https://gcpbvzyndmwdlvopftma.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+let _sb=null;
+const sb=()=>{if(_sb)return _sb;_sb=(typeof getSupabase==='function')?getSupabase():window.supabase.createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true}});return _sb;};
 
-// ── progress bar ──
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  document.getElementById('read-progress').style.width =
-    ((h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100) + '%';
+const params=new URLSearchParams(location.search);
+const storyId=params.get('story');
+const chapterId=params.get('chapter');
+
+let story=null,chapter=null,allChapters=[],pages=[],currentUser=null;
+let cPage=0,readerMode='manga';
+let lightMode=localStorage.getItem('vc-light')==='1';
+let lastScroll=0;
+
+function toast(msg,t='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='show '+t;clearTimeout(el._t);el._t=setTimeout(()=>el.className='',3000);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function ago(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return new Date(d).toLocaleDateString('en-IN');}
+
+async function init(){
+  if(!storyId||!chapterId){location.href='index.html';return;}
+  applyLight();
+  try{const{data:{user}}=await sb().auth.getUser();currentUser=user;}catch(e){}
+  await load();
+  window.addEventListener('scroll',()=>{
+    const cur=window.scrollY;
+    document.getElementById('topbar').classList.toggle('hide',cur>lastScroll&&cur>120);
+    lastScroll=cur;
+    updateProg();
+  },{passive:true});
+}
+
+async function load(){
+  try{
+    const[{data:s},{data:chs},{data:ch}]=await Promise.all([
+      sb().from('stories').select('id,title,type').eq('id',storyId).single(),
+      sb().from('chapters').select('id,chapter_number,title').eq('story_id',storyId).order('chapter_number',{ascending:true}),
+      sb().from('chapters').select('*').eq('id',chapterId).single()
+    ]);
+    if(!s||!ch){location.href='stories.html';return;}
+    story=s;chapter=ch;allChapters=chs||[];
+    document.title='Ch.'+ch.chapter_number+': '+ch.title+' — '+s.title+' — VoomComix';
+    document.getElementById('tb-story').textContent=s.title;
+    document.getElementById('tb-chapter').textContent='Ch.'+ch.chapter_number+': '+ch.title;
+
+    readerMode=s.type==='comic'?'comic':'manga';
+    const mb=document.getElementById('btn-mode');
+    mb.style.display='inline-block';
+    mb.textContent=readerMode==='comic'?'📜 Scroll':'📄 Pages';
+
+    const{data:pgs}=await sb().from('chapter_pages').select('*').eq('chapter_id',chapterId).order('page_number',{ascending:true});
+    pages=pgs||[];
+
+    setupNav();buildChGrid();renderReader();loadComments();
+
+    // track view
+    try{const{data:sv}=await sb().from('stories').select('total_views').eq('id',storyId).single();if(sv)sb().from('stories').update({total_views:(sv.total_views||0)+1}).eq('id',storyId);}catch(e){}
+  }catch(e){console.error(e);document.getElementById('manga-pages').innerHTML='<div style="text-align:center;padding:80px;color:var(--red);">Error loading. Please refresh.</div>';}
+}
+
+function renderReader(){
+  if(readerMode==='comic'){
+    document.getElementById('manga-pages').style.display='none';
+    document.getElementById('comic-reader').style.display='flex';
+    cPage=0;showComic(0);
+  } else {
+    document.getElementById('comic-reader').style.display='none';
+    document.getElementById('manga-pages').style.display='flex';
+    if(!pages.length){document.getElementById('manga-pages').innerHTML='<div style="text-align:center;padding:80px 20px;color:var(--muted);">No pages uploaded yet.</div>';return;}
+    document.getElementById('manga-pages').innerHTML=pages.map((p,i)=>`<div class="manga-page"><img src="${esc(p.image_url)}" alt="Page ${i+1}" loading="${i<2?'eager':'lazy'}" onerror="this.outerHTML='<div class=page-err>Page ${i+1} — not found</div>'"/></div>`).join('');
+  }
+}
+
+function showComic(i){
+  if(!pages.length){document.getElementById('ccounter').textContent='No pages';return;}
+  cPage=Math.max(0,Math.min(i,pages.length-1));
+  document.getElementById('comic-img').src=pages[cPage].image_url;
+  document.getElementById('ccounter').textContent=(cPage+1)+' / '+pages.length;
+  document.getElementById('cprev').disabled=cPage===0;
+  document.getElementById('cnext').disabled=cPage===pages.length-1;
+  updateProg();window.scrollTo({top:0,behavior:'smooth'});
+}
+function comicPrev(){if(cPage>0)showComic(cPage-1);}
+function comicNext(){if(cPage<pages.length-1)showComic(cPage+1);else goNext();}
+
+function updateProg(){
+  let p=0;
+  if(readerMode==='comic'&&pages.length)p=Math.round(((cPage+1)/pages.length)*100);
+  else{const t=document.body.scrollHeight-window.innerHeight;if(t>0)p=Math.round((window.scrollY/t)*100);}
+  document.getElementById('pfill').style.width=Math.min(100,p)+'%';
+}
+
+function toggleMode(){
+  readerMode=readerMode==='manga'?'comic':'manga';
+  document.getElementById('btn-mode').textContent=readerMode==='comic'?'📜 Scroll':'📄 Pages';
+  renderReader();
+}
+function toggleLight(){lightMode=!lightMode;localStorage.setItem('vc-light',lightMode?'1':'0');applyLight();}
+function applyLight(){document.body.classList.toggle('light-mode',lightMode);document.getElementById('btn-light').textContent=lightMode?'🌙':'☀️';}
+
+function setupNav(){
+  const idx=allChapters.findIndex(c=>c.id===chapterId);
+  const prev=allChapters[idx-1],next=allChapters[idx+1];
+  document.getElementById('ch-nav-mid').textContent='Chapter '+chapter.chapter_number+' of '+allChapters.length;
+  const pb=document.getElementById('btn-prev'),nb=document.getElementById('btn-next');
+  if(prev){pb.classList.remove('off');pb.textContent='← Ch.'+prev.chapter_number;}else{pb.classList.add('off');pb.textContent='← First';}
+  if(next){nb.classList.remove('off');nb.textContent='Ch.'+next.chapter_number+' →';}else{nb.classList.add('off');nb.textContent='Last →';}
+  window._pId=prev?.id||null;window._nId=next?.id||null;
+}
+function goPrev(){if(window._pId)location.href='manga-reader.html?story='+storyId+'&chapter='+window._pId;}
+function goNext(){if(window._nId)location.href='manga-reader.html?story='+storyId+'&chapter='+window._nId;}
+
+function buildChGrid(){
+  document.getElementById('ch-grid').innerHTML=allChapters.map(c=>`<div class="ch-opt ${c.id===chapterId?'cur':''}" onclick="location.href='manga-reader.html?story=${storyId}&chapter=${c.id}'">Ch.${c.chapter_number}<br/><span style="font-size:.56rem;font-weight:400;opacity:.6;">${esc(c.title)}</span></div>`).join('');
+}
+function toggleChList(){
+  const el=document.getElementById('ch-dropdown');el.classList.toggle('open');
+  document.getElementById('btn-chl').classList.toggle('on',el.classList.contains('open'));
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#ch-dropdown')&&!e.target.closest('#btn-chl')){document.getElementById('ch-dropdown').classList.remove('open');document.getElementById('btn-chl').classList.remove('on');}
+});
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='TEXTAREA')return;
+  if(e.key==='ArrowLeft')readerMode==='comic'?comicPrev():goPrev();
+  if(e.key==='ArrowRight')readerMode==='comic'?comicNext():goNext();
+  if(e.key==='l')toggleLight();
+  if(e.key==='m')toggleMode();
 });
 
-// ── MAIN INIT ──
-async function init() {
-  if (!storyId) { showError('No story ID in URL.'); return; }
-
-  // Load story
-  const { data: story, error: sErr } = await sb()
-    .from('stories')
-    .select('*, profiles(display_name, username)')
-    .eq('id', storyId)
-    .single();
-
-  if (sErr || !story) { showError('Story not found.'); return; }
-  storyData = story;
-
-  document.title = story.title + ' — VoomComix Manga';
-  document.getElementById('back-btn').href = 'story.html?id=' + storyId;
-
-  // Load all chapters
-  const { data: chapters } = await sb()
-    .from('chapters')
-    .select('*')
-    .eq('story_id', storyId)
-    .order('chapter_number', { ascending: true });
-
-  allChapters = chapters || [];
-  if (!allChapters.length) { showError('No chapters yet.'); return; }
-
-  // Resolve which chapter to show
-  let ch = allChapters.find(c => c.id === chId)
-        || allChapters.find(c => String(c.chapter_number) === String(chId))
-        || allChapters[0];
-
-  renderManga(ch);
+async function loadComments(){
+  const{data:cms}=await sb().from('comments').select(`id,content,created_at,profiles!user_id(display_name,username,avatar_url)`).eq('chapter_id',chapterId).order('created_at',{ascending:false}).limit(30);
+  const list=cms||[];
+  const inp=document.getElementById('cmt-input'),hint=document.getElementById('cmt-hint'),btn=document.getElementById('cmt-btn');
+  if(currentUser){inp.disabled=false;inp.placeholder='Write a comment...';hint.textContent='';btn.style.display='inline-block';}
+  else{inp.disabled=true;inp.placeholder='Login to comment';hint.innerHTML='<a href="login.html" style="color:var(--red2);">Login</a> to comment';btn.style.display='none';}
+  if(!list.length){document.getElementById('cmts-list').innerHTML='<div class="empty">No comments yet. Be the first!</div>';return;}
+  document.getElementById('cmts-list').innerHTML=list.map(c=>{
+    const p=c.profiles;const nm=p?.display_name||p?.username||'Reader';
+    const av=p?.avatar_url?`<div class="cmt-av"><img src="${esc(p.avatar_url)}"/></div>`:`<div class="cmt-av">${nm[0].toUpperCase()}</div>`;
+    return`<div class="cmt"><div class="cmt-top">${av}<span class="cmt-name">${esc(nm)}</span><span class="cmt-time">${ago(c.created_at)}</span></div><div class="cmt-text">${esc(c.content)}</div></div>`;
+  }).join('');
 }
 
-// ── RENDER ──
-async function renderManga(ch) {
-  if (!ch) return;
-  chId = ch.id;
-  const chIdx = allChapters.findIndex(c => c.id === ch.id);
-
-  document.getElementById('nav-title').textContent = storyData.title + ' · Ch ' + ch.chapter_number;
-  document.title = 'Ch ' + ch.chapter_number + ': ' + (ch.title || '') + ' — ' + storyData.title;
-
-  // Load pages
-  const { data: pages } = await sb()
-    .from('chapter_pages')
-    .select('*')
-    .eq('chapter_id', ch.id)
-    .order('page_number', { ascending: true });
-
-  const pageList = pages || [];
-
-  // Chapter select options
-  const chOptions = allChapters.map(c =>
-    `<option value="${c.id}" ${c.id === ch.id ? 'selected' : ''}>
-      Ch ${c.chapter_number}${c.title ? ': ' + c.title : ''}
-    </option>`
-  ).join('');
-
-  // Pages HTML
-  let pagesHTML = '';
-  if (pageList.length) {
-    pageList.forEach((pg, i) => {
-      if (pg.image_url) {
-        pagesHTML += `<div class="manga-page">
-          <img src="${pg.image_url}" alt="Page ${i + 1}" loading="lazy"/>
-          <span class="page-num-overlay">${i + 1}</span>
-        </div>`;
-      } else {
-        pagesHTML += `<div class="manga-page"><div class="empty-page">
-          <div class="page-num">${i + 1}</div>
-          <p>Page ${i + 1} — Image not uploaded yet</p>
-        </div><span class="page-num-overlay">${i + 1}</span></div>`;
-      }
-    });
-  } else {
-    // No pages uploaded yet — show placeholder
-    for (let i = 0; i < 5; i++) {
-      pagesHTML += `<div class="manga-page"><div class="empty-page">
-        <div class="page-num">${i + 1}</div>
-        <p>Page ${i + 1} — No pages uploaded yet</p>
-      </div></div>`;
-    }
-  }
-
-  // Like state (localStorage for guests)
-  const likes  = JSON.parse(localStorage.getItem('vc-likes')  || '{}');
-  const follows= JSON.parse(localStorage.getItem('vc-follows') || '{}');
-  const isLiked     = !!likes[storyId];
-  const isFollowing = !!follows[storyId];
-
-  // Comments from Supabase
-  const { data: commentData } = await sb()
-    .from('comments')
-    .select('*, profiles(display_name, username)')
-    .eq('story_id', storyId)
-    .order('created_at', { ascending: false })
-    .limit(50);
-  const comments = commentData || [];
-
-  const commentsHTML = comments.length
-    ? comments.map(c => `
-        <div class="comment-item">
-          <div class="comment-user">${c.profiles?.display_name || c.profiles?.username || 'Reader'}</div>
-          <div class="comment-text">${escHtml(c.content || '')}</div>
-          <div class="comment-time">${timeAgo(c.created_at)}</div>
-        </div>`).join('')
-    : '<div class="no-comments">Be the first to comment!</div>';
-
-  document.getElementById('manga-main').innerHTML = `
-  <div class="ch-header">
-    <span class="ch-type-badge">🎌 Manga</span>
-    <div class="ch-story-title">${storyData.title}</div>
-    <div class="ch-num">Chapter ${ch.chapter_number}${ch.title ? ' — ' + ch.title : ''}</div>
-  </div>
-
-  <div class="ch-nav">
-    <button class="ch-nav-btn" ${chIdx === 0 ? 'disabled' : ''}
-      onclick="renderManga(allChapters[${chIdx - 1}])">← Prev</button>
-    <select class="ch-select" onchange="renderManga(allChapters.find(c=>c.id===this.value))">
-      ${chOptions}
-    </select>
-    <span class="ch-page-count">${pageList.length} pages</span>
-    <button class="ch-nav-btn" ${chIdx === allChapters.length - 1 ? 'disabled' : ''}
-      onclick="renderManga(allChapters[${chIdx + 1}])">Next →</button>
-  </div>
-
-  <div class="manga-wrap">${pagesHTML}
-
-    <div class="chapter-end">
-      <h3>CHAPTER <span>${ch.chapter_number}</span> END</h3>
-      <p>${chIdx === allChapters.length - 1
-        ? 'New chapter coming soon! Follow to get notified.'
-        : 'Continue to next chapter →'}</p>
-      <div class="end-btns">
-        ${chIdx < allChapters.length - 1
-          ? `<button class="btn-r" onclick="renderManga(allChapters[${chIdx + 1}])">Next Chapter →</button>`
-          : ''}
-        <button class="btn-g" onclick="location.href='story.html?id=${storyId}'">Chapter List</button>
-      </div>
-    </div>
-
-    <div class="interact-section">
-      <div class="interact-row">
-        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(this)">
-          ♥ <span id="like-count">${storyData.like_count || 0}</span> Likes
-        </button>
-        <button class="follow-btn ${isFollowing ? 'following' : ''}" onclick="toggleFollow(this)">
-          ${isFollowing ? '✓ Following' : '+ Follow'}
-        </button>
-        <button class="share-btn" onclick="copyLink()">🔗 Share</button>
-      </div>
-      <div class="comments-head">COMMENTS <span>(${comments.length})</span></div>
-      <div class="comment-form">
-        <input type="text" id="comment-input" placeholder="Write a comment…" maxlength="200"/>
-        <button onclick="postComment()">Post</button>
-      </div>
-      <div class="comment-list" id="comment-list">${commentsHTML}</div>
-    </div>
-  </div>`;
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+async function postComment(){
+  if(!currentUser){toast('Login to comment','err');return;}
+  const inp=document.getElementById('cmt-input');const text=inp.value.trim();if(!text){toast('Write something!','err');return;}
+  const btn=document.getElementById('cmt-btn');btn.disabled=true;btn.textContent='...';
+  try{await sb().from('comments').insert({story_id:storyId,chapter_id:chapterId,user_id:currentUser.id,content:text});inp.value='';await loadComments();toast('Posted! ✓');}
+  catch(e){toast('Error','err');}
+  btn.disabled=false;btn.textContent='Post';
 }
 
-// ── LIKE ──
-async function toggleLike(btn) {
-  const likes = JSON.parse(localStorage.getItem('vc-likes') || '{}');
-  const countEl = document.getElementById('like-count');
-  if (likes[storyId]) {
-    delete likes[storyId];
-    btn.classList.remove('liked');
-    countEl.textContent = Math.max(0, parseInt(countEl.textContent) - 1);
-    await sb().from('stories').update({ like_count: parseInt(countEl.textContent) }).eq('id', storyId);
-  } else {
-    likes[storyId] = 1;
-    btn.classList.add('liked');
-    countEl.textContent = parseInt(countEl.textContent) + 1;
-    await sb().from('stories').update({ like_count: parseInt(countEl.textContent) }).eq('id', storyId);
-  }
-  localStorage.setItem('vc-likes', JSON.stringify(likes));
-}
-
-// ── FOLLOW ──
-function toggleFollow(btn) {
-  const follows = JSON.parse(localStorage.getItem('vc-follows') || '{}');
-  if (follows[storyId]) {
-    delete follows[storyId];
-    btn.classList.remove('following');
-    btn.textContent = '+ Follow';
-  } else {
-    follows[storyId] = 1;
-    btn.classList.add('following');
-    btn.textContent = '✓ Following';
-  }
-  localStorage.setItem('vc-follows', JSON.stringify(follows));
-}
-
-// ── COMMENT ──
-async function postComment() {
-  const inp = document.getElementById('comment-input');
-  const val = inp.value.trim();
-  if (!val) return;
-
-  const user = await getCurrentUser();
-  if (!user) {
-    showToast('Please login to comment.', 'warning');
-    return;
-  }
-
-  const { error } = await sb().from('comments').insert({
-    story_id:   storyId,
-    user_id:    user.id,
-    content:    val,
-    chapter_id: chId
-  });
-
-  if (error) { showToast('Could not post comment.', 'error'); return; }
-
-  inp.value = '';
-  const profile = await getCurrentProfile();
-  const cl = document.getElementById('comment-list');
-  const newComment = `<div class="comment-item">
-    <div class="comment-user">${profile?.display_name || profile?.username || 'You'}</div>
-    <div class="comment-text">${escHtml(val)}</div>
-    <div class="comment-time">Just now</div>
-  </div>`;
-  cl.innerHTML = newComment + cl.innerHTML.replace('<div class="no-comments">Be the first to comment!</div>', '');
-}
-
-// ── SHARE ──
-function copyLink() {
-  navigator.clipboard.writeText(location.href)
-    .then(() => showToast('Link copied!'))
-    .catch(() => showToast('Copy this link: ' + location.href, 'info'));
-}
-
-// ── HELPERS ──
-function showError(msg) {
-  document.getElementById('manga-main').innerHTML =
-    `<div style="text-align:center;padding:200px 20px;font-size:.85rem;letter-spacing:.15em;color:#8a7a6a;">
-      ${msg} <a href="stories.html" style="color:#c0392b;">Back to Stories →</a>
-    </div>`;
-}
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ── START ──
 init();
 </script>
 </body>
