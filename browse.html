@@ -183,3 +183,312 @@ a{text-decoration:none;color:inherit;}
       <label class="filter-check"><input type="checkbox" value="drama" onchange="toggleGenre('drama')"/> 🎭 Drama</label>
       <label class="filter-check"><input type="checkbox" value="mystery" onchange="toggleGenre('mystery')"/> 🔍 Mystery</label>
       <label class="filter-check"><input type="checkbox" value="sci-fi" onchange="toggleGenre('sci-fi')"/> 🚀 Sci-Fi</label>
+      <label class="filter-check"><input type="checkbox" value="supernatural" onchange="toggleGenre('supernatural')"/> ✨ Supernatural</label>
+      <label class="filter-check"><input type="checkbox" value="adventure" onchange="toggleGenre('adventure')"/> 🗺️ Adventure</label>
+      <label class="filter-check"><input type="checkbox" value="isekai" onchange="toggleGenre('isekai')"/> 🌀 Isekai</label>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Rating</div>
+      <button class="filter-btn active" onclick="setWarning('')">All Ages & 18+</button>
+      <button class="filter-btn" onclick="setWarning('all')">🌐 All Ages Only</button>
+      <button class="filter-btn" onclick="setWarning('18+')">🔞 18+ Only</button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">Length</div>
+      <button class="filter-btn active" onclick="setLength('')">Any Length</button>
+      <button class="filter-btn" onclick="setLength('short')">Short</button>
+      <button class="filter-btn" onclick="setLength('medium')">Medium</button>
+      <button class="filter-btn" onclick="setLength('long')">Long</button>
+    </div>
+
+    <button class="clear-btn" onclick="clearFilters()">Clear All Filters</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="browse-main">
+    <div class="browse-header">
+      <div>
+        <h1 id="browse-title">Browse <span>Stories</span></h1>
+        <div class="results-count" id="results-count">Loading...</div>
+      </div>
+      <div class="sort-wrap">
+        <label>Sort:</label>
+        <select id="sort-select" onchange="setSort(this.value)">
+          <option value="new">Newest</option>
+          <option value="top">Most Views</option>
+          <option value="ranking">Top Ranked</option>
+          <option value="followers">Most Followed</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Active filter pills -->
+    <div class="active-filters" id="active-filters"></div>
+
+    <!-- Books Grid -->
+    <div class="books-grid" id="books-grid">
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+      <div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+  </main>
+</div>
+
+<script>
+// ══════════════════════════
+// STATE
+// ══════════════════════════
+let filters = {
+  type: '', sort: 'new', lang: '', genres: [],
+  warning: '', length: '', search: '', page: 1
+};
+const PER_PAGE = 24;
+let totalCount = 0;
+
+// ══════════════════════════
+// INIT — read URL params
+// ══════════════════════════
+(async () => {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('type'))   filters.type   = p.get('type');
+  if (p.get('sort'))   filters.sort   = p.get('sort');
+  if (p.get('genre'))  filters.genres = [p.get('genre')];
+  if (p.get('search')) filters.search = p.get('search');
+  if (p.get('lang'))   filters.lang   = p.get('lang');
+  document.getElementById('search-input').value = filters.search;
+  syncSidebarUI();
+  await loadBooks();
+})();
+
+// ══════════════════════════
+// LOAD BOOKS
+// ══════════════════════════
+async function loadBooks() {
+  const grid = document.getElementById('books-grid');
+  grid.innerHTML = Array(6).fill('<div class="skeleton" style="aspect-ratio:2/3;border-radius:10px;"></div>').join('');
+
+  let query = sb.from('books')
+    .select('id,title,type,cover_image,genre,language,total_views,total_followers,total_reviews,warning,length_type,unique_code,users(username)', { count: 'exact' })
+    .eq('status', 'active');
+
+  if (filters.type)   query = query.eq('type', filters.type);
+  if (filters.lang)   query = query.eq('language', filters.lang);
+  if (filters.warning) query = query.eq('warning', filters.warning);
+  if (filters.length) query = query.eq('length_type', filters.length);
+  if (filters.genres.length) query = query.overlaps('genre', filters.genres);
+  if (filters.search) {
+    query = query.or(`title.ilike.%${filters.search}%`);
+  }
+
+  // Sort
+  const sortMap = {
+    new:       { col: 'created_at', asc: false },
+    top:       { col: 'total_views', asc: false },
+    ranking:   { col: 'total_reviews', asc: false },
+    followers: { col: 'total_followers', asc: false },
+  };
+  const s = sortMap[filters.sort] || sortMap.new;
+  query = query.order(s.col, { ascending: s.asc });
+
+  // Pagination
+  const from = (filters.page - 1) * PER_PAGE;
+  query = query.range(from, from + PER_PAGE - 1);
+
+  const { data, count, error } = await query;
+  totalCount = count || 0;
+
+  updateBrowseHeader();
+  updateActivePills();
+  renderBooks(data || []);
+  renderPagination();
+}
+
+// ══════════════════════════
+// RENDER BOOKS
+// ══════════════════════════
+function renderBooks(books) {
+  const grid = document.getElementById('books-grid');
+  if (!books.length) {
+    grid.innerHTML = `
+    <div class="empty-state" style="grid-column:1/-1;">
+      <div class="es-icon">🔍</div>
+      <h3>No Stories Found</h3>
+      <p>Try adjusting your filters or search term.</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = books.map(b => `
+  <div class="book-card" onclick="window.location='book-detail.html?id=${b.id}'">
+    ${b.cover_image
+      ? `<img class="book-cover" src="${b.cover_image}" alt="${b.title}" loading="lazy"/>`
+      : `<div class="book-cover-placeholder">No Cover</div>`}
+    <span class="type-badge tb-${b.type||'novel'}">${b.type||'novel'}</span>
+    ${b.warning === '18+' ? '<span class="warning-badge">18+</span>' : ''}
+    <div class="book-info">
+      <div class="book-title">${b.title}</div>
+      <div class="book-author">${b.users?.username||'Unknown'}</div>
+      <div class="book-stats">
+        <span class="bstat">👁 ${fmt(b.total_views)}</span>
+        <span class="bstat">❤️ ${fmt(b.total_followers)}</span>
+      </div>
+    </div>
+  </div>`).join('');
+}
+
+// ══════════════════════════
+// PAGINATION
+// ══════════════════════════
+function renderPagination() {
+  const total = Math.ceil(totalCount / PER_PAGE);
+  const pag   = document.getElementById('pagination');
+  if (total <= 1) { pag.innerHTML = ''; return; }
+  let html = '';
+  html += `<button class="page-btn" onclick="goPage(${filters.page-1})" ${filters.page===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || Math.abs(i - filters.page) <= 2) {
+      html += `<button class="page-btn ${i===filters.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - filters.page) === 3) {
+      html += `<span style="padding:8px 4px;color:var(--muted);">...</span>`;
+    }
+  }
+  html += `<button class="page-btn" onclick="goPage(${filters.page+1})" ${filters.page===total?'disabled':''}>›</button>`;
+  pag.innerHTML = html;
+}
+
+function goPage(p) {
+  filters.page = p;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  loadBooks();
+}
+
+// ══════════════════════════
+// FILTER SETTERS
+// ══════════════════════════
+function setType(val) {
+  filters.type = val; filters.page = 1;
+  syncSidebarUI(); loadBooks();
+}
+function setSort(val) {
+  filters.sort = val; filters.page = 1;
+  document.getElementById('sort-select').value = val;
+  syncSidebarUI(); loadBooks();
+}
+function setLang(val) {
+  filters.lang = val; filters.page = 1;
+  syncSidebarUI(); loadBooks();
+}
+function setWarning(val) {
+  filters.warning = val; filters.page = 1;
+  syncSidebarUI(); loadBooks();
+}
+function setLength(val) {
+  filters.length = val; filters.page = 1;
+  syncSidebarUI(); loadBooks();
+}
+function toggleGenre(val) {
+  const idx = filters.genres.indexOf(val);
+  if (idx === -1) filters.genres.push(val);
+  else filters.genres.splice(idx, 1);
+  filters.page = 1; loadBooks(); updateActivePills();
+}
+
+let searchTimer;
+function onSearchInput() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    filters.search = document.getElementById('search-input').value.trim();
+    filters.page = 1; loadBooks();
+  }, 400);
+}
+
+function clearFilters() {
+  filters = { type:'', sort:'new', lang:'', genres:[], warning:'', length:'', search:'', page:1 };
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.filter-check input').forEach(i => i.checked = false);
+  document.getElementById('sort-select').value = 'new';
+  syncSidebarUI(); loadBooks();
+}
+
+// ══════════════════════════
+// UI SYNC
+// ══════════════════════════
+function syncSidebarUI() {
+  // Type buttons
+  document.querySelectorAll('#filters-sidebar .filter-btn').forEach(btn => {
+    const onClick = btn.getAttribute('onclick') || '';
+    if (onClick.includes("setType(")) {
+      const val = onClick.match(/setType\('(.*)'\)/)?.[1] || '';
+      btn.classList.toggle('active', filters.type === val);
+    }
+    if (onClick.includes("setSort(")) {
+      const val = onClick.match(/setSort\('(.*)'\)/)?.[1] || '';
+      btn.classList.toggle('active', filters.sort === val);
+    }
+    if (onClick.includes("setLang(")) {
+      const val = onClick.match(/setLang\('(.*)'\)/)?.[1] || '';
+      btn.classList.toggle('active', filters.lang === val);
+    }
+    if (onClick.includes("setWarning(")) {
+      const val = onClick.match(/setWarning\('(.*)'\)/)?.[1] || '';
+      btn.classList.toggle('active', filters.warning === val);
+    }
+    if (onClick.includes("setLength(")) {
+      const val = onClick.match(/setLength\('(.*)'\)/)?.[1] || '';
+      btn.classList.toggle('active', filters.length === val);
+    }
+  });
+  // Genre checkboxes
+  document.querySelectorAll('.filter-check input').forEach(i => {
+    i.checked = filters.genres.includes(i.value);
+  });
+}
+
+function updateBrowseHeader() {
+  const typeLabels = { '':'All Stories', novel:'Novels', manga:'Manga', comic:'Comics' };
+  const title = filters.search
+    ? `Results for "${filters.search}"`
+    : (typeLabels[filters.type] || 'Browse Stories');
+  document.getElementById('browse-title').innerHTML = title + ' <span>— VoomComix</span>';
+  document.getElementById('results-count').textContent = `${totalCount} ${totalCount === 1 ? 'story' : 'stories'} found`;
+}
+
+function updateActivePills() {
+  const pills = [];
+  if (filters.type)    pills.push([`Type: ${filters.type}`, () => setType('')]);
+  if (filters.lang)    pills.push([`Lang: ${filters.lang}`, () => setLang('')]);
+  if (filters.warning) pills.push([`Rating: ${filters.warning}`, () => setWarning('')]);
+  if (filters.length)  pills.push([`Length: ${filters.length}`, () => setLength('')]);
+  filters.genres.forEach(g => pills.push([`Genre: ${g}`, () => toggleGenre(g)]));
+
+  const el = document.getElementById('active-filters');
+  el.innerHTML = pills.map(([label], i) => `
+  <div class="filter-pill">
+    ${label}
+    <button onclick="clearPill(${i})">×</button>
+  </div>`).join('');
+
+  // Store callbacks
+  el._callbacks = pills.map(([, fn]) => fn);
+}
+
+function clearPill(i) {
+  document.getElementById('active-filters')._callbacks[i]();
+}
+
+function fmt(n) {
+  if (!n) return '0';
+  if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
+  if (n >= 1000)    return (n/1000).toFixed(1)+'K';
+  return n;
+}
+</script>
+</body>
+</html>
