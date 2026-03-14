@@ -4,231 +4,440 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Chapter — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0f14;--card:#141420;--red:#e63022;--gold:#f0a500;--white:#fdfaf4;--muted:#6a6478;--border:rgba(255,255,255,0.07);--reading-bg:#0f0f14;--reading-text:#ddd5c5;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--reading-bg);color:var(--white);font-family:'Libre Baskerville',serif;}
+:root{
+  --bg:#f7f4f0;--white:#fff;--ink:#1a1410;--red:#c0392b;
+  --gold:#d4820a;--teal:#0a7c6e;--muted:#6b5a4e;--border:#ddd5c8;
+  --reader-bg:#fffdf9;--reader-ink:#1a1410;--reader-muted:#8a7a6a;
+}
+body.dark{
+  --bg:#111018;--white:#1a1820;--ink:#e8e0d4;--red:#e05040;
+  --muted:#9a8a7a;--border:#2a2530;
+  --reader-bg:#141218;--reader-ink:#e0d8cc;--reader-muted:#7a6a5a;
+}
+body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;transition:background .3s,color .3s;}
 a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'Rajdhani';}
+
+/* TOP BAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 20px;gap:12px;transition:background .3s,border-color .3s;}
+.tb-logo{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.1em;color:var(--ink);}
+.tb-logo span{color:var(--red);}
+.tb-sep{color:var(--border);font-size:.8rem;}
+.tb-story{font-size:.72rem;font-weight:700;color:var(--muted);max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tb-chapter{font-size:.72rem;font-weight:700;color:var(--ink);}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.tb-btn{background:transparent;border:1.5px solid var(--border);border-radius:7px;color:var(--muted);padding:5px 10px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;display:flex;align-items:center;gap:4px;}
+.tb-btn:hover{border-color:var(--ink);color:var(--ink);}
+.tb-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
 
 /* PROGRESS BAR */
-#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;z-index:200;transition:width .1s;box-shadow:0 0 8px var(--red);}
+.progress-bar{position:fixed;top:56px;left:0;right:0;z-index:99;height:3px;background:var(--border);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));width:0%;transition:width .2s;}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,13,13,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,48,34,0.15);padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:.1em;}
-.logo span{color:var(--red);}
-.nav-center{font-family:'Rajdhani';font-size:.78rem;letter-spacing:.12em;color:var(--muted);text-align:center;}
-.nav-r{display:flex;align-items:center;gap:16px;}
-.nav-r a,.nav-r button{font-family:'Rajdhani';font-size:.75rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .2s;padding:0;}
-.nav-r a:hover,.nav-r button:hover,.nav-r button.active{color:var(--white);}
+/* CHAPTER SELECT DROPDOWN */
+.ch-dropdown{position:fixed;top:56px;left:0;right:0;z-index:98;background:var(--white);border-bottom:1px solid var(--border);padding:12px 20px;display:none;max-height:300px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.1);}
+.ch-dropdown.open{display:block;}
+.ch-dropdown-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;}
+.ch-opt{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;background:var(--bg);color:var(--ink);}
+.ch-opt:hover{border-color:var(--red);color:var(--red);}
+.ch-opt.current{background:var(--red);border-color:var(--red);color:#fff;}
 
-/* CHAPTER CONTENT */
-.chapter-wrap{max-width:720px;margin:0 auto;padding:90px 24px 60px;}
-.ch-breadcrumb{font-family:'Rajdhani';font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
-.ch-breadcrumb a:hover{color:var(--red);}
-.ch-number{font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
-.ch-title-big{font-family:'Bebas Neue';font-size:2.5rem;letter-spacing:.04em;margin-bottom:6px;line-height:1.1;}
-.ch-meta-row{font-family:'Rajdhani';font-size:.72rem;color:var(--muted);letter-spacing:.1em;margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);display:flex;gap:16px;}
+/* FONT SIZE */
+.font-panel{position:fixed;top:56px;right:20px;z-index:98;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px;display:none;box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.font-panel.open{display:block;}
+.font-panel label{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px;}
+.font-btns{display:flex;gap:6px;align-items:center;}
+.font-btn{width:32px;height:32px;border:1.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.9rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.font-btn:hover{border-color:var(--red);color:var(--red);}
+.font-val{font-size:.82rem;font-weight:700;min-width:32px;text-align:center;}
+.font-family-btns{display:flex;gap:6px;margin-top:10px;}
+.ff-btn{flex:1;padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:.68rem;font-weight:700;background:var(--bg);color:var(--ink);transition:all .2s;}
+.ff-btn:hover{border-color:var(--muted);}
+.ff-btn.active{border-color:var(--red);background:var(--red);color:#fff;}
 
-/* READING TEXT */
-.chapter-body{font-size:1.1rem;line-height:2;color:var(--reading-text);}
-.chapter-body p{margin-bottom:1.6em;}
-.chapter-body h2,.chapter-body h3{font-family:'Bebas Neue';color:var(--red);letter-spacing:.05em;margin:2em 0 .8em;font-size:1.5rem;}
+/* READER */
+.reader-wrap{max-width:740px;margin:0 auto;padding:80px 24px 120px;}
+.chapter-header{margin-bottom:36px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.ch-story-link{font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);display:inline-flex;align-items:center;gap:4px;margin-bottom:12px;transition:opacity .2s;}
+.ch-story-link:hover{opacity:.7;}
+.ch-num-label{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.ch-title{font-family:'Bebas Neue';font-size:2.2rem;letter-spacing:.03em;color:var(--ink);margin-bottom:8px;line-height:1.1;}
+.ch-meta{font-size:.68rem;color:var(--muted);}
 
-/* FONT SIZE CONTROL */
-body.font-sm .chapter-body{font-size:.95rem;}
-body.font-lg .chapter-body{font-size:1.25rem;}
-body.font-xl .chapter-body{font-size:1.4rem;}
-body.theme-sepia{--reading-bg:#1a1510;--reading-text:#d4c9a8;}
-body.theme-white{--reading-bg:#f5f0e8;--reading-text:#1a1510;}
-body.theme-white nav{--border:rgba(0,0,0,.1);background:rgba(245,240,232,0.97);}
-body.theme-white .logo{color:#1a1510;}
-body.theme-white{color:#1a1510;}
+/* CONTENT */
+.chapter-content{font-family:'Lora',serif;font-size:18px;line-height:1.9;color:var(--reader-ink);}
+.chapter-content p{margin-bottom:1.4em;}
+.chapter-content p:last-child{margin-bottom:0;}
 
-/* SETTINGS PANEL */
-.settings-panel{position:fixed;top:56px;right:0;width:260px;background:var(--card);border-left:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px;z-index:99;display:none;}
-.settings-panel.open{display:block;}
-.sp-label{font-family:'Rajdhani';font-size:.65rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;margin-top:16px;}
-.sp-label:first-child{margin-top:0;}
-.sp-row{display:flex;gap:8px;}
-.sp-btn{flex:1;font-family:'Rajdhani';font-size:.72rem;font-weight:700;letter-spacing:.1em;padding:7px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;}
-.sp-btn:hover,.sp-btn.active{border-color:var(--red);color:var(--red);background:rgba(230,48,34,.06);}
-.theme-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:border-color .2s;}
-.theme-dot:hover,.theme-dot.active{border-color:var(--red);}
+/* NAV BOTTOM */
+.ch-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:48px;padding-top:28px;border-top:1px solid var(--border);}
+.ch-nav-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);color:var(--ink);font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;cursor:pointer;}
+.ch-nav-btn:hover{border-color:var(--ink);}
+.ch-nav-btn.disabled{opacity:.3;cursor:not-allowed;pointer-events:none;}
+.ch-nav-btn.primary{background:var(--red);border-color:var(--red);color:#fff;}
+.ch-nav-btn.primary:hover{background:#a93226;}
+.ch-nav-center{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;}
 
-/* CHAPTER NAV */
-.chapter-nav{display:flex;justify-content:space-between;align-items:center;padding:30px 0;margin-top:40px;border-top:1px solid var(--border);}
-.ch-nav-btn{font-family:'Rajdhani';font-size:.8rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;border:1px solid var(--border);color:var(--muted);background:none;cursor:pointer;transition:all .2s;}
-.ch-nav-btn:hover:not(:disabled){border-color:var(--red);color:var(--red);}
-.ch-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
-.ch-nav-center{font-family:'Rajdhani';font-size:.72rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;}
+/* COMMENTS SECTION */
+.comments-section{max-width:740px;margin:0 auto;padding:0 24px 80px;}
+.sec-title{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.comment-form{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;}
+.comment-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Rajdhani';font-size:.88rem;outline:none;resize:none;min-height:70px;background:var(--bg);color:var(--ink);transition:border-color .2s;}
+.comment-input:focus{border-color:var(--red);}
+.comment-input:disabled{opacity:.5;cursor:not-allowed;}
+.comment{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+.comment-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;}
+.comment-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.comment-name{font-size:.78rem;font-weight:700;}
+.comment-time{font-size:.6rem;color:var(--muted);margin-left:auto;}
+.comment-text{font-size:.85rem;line-height:1.6;color:var(--ink);}
 
-/* CHAPTER INDEX POPUP */
-.ch-index{position:fixed;bottom:70px;right:20px;background:var(--card);border:1px solid var(--border);width:280px;max-height:400px;overflow-y:auto;z-index:99;display:none;box-shadow:0 20px 60px rgba(0,0,0,.6);}
-.ch-index.open{display:block;}
-.ch-index-item{padding:10px 16px;font-family:'Rajdhani';font-size:.8rem;font-weight:600;letter-spacing:.06em;cursor:pointer;border-bottom:1px solid var(--border);transition:all .2s;display:flex;gap:10px;align-items:center;}
-.ch-index-item:hover{background:var(--card);color:var(--red);}
-.ch-index-item.current{color:var(--red);}
-.ch-index-num{font-family:'Bebas Neue';font-size:.95rem;color:var(--red);min-width:28px;}
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#1a1410;color:#fff;padding:12px 18px;border-radius:10px;font-size:.8rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.ok{background:var(--teal);}
+#toast.err{background:var(--red);}
 
-/* FLOAT BUTTONS */
-.float-btns{position:fixed;bottom:24px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:100;}
-.float-btn{width:40px;height:40px;background:var(--card);border:1px solid var(--border);color:var(--muted);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
-.float-btn:hover{border-color:var(--red);color:var(--red);}
-
-footer{border-top:1px solid var(--border);padding:24px 40px;text-align:center;font-family:'Rajdhani';font-size:.7rem;color:var(--muted);}
+.empty{text-align:center;padding:32px;color:var(--muted);font-size:.82rem;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid transparent;transition:all .2s;cursor:pointer;font-family:'Rajdhani';}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red);}
+.btn-red:hover{background:#a93226;}
+.btn-sm{padding:5px 10px;font-size:.65rem;}
 
 @media(max-width:600px){
-  nav{padding:0 16px;}
-  .nav-center{display:none;}
-  .chapter-wrap{padding:76px 18px 60px;}
+  .reader-wrap{padding:72px 16px 100px;}
+  .chapter-content{font-size:16px;}
+  .ch-title{font-size:1.8rem;}
+  .tb-story,.tb-sep,.tb-chapter{display:none;}
+  .comments-section{padding:0 16px 60px;}
 }
 </style>
 </head>
 <body>
 
-<div id="progress"></div>
-
-<nav>
-  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
-  <div class="nav-center" id="nav-title">Loading...</div>
-  <div class="nav-r">
-    <a href="#" id="back-to-story">← Story</a>
-    <button onclick="toggleSettings()" id="settings-btn">⚙ Settings</button>
-  </div>
-</nav>
-
-<!-- SETTINGS PANEL -->
-<div class="settings-panel" id="settings-panel">
-  <div class="sp-label">Font Size</div>
-  <div class="sp-row">
-    <button class="sp-btn" onclick="setFont('')">A</button>
-    <button class="sp-btn" onclick="setFont('font-sm')">A-</button>
-    <button class="sp-btn" onclick="setFont('font-lg')">A+</button>
-    <button class="sp-btn" onclick="setFont('font-xl')">A++</button>
-  </div>
-  <div class="sp-label">Theme</div>
-  <div class="sp-row" style="gap:10px;">
-    <div class="theme-dot active" style="background:#0f0f14;" onclick="setTheme('')" title="Dark"></div>
-    <div class="theme-dot" style="background:#1a1510;" onclick="setTheme('theme-sepia')" title="Sepia"></div>
-    <div class="theme-dot" style="background:#f5f0e8;border-color:#ccc;" onclick="setTheme('theme-white')" title="Light"></div>
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="index.html" class="tb-logo">VOOM<span>COMIX</span></a>
+  <span class="tb-sep">›</span>
+  <span class="tb-story" id="tb-story">Loading...</span>
+  <span class="tb-sep">›</span>
+  <span class="tb-chapter" id="tb-chapter">Chapter</span>
+  <div class="tb-right">
+    <button class="tb-btn" onclick="toggleChList()" id="btn-chlist">📋 Chapters</button>
+    <button class="tb-btn" onclick="toggleFontPanel()" id="btn-font">Aa</button>
+    <button class="tb-btn" onclick="toggleDark()" id="btn-dark">🌙</button>
+    <button class="tb-btn" onclick="location.href='story.html?id='+storyId">📖 Story</button>
   </div>
 </div>
 
-<!-- CHAPTER CONTENT -->
-<div class="chapter-wrap">
-  <div class="ch-breadcrumb">
-    <a href="stories.html">Stories</a> › <a href="#" id="story-link">Story</a> › Chapter
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+<!-- CHAPTER LIST DROPDOWN -->
+<div class="ch-dropdown" id="ch-dropdown">
+  <div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Select Chapter</div>
+  <div class="ch-dropdown-grid" id="ch-dropdown-grid"></div>
+</div>
+
+<!-- FONT PANEL -->
+<div class="font-panel" id="font-panel">
+  <label>Font Size</label>
+  <div class="font-btns">
+    <button class="font-btn" onclick="changeFontSize(-1)">A−</button>
+    <span class="font-val" id="font-val">18</span>
+    <button class="font-btn" onclick="changeFontSize(1)">A+</button>
   </div>
-  <div class="ch-number" id="ch-number">Chapter 1</div>
-  <div class="ch-title-big" id="ch-title">Loading...</div>
-  <div class="ch-meta-row">
-    <span id="ch-words">— words</span>
-    <span id="ch-date">—</span>
-  </div>
-  <div class="chapter-body" id="chapter-body">
-    <p>Loading chapter content...</p>
-  </div>
-  <div class="chapter-nav">
-    <button class="ch-nav-btn" id="prev-btn" onclick="goChapter(-1)">← Prev Chapter</button>
-    <span class="ch-nav-center" id="ch-position">Ch 1 / 1</span>
-    <button class="ch-nav-btn" id="next-btn" onclick="goChapter(1)">Next Chapter →</button>
+  <label style="margin-top:10px;">Font Style</label>
+  <div class="font-family-btns">
+    <button class="ff-btn active" id="ff-lora" onclick="setFont('lora',this)">Lora</button>
+    <button class="ff-btn" id="ff-raj" onclick="setFont('raj',this)">Rajdhani</button>
+    <button class="ff-btn" id="ff-mono" onclick="setFont('mono',this)">Mono</button>
   </div>
 </div>
 
-<!-- CHAPTER INDEX -->
-<div class="ch-index" id="ch-index"></div>
-
-<!-- FLOAT BUTTONS -->
-<div class="float-btns">
-  <button class="float-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Top">↑</button>
-  <button class="float-btn" onclick="toggleIndex()" title="Chapters">☰</button>
+<!-- READER -->
+<div class="reader-wrap">
+  <div class="chapter-header">
+    <a class="ch-story-link" id="story-link" href="#">← Back to Story</a>
+    <div class="ch-num-label" id="ch-num-label">Chapter —</div>
+    <h1 class="ch-title" id="ch-title">Loading...</h1>
+    <div class="ch-meta" id="ch-meta"></div>
+  </div>
+  <div class="chapter-content" id="chapter-content">
+    <p style="color:var(--muted);">Loading chapter content...</p>
+  </div>
+  <div class="ch-nav">
+    <button class="ch-nav-btn disabled" id="btn-prev" onclick="goPrev()">← Prev Chapter</button>
+    <div class="ch-nav-center" id="ch-nav-center">—</div>
+    <button class="ch-nav-btn primary disabled" id="btn-next" onclick="goNext()">Next Chapter →</button>
+  </div>
 </div>
 
-<footer>© 2024 VoomComix — Free to Read, Always</footer>
+<!-- COMMENTS -->
+<div class="comments-section">
+  <div class="sec-title">💬 Chapter Comments</div>
+  <div class="comment-form">
+    <textarea class="comment-input" id="comment-input" placeholder="Write a comment about this chapter..." rows="3"></textarea>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;">
+      <span style="font-size:.68rem;color:var(--muted);" id="comment-hint"></span>
+      <button class="btn btn-red btn-sm" id="post-btn" onclick="postComment()">Post</button>
+    </div>
+  </div>
+  <div id="comments-list"><div class="empty">Loading comments...</div></div>
+</div>
 
-<script src="stories-data.js"></script>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="vc-config.js"></script>
 <script>
-const p = new URLSearchParams(location.search);
-const storyId = p.get('story');
-const chId = parseInt(p.get('ch'));
-const stories = loadData();
-const story = stories.find(s=>s.id===storyId);
+const SURL='https://gcpbvzyndmwdlvopftma.supabase.co';
+const SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjcGJ2enluZG13ZGx2b3BmdG1hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyMjQ0MzcsImV4cCI6MjA4ODgwMDQzN30.pqv_VcOxGrpxPfQXAaey_wF85yiC0hgNDJBD6f7MyXk';
+let _sb=null;
+const sb=()=>{if(_sb)return _sb;_sb=(typeof getSupabase==='function')?getSupabase():window.supabase.createClient(SURL,SKEY,{auth:{persistSession:true,autoRefreshToken:true}});return _sb;};
 
-if(story){
-  const chIdx = story.chapters.findIndex(c=>c.id===chId);
-  const ch = story.chapters[chIdx];
-  document.title = `Ch ${ch.id}: ${ch.title} — ${story.title}`;
-  document.getElementById('nav-title').textContent = story.title + ' · Ch ' + ch.id;
-  document.getElementById('back-to-story').href = 'story.html?id='+storyId;
-  document.getElementById('story-link').href = 'story.html?id='+storyId;
-  document.getElementById('story-link').textContent = story.title;
-  document.getElementById('ch-number').textContent = 'Chapter ' + ch.id;
-  document.getElementById('ch-title').textContent = ch.title;
-  document.getElementById('ch-words').textContent = (ch.wordCount||'?').toLocaleString() + ' words';
-  document.getElementById('ch-date').textContent = ch.date;
-  document.getElementById('ch-position').textContent = `Ch ${chIdx+1} / ${story.chapters.length}`;
+const params=new URLSearchParams(location.search);
+const storyId=params.get('story');
+const chapterId=params.get('chapter');
 
-  // Render content — split paragraphs
-  const raw = ch.content || '';
-  const html = raw.split('\n').filter(l=>l.trim()).map(l=>`<p>${l}</p>`).join('');
-  document.getElementById('chapter-body').innerHTML = html || `<p>${raw}</p>`;
+let story=null, chapter=null, allChapters=[], currentUser=null;
+let fontSize=parseInt(localStorage.getItem('vc-fontsize')||'18');
+let fontFamily=localStorage.getItem('vc-fontfamily')||'lora';
+let darkMode=localStorage.getItem('vc-dark')==='1';
 
-  // Prev/Next
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  if(chIdx===0) prevBtn.disabled=true;
-  else prevBtn.onclick=()=>location.href=`chapter.html?story=${storyId}&ch=${story.chapters[chIdx-1].id}`;
-  if(chIdx===story.chapters.length-1) nextBtn.disabled=true;
-  else nextBtn.onclick=()=>location.href=`chapter.html?story=${storyId}&ch=${story.chapters[chIdx+1].id}`;
+function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='show '+type;clearTimeout(t._t);t._t=setTimeout(()=>{t.className=''},3000);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function timeAgo(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return new Date(d).toLocaleDateString('en-IN');}
 
-  // Chapter index
-  const idx = document.getElementById('ch-index');
-  idx.innerHTML = story.chapters.map(c=>`
-  <div class="ch-index-item ${c.id===chId?'current':''}" onclick="location.href='chapter.html?story=${storyId}&ch=${c.id}'">
-    <span class="ch-index-num">${c.id}</span>
-    <span>${c.title}</span>
-  </div>`).join('');
+async function init(){
+  if(!storyId||!chapterId){location.href='index.html';return;}
+
+  // Apply saved settings
+  applySettings();
+
+  // Get user
+  try{const{data:{user}}=await sb().auth.getUser();currentUser=user;}catch(e){}
+
+  await loadData();
 }
 
-// Reading progress
-window.addEventListener('scroll',()=>{
-  const h=document.documentElement;
-  const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
-  document.getElementById('progress').style.width=pct+'%';
+async function loadData(){
+  try{
+    // Load story + all chapters + current chapter in parallel
+    const[{data:s},{data:chs},{data:ch}]=await Promise.all([
+      sb().from('stories').select('id,title,type').eq('id',storyId).single(),
+      sb().from('chapters').select('id,chapter_number,title').eq('story_id',storyId).order('chapter_number',{ascending:true}),
+      sb().from('chapters').select('*').eq('id',chapterId).single()
+    ]);
+
+    if(!s||!ch){location.href='stories.html';return;}
+
+    story=s; chapter=ch; allChapters=chs||[];
+
+    // Set page title
+    document.title=`Ch.${ch.chapter_number}: ${ch.title} — ${s.title} — VoomComix`;
+
+    // Topbar
+    document.getElementById('tb-story').textContent=s.title;
+    document.getElementById('tb-chapter').textContent=`Ch.${ch.chapter_number}`;
+
+    // Chapter header
+    document.getElementById('story-link').href=`story.html?id=${storyId}`;
+    document.getElementById('story-link').textContent=`← ${s.title}`;
+    document.getElementById('ch-num-label').textContent=`Chapter ${ch.chapter_number}`;
+    document.getElementById('ch-title').textContent=ch.title;
+    document.getElementById('ch-meta').textContent=
+      `${(ch.word_count||0).toLocaleString()} words · `+
+      (ch.published_at?new Date(ch.published_at).toLocaleDateString('en-IN',''):'');
+
+    // Content
+    renderContent(ch.content||'');
+
+    // Navigation
+    setupNav();
+
+    // Chapter dropdown
+    buildChDropdown();
+
+    // Comments
+    loadComments();
+
+  }catch(e){
+    console.error(e);
+    document.getElementById('chapter-content').innerHTML='<p style="color:var(--red);">Error loading chapter. Please refresh.</p>';
+  }
+}
+
+function renderContent(raw){
+  // Split by double newline into paragraphs
+  const paras=raw.split(/\n\n+/).filter(p=>p.trim());
+  const html=paras.map(p=>`<p>${esc(p.trim()).replace(/\n/g,'<br/>')}</p>`).join('');
+  document.getElementById('chapter-content').innerHTML=html||'<p style="color:var(--muted);">No content yet.</p>';
+
+  // Apply font settings
+  applySettings();
+
+  // Scroll progress
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  updateProgress();
+}
+
+function updateProgress(){
+  const el=document.getElementById('chapter-content');
+  const rect=el.getBoundingClientRect();
+  const total=el.offsetHeight;
+  const scrolled=Math.max(0,-rect.top);
+  const pct=Math.min(100,Math.round((scrolled/total)*100));
+  document.getElementById('progress-fill').style.width=pct+'%';
+}
+
+function setupNav(){
+  const idx=allChapters.findIndex(c=>c.id===chapterId);
+  const prev=allChapters[idx-1];
+  const next=allChapters[idx+1];
+
+  const prevBtn=document.getElementById('btn-prev');
+  const nextBtn=document.getElementById('btn-next');
+  const center=document.getElementById('ch-nav-center');
+
+  center.textContent=`Chapter ${chapter.chapter_number} of ${allChapters.length}`;
+
+  if(prev){prevBtn.classList.remove('disabled');prevBtn.textContent=`← Ch.${prev.chapter_number}`;}
+  else{prevBtn.classList.add('disabled');prevBtn.textContent='← First Chapter';}
+
+  if(next){nextBtn.classList.remove('disabled');nextBtn.textContent=`Ch.${next.chapter_number} →`;}
+  else{nextBtn.classList.add('disabled');nextBtn.textContent='Last Chapter';}
+
+  // Store for nav functions
+  window._prevId=prev?.id||null;
+  window._nextId=next?.id||null;
+}
+
+function goPrev(){if(window._prevId)location.href=`chapter.html?story=${storyId}&chapter=${window._prevId}`;}
+function goNext(){if(window._nextId)location.href=`chapter.html?story=${storyId}&chapter=${window._nextId}`;}
+
+function buildChDropdown(){
+  document.getElementById('ch-dropdown-grid').innerHTML=allChapters.map(c=>`
+    <div class="ch-opt ${c.id===chapterId?'current':''}" onclick="location.href='chapter.html?story=${storyId}&chapter=${c.id}'">
+      Ch.${c.chapter_number}<br/><span style="font-size:.6rem;font-weight:400;opacity:.7;">${esc(c.title)}</span>
+    </div>`).join('');
+}
+
+// ── UI TOGGLES ──
+function toggleChList(){
+  const el=document.getElementById('ch-dropdown');
+  const fp=document.getElementById('font-panel');
+  fp.classList.remove('open');
+  el.classList.toggle('open');
+  document.getElementById('btn-chlist').classList.toggle('active',el.classList.contains('open'));
+}
+
+function toggleFontPanel(){
+  const el=document.getElementById('font-panel');
+  const dd=document.getElementById('ch-dropdown');
+  dd.classList.remove('open');
+  document.getElementById('btn-chlist').classList.remove('active');
+  el.classList.toggle('open');
+}
+
+function toggleDark(){
+  darkMode=!darkMode;
+  localStorage.setItem('vc-dark',darkMode?'1':'0');
+  document.body.classList.toggle('dark',darkMode);
+  document.getElementById('btn-dark').textContent=darkMode?'☀️':'🌙';
+}
+
+function changeFontSize(delta){
+  fontSize=Math.min(26,Math.max(14,fontSize+delta));
+  localStorage.setItem('vc-fontsize',fontSize);
+  document.getElementById('font-val').textContent=fontSize;
+  applySettings();
+}
+
+function setFont(name,el){
+  fontFamily=name;
+  localStorage.setItem('vc-fontfamily',name);
+  document.querySelectorAll('.ff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  applySettings();
+}
+
+function applySettings(){
+  const fonts={lora:"'Lora',serif",raj:"'Rajdhani',sans-serif",mono:"'Courier New',monospace"};
+  const content=document.getElementById('chapter-content');
+  if(content){content.style.fontSize=fontSize+'px';content.style.fontFamily=fonts[fontFamily]||fonts.lora;}
+  document.getElementById('font-val').textContent=fontSize;
+  document.getElementById('btn-dark').textContent=darkMode?'☀️':'🌙';
+  document.body.classList.toggle('dark',darkMode);
+  // Font family buttons
+  document.querySelectorAll('.ff-btn').forEach(b=>b.classList.remove('active'));
+  const ffEl=document.getElementById('ff-'+fontFamily);
+  if(ffEl)ffEl.classList.add('active');
+}
+
+// ── COMMENTS ──
+async function loadComments(){
+  const{data:comments}=await sb()
+    .from('comments')
+    .select(`id,content,created_at,profiles!user_id(display_name,username,avatar_url)`)
+    .eq('chapter_id',chapterId)
+    .order('created_at',{ascending:false})
+    .limit(30);
+
+  const list=comments||[];
+
+  // Form state
+  const inp=document.getElementById('comment-input');
+  const hint=document.getElementById('comment-hint');
+  const btn=document.getElementById('post-btn');
+  if(currentUser){inp.disabled=false;inp.placeholder='Write a comment...';hint.textContent='';btn.style.display='inline-flex';}
+  else{inp.disabled=true;inp.placeholder='Login to comment';hint.innerHTML='<a href="login.html" style="color:var(--red);">Login</a> to comment';btn.style.display='none';}
+
+  if(!list.length){document.getElementById('comments-list').innerHTML=`<div class="empty">No comments yet. Be the first!</div>`;return;}
+
+  document.getElementById('comments-list').innerHTML=list.map(c=>{
+    const prof=c.profiles;const name=prof?.display_name||prof?.username||'Reader';
+    const av=prof?.avatar_url?`<div class="comment-avatar"><img src="${esc(prof.avatar_url)}"/></div>`:`<div class="comment-avatar">${name[0].toUpperCase()}</div>`;
+    return`<div class="comment"><div class="comment-top">${av}<span class="comment-name">${esc(name)}</span><span class="comment-time">${timeAgo(c.created_at)}</span></div><div class="comment-text">${esc(c.content)}</div></div>`;
+  }).join('');
+}
+
+async function postComment(){
+  if(!currentUser){toast('Login to comment','err');return;}
+  const inp=document.getElementById('comment-input');const text=inp.value.trim();
+  if(!text){toast('Write something first!','err');return;}
+  const btn=document.getElementById('post-btn');btn.disabled=true;btn.textContent='Posting...';
+  try{
+    await sb().from('comments').insert({story_id:storyId,chapter_id:chapterId,user_id:currentUser.id,content:text});
+    inp.value='';await loadComments();toast('Comment posted! ✓');
+  }catch(e){toast('Error posting comment','err');}
+  btn.disabled=false;btn.textContent='Post';
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#ch-dropdown')&&!e.target.closest('#btn-chlist')){
+    document.getElementById('ch-dropdown').classList.remove('open');
+    document.getElementById('btn-chlist').classList.remove('active');
+  }
+  if(!e.target.closest('#font-panel')&&!e.target.closest('#btn-font')){
+    document.getElementById('font-panel').classList.remove('open');
+  }
 });
 
-function toggleSettings(){
-  document.getElementById('settings-panel').classList.toggle('open');
-  document.getElementById('ch-index').classList.remove('open');
-}
-function toggleIndex(){
-  document.getElementById('ch-index').classList.toggle('open');
-  document.getElementById('settings-panel').classList.remove('open');
-}
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowLeft')goPrev();
+  if(e.key==='ArrowRight')goNext();
+  if(e.key==='d')toggleDark();
+});
 
-const fontClasses=['font-sm','font-lg','font-xl'];
-function setFont(cls){
-  fontClasses.forEach(c=>document.body.classList.remove(c));
-  if(cls) document.body.classList.add(cls);
-  localStorage.setItem('vc-font',cls);
-}
-const themeClasses=['theme-sepia','theme-white'];
-function setTheme(cls){
-  themeClasses.forEach(c=>document.body.classList.remove(c));
-  if(cls) document.body.classList.add(cls);
-  localStorage.setItem('vc-theme',cls);
-  document.querySelectorAll('.theme-dot').forEach((d,i)=>d.classList.toggle('active',i===['','theme-sepia','theme-white'].indexOf(cls)));
-}
-
-// Restore prefs
-const savedFont=localStorage.getItem('vc-font');
-const savedTheme=localStorage.getItem('vc-theme');
-if(savedFont) setFont(savedFont);
-if(savedTheme) setTheme(savedTheme);
-
-function goChapter(dir){} // handled by prev/next buttons above
+init();
 </script>
 </body>
 </html>
