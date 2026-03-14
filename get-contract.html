@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Get Contract — VoomComix</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+:root{--bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;--red:#e8341c;--red2:#ff4d2e;--gold:#d4820a;--white:#f5efe6;--muted:#8a7a6a;--border:rgba(245,239,230,0.08);--radius:12px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;min-height:100vh;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,14,18,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 40px;gap:20px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;}
+.logo span{color:var(--red);}
+.btn{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Rajdhani',sans-serif;letter-spacing:.5px;text-transform:uppercase;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:var(--red2);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+.page-hero{margin-top:60px;background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);padding:72px 40px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,130,10,.08) 0%,transparent 70%);}
+.page-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,80px);letter-spacing:1px;position:relative;}
+.page-hero h1 span{color:var(--red);}
+.page-hero p{font-size:17px;color:rgba(245,239,230,.7);max-width:580px;margin:14px auto 0;line-height:1.7;position:relative;}
+.main-wrap{max-width:1060px;margin:0 auto;padding:60px 40px;display:grid;grid-template-columns:1fr 380px;gap:32px;}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;}
+.form-card h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.3px;margin-bottom:6px;}
+.form-card p{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:11px;color:var(--muted);margin-bottom:7px;font-family:'Rajdhani',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.form-group label .req{color:var(--red);}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border .2s;appearance:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--red);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted);}
+.form-group select option{background:var(--bg3);}
+.form-group textarea{resize:vertical;min-height:100px;line-height:1.6;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.submit-btn{width:100%;padding:14px;border-radius:10px;background:var(--red);color:#fff;border:none;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;transition:all .25s;margin-top:8px;}
+.submit-btn:hover{background:var(--red2);transform:translateY(-1px);}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.form-msg{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;}
+.form-msg.error{background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.3);color:#fca5a5;display:block;}
+.form-msg.success{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#86efac;display:block;}
+.sidebar-info{display:flex;flex-direction:column;gap:16px;}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+.info-card h3{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-bottom:14px;letter-spacing:.3px;}
+.info-list{display:flex;flex-direction:column;gap:10px;}
+.info-item{display:flex;gap:10px;font-size:13px;align-items:flex-start;}
+.info-item .ii-icon{font-size:18px;flex-shrink:0;}
+.info-item .ii-text strong{display:block;margin-bottom:2px;}
+.info-item .ii-text span{color:var(--muted);line-height:1.5;font-size:12px;}
+.process-steps{display:flex;flex-direction:column;gap:0;}
+.ps-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.ps-item:last-child{border-bottom:none;}
+.ps-num{width:24px;height:24px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.ps-text strong{font-size:13px;display:block;margin-bottom:2px;}
+.ps-text span{font-size:12px;color:var(--muted);}
+.revenue-highlight{background:linear-gradient(135deg,rgba(212,130,10,.12) 0%,rgba(232,52,28,.06) 100%);border:1px solid rgba(212,130,10,.2);border-radius:10px;padding:18px;}
+.revenue-highlight h4{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);margin-bottom:10px;}
+.rev-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(212,130,10,.1);font-size:13px;}
+.rev-row:last-child{border-bottom:none;}
+.rev-label{color:var(--muted);}
+.rev-val{font-weight:700;color:var(--gold);}
+.spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 40px;text-align:center;}
+footer p{font-size:13px;color:var(--muted);}
+footer a{color:var(--red);}
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr;padding:40px 20px;}.form-row{grid-template-columns:1fr;}#header{padding:0 20px;}.page-hero{padding:60px 20px;}}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
+  <div style="margin-left:auto;display:flex;gap:8px;">
+    <a href="index.html" class="btn btn-outline">Home</a>
+    <a href="login.html" class="btn btn-red">Login</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h1>Get a <span>Contract</span></h1>
+  <p>Want to adapt a VoomComix story into a video, series, animation or any other platform? Apply for an official content contract here.</p>
+</div>
+
+<div class="main-wrap">
+
+  <!-- FORM -->
+  <div class="form-card">
+    <h2>Contract Application</h2>
+    <p>Fill in the details below. VoomComix will review your application, contact the original author and respond to your email within 7–14 working days.</p>
+
+    <div class="form-msg" id="form-msg"></div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Your Full Name <span class="req">*</span></label>
+        <input type="text" id="applicant-name" placeholder="Your legal name"/>
+      </div>
+      <div class="form-group">
+        <label>Your Email <span class="req">*</span></label>
+        <input type="email" id="applicant-email" placeholder="you@example.com"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Your Organisation / Company (if any)</label>
+      <input type="text" id="applicant-org" placeholder="Company or individual name"/>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Book Name <span class="req">*</span></label>
+        <input type="text" id="contract-book-name" placeholder="Exact title of the book"/>
+      </div>
+      <div class="form-group">
+        <label>Book Unique ID <span class="req">*</span></label>
+        <input type="text" id="contract-book-code" placeholder="e.g. VC-A1B2C3D4"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Author Name <span class="req">*</span></label>
+      <input type="text" id="contract-author-name" placeholder="Name of the book's author on VoomComix"/>
+    </div>
+
+    <div class="form-group">
+      <label>Platform / Medium <span class="req">*</span></label>
+      <select id="contract-platform">
+        <option value="">Select platform...</option>
+        <option value="YouTube">YouTube</option>
+        <option value="Netflix">Netflix</option>
+        <option value="Amazon Prime">Amazon Prime</option>
+        <option value="Disney+ Hotstar">Disney+ Hotstar</option>
+        <option value="Instagram / Reels">Instagram / Reels</option>
+        <option value="Short Film">Short Film</option>
+        <option value="Feature Film">Feature Film</option>
+        <option value="Web Series">Web Series</option>
+        <option value="Animation">Animation</option>
+        <option value="Podcast">Podcast</option>
+        <option value="Book / Print">Book / Print</option>
+        <option value="Game">Game</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Type of Use <span class="req">*</span></label>
+      <select id="contract-use-type">
+        <option value="">Select type...</option>
+        <option value="Full Adaptation">Full Story Adaptation</option>
+        <option value="Partial Adaptation">Partial / Episode Adaptation</option>
+        <option value="Inspired By">Inspired By (original story)</option>
+        <option value="Narration / Voiceover">Narration / Voiceover</option>
+        <option value="Fan Content">Fan Content (non-commercial)</option>
+        <option value="Commercial Content">Commercial Content</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Brief Description of Your Project <span class="req">*</span></label>
+      <textarea id="contract-message" placeholder="Describe your project — what you plan to create, your channel/platform size, expected release date, and any other relevant details..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Your Website / Channel / Portfolio Link</label>
+      <input type="url" id="contract-link" placeholder="https://youtube.com/yourchannel"/>
+    </div>
+
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--muted);line-height:1.6;">
+      ⚠️ By submitting this form you acknowledge that all content rights belong to the original author and VoomComix. A formal contract and revenue agreement will be signed before any content is produced. Any use of VoomComix content without an approved contract is a violation of our Terms & Conditions.
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitContract()">Submit Application</button>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-info">
+
+    <div class="info-card">
+      <h3>What is a Contract?</h3>
+      <div class="info-list">
+        <div class="info-item">
+          <span class="ii-icon">🎬</span>
+          <div class="ii-text"><strong>Adapt stories legally</strong><span>Get official permission to adapt any VoomComix original story for video, animation, series or other formats.</span></div>
+        </div>
+        <div class="info-item">
+          <span class="ii-icon">🤝</span>
+          <div class="ii-text"><strong>Author is involved</strong><span>VoomComix contacts the original author. Both parties sign a deal before production begins.</span></div>
+        </div>
+        <div class="info-item">
+          <span class="ii-icon">✅</span>
+          <div class="ii-text"><strong>Official approval</strong><span>Once approved you receive a unique contract reference and formal written agreement.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>Process</h3>
+      <div class="process-steps">
+        <div class="ps-item"><div class="ps-num">1</div><div class="ps-text"><strong>You Apply</strong><span>Fill the form with book details and your project plan.</span></div></div>
+        <div class="ps-item"><div class="ps-num">2</div><div class="ps-text"><strong>VoomComix Reviews</strong><span>We check the application within 7–14 working days.</span></div></div>
+        <div class="ps-item"><div class="ps-num">3</div><div class="ps-text"><strong>Author is Contacted</strong><span>We reach out to the original author for their consent and terms.</span></div></div>
+        <div class="ps-item"><div class="ps-num">4</div><div class="ps-text"><strong>Contract is Signed</strong><span>A formal agreement is signed via email by all parties.</span></div></div>
+        <div class="ps-item"><div class="ps-num">5</div><div class="ps-text"><strong>Production Begins</strong><span>You can legally begin production with the approved contract.</span></div></div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="revenue-highlight">
+        <h4>Revenue Share</h4>
+        <div class="rev-row"><span class="rev-label">Author share from sale</span><span class="rev-val">70%</span></div>
+        <div class="rev-row"><span class="rev-label">VoomComix share</span><span class="rev-val">30%</span></div>
+        <div class="rev-row"><span class="rev-label">Negotiation</span><span class="rev-val">Case by case</span></div>
+      </div>
+    </div>
+
+    <div class="info-card" style="text-align:center;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">For contract enquiries, email us directly:</div>
+      <a href="mailto:contract@voomcomix.in" style="color:var(--red);font-size:15px;font-weight:600;font-family:'Rajdhani',sans-serif;">contract@voomcomix.in</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2024–2026 VoomComix · <a href="terms.html">Terms & Conditions</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About Us</a></p>
+</footer>
+
+<script>
+async function submitContract() {
+  const name       = document.getElementById('applicant-name').value.trim();
+  const email      = document.getElementById('applicant-email').value.trim();
+  const org        = document.getElementById('applicant-org').value.trim();
+  const bookName   = document.getElementById('contract-book-name').value.trim();
+  const bookCode   = document.getElementById('contract-book-code').value.trim();
+  const authorName = document.getElementById('contract-author-name').value.trim();
+  const platform   = document.getElementById('contract-platform').value;
+  const useType    = document.getElementById('contract-use-type').value;
+  const message    = document.getElementById('contract-message').value.trim();
+  const link       = document.getElementById('contract-link').value.trim();
+  const msgEl      = document.getElementById('form-msg');
+
+  msgEl.className = 'form-msg';
+
+  if (!name || !email || !bookName || !bookCode || !authorName || !platform || !useType || !message) {
+    msgEl.textContent = 'Please fill in all required fields.';
+    msgEl.className = 'form-msg error';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msgEl.textContent = 'Please enter a valid email address.';
+    msgEl.className = 'form-msg error';
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+  try {
+    const { error } = await sb.from('contracts').insert({
+      book_name:       bookName,
+      book_unique_code:bookCode,
+      author_name:     authorName,
+      applicant_name:  name + (org ? ` (${org})` : ''),
+      applicant_email: email,
+      platform:        platform + ' — ' + useType,
+      message:         message + (link ? `\n\nPortfolio: ${link}` : ''),
+      status:          'pending'
+    });
+    if (error) throw error;
+
+    msgEl.textContent = '✅ Application submitted! We will review it and contact you at ' + email + ' within 7–14 working days.';
+    msgEl.className = 'form-msg success';
+    // Clear form
+    ['applicant-name','applicant-email','applicant-org','contract-book-name',
+     'contract-book-code','contract-author-name','contract-message','contract-link']
+      .forEach(id => document.getElementById(id).value = '');
+    document.getElementById('contract-platform').value = '';
+    document.getElementById('contract-use-type').value = '';
+  } catch(err) {
+    msgEl.textContent = err.message || 'Failed to submit. Please try again or email contract@voomcomix.in';
+    msgEl.className = 'form-msg error';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Submit Application';
+}
+</script>
+</body>
+</html>
