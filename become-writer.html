@@ -4,117 +4,409 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Become a Writer — VoomComix</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lora:ital,wght@0,400;0,600;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <style>
+:root{
+  --bg:#0e0e12;--bg2:#16161d;--bg3:#1e1e28;--card:#1a1a24;
+  --red:#e8341c;--red2:#ff4d2e;--gold:#d4820a;--white:#f5efe6;
+  --muted:#8a7a6a;--border:rgba(245,239,230,0.08);--radius:12px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--bg:#f5efe6;--ink:#1a1410;--red:#c0392b;--gold:#d4820a;--teal:#0a7c6e;--muted:#8a7a6a;--border:#e0d4c0;}
-body{background:var(--bg);color:var(--ink);font-family:'Rajdhani',sans-serif;}
-nav{background:var(--ink);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;}
-nav .logo{font-family:'Bebas Neue';font-size:1.4rem;letter-spacing:.1em;color:#fff;text-decoration:none;}
-nav .logo span{color:#ef4444;}
-nav a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
-nav a:hover{color:#fff;}
-.hero{background:linear-gradient(160deg,#1a0a05,#2d1510);padding:70px 28px;text-align:center;}
-.hero-tag{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
-.hero-title{font-family:'Bebas Neue';font-size:3.5rem;letter-spacing:.05em;color:#fff;margin-bottom:14px;}
-.hero-title span{color:#ef4444;}
-.hero-sub{font-family:'Lora';font-size:1.1rem;color:rgba(255,255,255,.6);max-width:500px;margin:0 auto 28px;line-height:1.7;}
-.perks{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:28px;}
-.perk{text-align:center;color:rgba(255,255,255,.7);}
-.perk-ic{font-size:1.8rem;margin-bottom:6px;}
-.perk-t{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;}
-.perk-s{font-size:.72rem;margin-top:2px;line-height:1.4;}
-.form-wrap{max-width:600px;margin:40px auto;padding:0 20px 60px;}
-.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:0 4px 20px rgba(0,0,0,.06);}
-.card-title{font-family:'Bebas Neue';font-size:1.3rem;letter-spacing:.06em;margin-bottom:4px;}
-.card-sub{font-size:.78rem;color:var(--muted);margin-bottom:22px;}
-.fg{margin-bottom:16px;}
-.fg label{display:block;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
-.fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:.88rem;font-family:'Rajdhani';outline:none;transition:all .2s;background:#fdfaf7;color:var(--ink);}
-.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.08);}
-.fg textarea{min-height:110px;resize:vertical;line-height:1.6;}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border-radius:10px;font-size:.88rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Rajdhani';transition:all .2s;}
-.btn-red{background:var(--red);color:#fff;width:100%;}
-.btn-red:hover{background:#a0291e;}
-.btn-red:disabled{opacity:.6;cursor:not-allowed;}
-.success-box{background:#f0fdf4;border:1px solid rgba(5,150,105,.2);border-radius:12px;padding:24px;text-align:center;}
-.success-ic{font-size:2.5rem;margin-bottom:10px;}
-.success-t{font-size:1rem;font-weight:700;color:#065f46;margin-bottom:4px;}
-.success-s{font-size:.82rem;color:var(--muted);}
-.err-msg{background:#fef2f2;border:1px solid rgba(192,57,43,.2);color:var(--red);padding:10px 14px;border-radius:8px;font-size:.8rem;margin-bottom:14px;display:none;}
+body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif;}
+a{text-decoration:none;color:inherit;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+
+/* HEADER */
+#header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(14,14,18,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 40px;gap:20px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;}
+.logo span{color:var(--red);}
+.header-links{display:flex;gap:4px;flex:1;justify-content:center;}
+.header-links a{padding:7px 14px;border-radius:6px;font-size:13px;color:var(--muted);font-family:'Rajdhani',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.5px;transition:all .2s;}
+.header-links a:hover{color:var(--white);background:var(--bg3);}
+.btn{padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Rajdhani',sans-serif;letter-spacing:.5px;text-transform:uppercase;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:var(--red2);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+
+/* HERO */
+.page-hero{
+  margin-top:60px;
+  background:linear-gradient(135deg,var(--bg) 0%,var(--bg2) 100%);
+  padding:80px 40px;text-align:center;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.page-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(232,52,28,.08) 0%,transparent 70%);
+}
+.page-hero h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,8vw,88px);
+  letter-spacing:1px;line-height:1;
+  position:relative;
+}
+.page-hero h1 span{color:var(--red);}
+.page-hero p{
+  font-size:18px;color:rgba(245,239,230,.7);
+  max-width:600px;margin:16px auto 0;line-height:1.7;
+  position:relative;
+}
+
+/* SECTIONS */
+.section{padding:72px 40px;max-width:1100px;margin:0 auto;}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:36px;letter-spacing:.5px;
+  margin-bottom:8px;
+}
+.section-title span{color:var(--red);}
+.section-sub{font-size:15px;color:var(--muted);margin-bottom:40px;line-height:1.6;}
+
+/* STEPS */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.step-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px 24px;
+  position:relative;transition:all .25s;
+}
+.step-card:hover{border-color:rgba(232,52,28,.3);transform:translateY(-3px);}
+.step-num{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;
+  color:rgba(232,52,28,.15);line-height:1;
+  position:absolute;top:16px;right:20px;
+}
+.step-icon{font-size:32px;margin-bottom:14px;}
+.step-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:8px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+
+/* TYPES */
+.types-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.type-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;
+  text-align:center;transition:all .25s;
+}
+.type-card:hover{transform:translateY(-3px);}
+.type-card.novel{border-top:3px solid var(--gold);}
+.type-card.manga{border-top:3px solid var(--red);}
+.type-card.comic{border-top:3px solid #3b82f6;}
+.type-icon{font-size:40px;margin-bottom:16px;}
+.type-name{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:12px;letter-spacing:.5px;}
+.type-lengths{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.length-item{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:8px 14px;font-size:13px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.length-name{font-weight:600;}
+.length-req{font-size:11px;color:var(--muted);}
+.type-note{font-size:12px;color:var(--muted);background:var(--bg3);border-radius:8px;padding:10px 14px;text-align:left;line-height:1.5;}
+
+/* MONETIZATION */
+.mono-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.mono-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;
+}
+.mono-card h3{font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:16px;letter-spacing:.3px;}
+.req-list{display:flex;flex-direction:column;gap:10px;}
+.req-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px;background:var(--bg3);border-radius:8px;
+  font-size:13px;line-height:1.5;
+}
+.req-item .req-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.req-item strong{display:block;margin-bottom:2px;}
+.req-item span{color:var(--muted);}
+.revenue-box{
+  background:linear-gradient(135deg,rgba(212,130,10,.12) 0%,rgba(232,52,28,.08) 100%);
+  border:1px solid rgba(212,130,10,.2);
+  border-radius:10px;padding:20px;margin-top:16px;
+}
+.revenue-box h4{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-bottom:12px;}
+.rev-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(212,130,10,.1);font-size:13px;}
+.rev-row:last-child{border-bottom:none;}
+.rev-label{color:var(--muted);}
+.rev-val{font-weight:700;color:var(--gold);}
+
+/* RULES */
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.rule-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:18px;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.rule-icon{font-size:20px;flex-shrink:0;}
+.rule-text strong{font-size:14px;display:block;margin-bottom:4px;}
+.rule-text span{font-size:12px;color:var(--muted);line-height:1.5;}
+.rule-card.banned{border-color:rgba(220,38,38,.2);}
+.rule-card.allowed{border-color:rgba(34,197,94,.2);}
+
+/* FAQ */
+.faq-list{max-width:780px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{padding:18px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:500;}
+.faq-q:hover{color:var(--red);}
+.faq-icon{font-size:20px;color:var(--red);transition:transform .2s;}
+.faq-a{max-height:0;overflow:hidden;transition:all .3s;font-size:14px;color:var(--muted);line-height:1.8;}
+.faq-a.open{max-height:300px;padding-bottom:16px;}
+
+/* CTA */
+.cta-section{
+  background:linear-gradient(135deg,rgba(232,52,28,.1) 0%,rgba(212,130,10,.06) 100%);
+  border:1px solid rgba(232,52,28,.15);
+  border-radius:20px;padding:60px 40px;text-align:center;margin:0 40px 80px;
+}
+.cta-section h2{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.5px;margin-bottom:12px;}
+.cta-section h2 span{color:var(--red);}
+.cta-section p{font-size:16px;color:var(--muted);max-width:500px;margin:0 auto 28px;line-height:1.6;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-large{padding:14px 32px;font-size:16px;border-radius:10px;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px;text-align:center;}
+footer .logo{display:inline-block;margin-bottom:12px;}
+footer p{font-size:13px;color:var(--muted);}
+footer a{color:var(--red);}
+
+@media(max-width:768px){
+  .section{padding:48px 20px;}
+  .types-grid{grid-template-columns:1fr;}
+  .mono-grid,.rules-grid{grid-template-columns:1fr;}
+  .page-hero{padding:60px 20px;}
+  .cta-section{margin:0 20px 60px;padding:40px 20px;}
+  #header{padding:0 20px;}
+  .header-links{display:none;}
+}
 </style>
 </head>
 <body>
-<nav>
+
+<!-- HEADER -->
+<header id="header">
   <a href="index.html" class="logo">VOOM<span>COMIX</span></a>
-  <a href="index.html">← Back to Site</a>
-</nav>
-<div class="hero">
-  <div class="hero-tag">Join the Creator Program</div>
-  <div class="hero-title">BECOME A <span>WRITER</span></div>
-  <div class="hero-sub">Share your stories with thousands of readers and earn real money from AdSense revenue sharing.</div>
-  <div class="perks">
-    <div class="perk"><div class="perk-ic">💰</div><div class="perk-t">Earn Revenue</div><div class="perk-s">Get up to 70% of<br/>AdSense earnings</div></div>
-    <div class="perk"><div class="perk-ic">📚</div><div class="perk-t">Publish Freely</div><div class="perk-s">Novels, manga<br/>& comics</div></div>
-    <div class="perk"><div class="perk-ic">👥</div><div class="perk-t">Build Audience</div><div class="perk-s">Grow followers<br/>& readers</div></div>
-    <div class="perk"><div class="perk-ic">🏆</div><div class="perk-t">Contests</div><div class="perk-s">Win prizes in<br/>weekly contests</div></div>
+  <nav class="header-links">
+    <a href="index.html">Home</a>
+    <a href="browse.html">All Stories</a>
+    <a href="get-contract.html">Get Contract</a>
+  </nav>
+  <div style="display:flex;gap:8px;margin-left:auto;">
+    <a href="login.html?tab=signup&role=writer" class="btn btn-red">Start Writing</a>
+    <a href="login.html" class="btn btn-outline">Login</a>
   </div>
+</header>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Become a <span>Writer</span></h1>
+  <p>Publish your original novels, manga and comics on VoomComix — reach thousands of readers across India and earn real revenue from your stories.</p>
 </div>
-<div class="form-wrap">
-  <div class="card" id="apply-card">
-    <div class="card-title">Apply to be a Writer</div>
-    <div class="card-sub">Fill in the form below. Applications are usually reviewed within 24-48 hours.</div>
-    <div class="err-msg" id="err-msg"></div>
-    <div class="fg"><label>Why do you want to write on VoomComix?</label><textarea id="reason" placeholder="Tell us about yourself and what kind of stories you want to write..."></textarea></div>
-    <div class="fg"><label>Sample Writing (Optional)</label><textarea id="sample" placeholder="Paste a short excerpt of your writing (200-500 words)..."></textarea></div>
-    <div class="fg"><label>What genres will you write?</label><input type="text" id="genres" placeholder="Fantasy, Romance, Action, Horror..."/></div>
-    <button class="btn btn-red" id="apply-btn" onclick="submitApplication()">Submit Application →</button>
-  </div>
-  <div id="success-card" style="display:none;">
-    <div class="success-box">
-      <div class="success-ic">🎉</div>
-      <div class="success-t">Application Submitted!</div>
-      <div class="success-s">We'll review your application and notify you within 24-48 hours. Once approved, you'll have access to the Writer Studio to publish stories and earn revenue.</div>
-      <br/><a href="index.html" style="color:var(--red);font-weight:700;font-size:.82rem;">← Back to Site</a>
+
+<!-- STEP BY STEP -->
+<div class="section">
+  <div class="section-title">How to <span>Get Started</span></div>
+  <div class="section-sub">Four simple steps from signup to publishing your first chapter.</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-icon">✍️</div>
+      <div class="step-title">Create a Writer Account</div>
+      <div class="step-desc">Sign up as a Writer. Fill in your name, username and preferred language. Your account is free — always.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-icon">📚</div>
+      <div class="step-title">Create Your Book</div>
+      <div class="step-desc">Go to your Writer Dashboard and click "Create New Book". Choose type (novel, manga, comic), set your cover, write your synopsis and pick your genres.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-icon">📝</div>
+      <div class="step-title">Write & Post Chapters</div>
+      <div class="step-desc">Use the built-in chapter editor to write novels or upload image pages for manga and comics. Schedule releases or post immediately.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <div class="step-icon">💰</div>
+      <div class="step-title">Grow & Earn</div>
+      <div class="step-desc">Build your followers, gather reviews and hit the monetization criteria. Apply for AdSense revenue and earn 60% of your book's earnings every month.</div>
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="vc-config.js"></script>
+
+<!-- BOOK TYPES -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 40px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-title">What Can You <span>Write?</span></div>
+    <div class="section-sub">VoomComix supports three formats — choose what suits your style best.</div>
+    <div class="types-grid">
+
+      <!-- NOVEL -->
+      <div class="type-card novel">
+        <div class="type-icon">📖</div>
+        <div class="type-name">Novel</div>
+        <div class="type-lengths">
+          <div class="length-item"><span class="length-name">Short Novel</span><span class="length-req">Min 6 chapters</span></div>
+          <div class="length-item"><span class="length-name">Medium Novel</span><span class="length-req">Min 30 chapters</span></div>
+          <div class="length-item"><span class="length-name">Long Novel</span><span class="length-req">Min 70 chapters</span></div>
+        </div>
+        <div class="type-note">📌 Chapter length requirements apply only when applying for book sale approval. For monetization, the standard follower/view/review criteria applies.</div>
+      </div>
+
+      <!-- MANGA -->
+      <div class="type-card manga">
+        <div class="type-icon">🎌</div>
+        <div class="type-name">Manga</div>
+        <div class="type-lengths">
+          <div class="length-item"><span class="length-name">Short Manga</span><span class="length-req">Min 6 chapters</span></div>
+          <div class="length-item"><span class="length-name">Medium Manga</span><span class="length-req">Min 30 chapters</span></div>
+          <div class="length-item"><span class="length-name">Long Manga</span><span class="length-req">Min 70 chapters</span></div>
+        </div>
+        <div class="type-note">📌 Each chapter must have a minimum of 10 image pages. Upload your panels in sequence — readers see them in the order you set.</div>
+      </div>
+
+      <!-- COMIC -->
+      <div class="type-card comic">
+        <div class="type-icon">💥</div>
+        <div class="type-name">Comic</div>
+        <div class="type-lengths">
+          <div class="length-item"><span class="length-name">Short Comic</span><span class="length-req">Min 6 chapters</span></div>
+          <div class="length-item"><span class="length-name">Medium Comic</span><span class="length-req">Min 30 chapters</span></div>
+          <div class="length-item"><span class="length-name">Long Comic</span><span class="length-req">Min 70 chapters</span></div>
+        </div>
+        <div class="type-note">📌 Each chapter must have a minimum of 10 image pages. Comics follow the same upload system as manga with full-quality image support.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MONETIZATION -->
+<div class="section">
+  <div class="section-title">How <span>Monetization</span> Works</div>
+  <div class="section-sub">Once your book qualifies, apply for monetization and start earning real revenue.</div>
+  <div class="mono-grid">
+    <div class="mono-card">
+      <h3>Requirements to Apply</h3>
+      <div class="req-list">
+        <div class="req-item"><span class="req-icon">👥</span><div><strong>5,000 Followers</strong><span>Your book must have at least 5,000 followers.</span></div></div>
+        <div class="req-item"><span class="req-icon">👁</span><div><strong>20,000+ Views</strong><span>Total chapter views across the book.</span></div></div>
+        <div class="req-item"><span class="req-icon">⭐</span><div><strong>50+ Positive Reviews</strong><span>Reviews with 4 or 5 star ratings.</span></div></div>
+        <div class="req-item"><span class="req-icon">✍️</span><div><strong>80% Original Writing</strong><span>The story must be written by you, not copied.</span></div></div>
+        <div class="req-item"><span class="req-icon">🤖</span><div><strong>Max 20% AI Assistance</strong><span>AI allowed only for grammar corrections.</span></div></div>
+        <div class="req-item"><span class="req-icon">🔒</span><div><strong>Exclusive to VoomComix</strong><span>Story must not be published elsewhere.</span></div></div>
+      </div>
+    </div>
+    <div class="mono-card">
+      <h3>Revenue Breakdown</h3>
+      <div class="revenue-box">
+        <h4>💰 Your Earnings</h4>
+        <div class="rev-row"><span class="rev-label">AdSense Revenue (monthly)</span><span class="rev-val">60% to you</span></div>
+        <div class="rev-row"><span class="rev-label">Future book/video sale</span><span class="rev-val">70% to you</span></div>
+        <div class="rev-row"><span class="rev-label">Minimum transfer amount</span><span class="rev-val">$10 USD</span></div>
+        <div class="rev-row"><span class="rev-label">Payment schedule</span><span class="rev-val">Monthly</span></div>
+        <div class="rev-row"><span class="rev-label">Transfer method</span><span class="rev-val">Direct bank transfer</span></div>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:var(--bg3);border-radius:8px;font-size:13px;color:var(--muted);line-height:1.6;">
+        💡 VoomComix reviews each monetization application within 7–14 days. If rejected, you get up to 3 chances to improve your content and reapply.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT RULES -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 40px;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-title">Content <span>Rules</span></div>
+    <div class="section-sub">Read these carefully before creating your book. Violations may result in permanent ban.</div>
+    <div class="rules-grid">
+      <div class="rule-card allowed"><div class="rule-icon">✅</div><div class="rule-text"><strong>Original stories only</strong><span>Your story must be 100% your own creation, not based on or copied from any existing work.</span></div></div>
+      <div class="rule-card allowed"><div class="rule-icon">✅</div><div class="rule-text"><strong>Multiple genres welcome</strong><span>Action, romance, fantasy, thriller, horror, comedy, drama — all genres are welcome.</span></div></div>
+      <div class="rule-card allowed"><div class="rule-icon">✅</div><div class="rule-text"><strong>18+ content allowed with label</strong><span>Mature content is permitted only if the book is properly labelled as 18+ during creation.</span></div></div>
+      <div class="rule-card allowed"><div class="rule-icon">✅</div><div class="rule-text"><strong>All Indian languages</strong><span>You can write in Hindi, English, Marathi, Telugu, Tamil and all major Indian languages.</span></div></div>
+      <div class="rule-card banned"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No plagiarism</strong><span>Copying content from any other website, book or source will result in a permanent account ban.</span></div></div>
+      <div class="rule-card banned"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No AI-generated stories</strong><span>Using AI to write your story (not just fix grammar) will disqualify monetization and may get your account banned.</span></div></div>
+      <div class="rule-card banned"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No hate speech or abuse</strong><span>Content that targets any group, religion or person with hate, abuse or violence is strictly banned.</span></div></div>
+      <div class="rule-card banned"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No sexual content involving minors</strong><span>Any such content results in immediate permanent ban and will be reported to authorities.</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="section-title" style="text-align:center;">Frequently Asked <span>Questions</span></div>
+  <div class="section-sub" style="text-align:center;margin-bottom:32px;">Everything you need to know before you start writing.</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Is it free to publish on VoomComix?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes, completely free. Creating an account, publishing a book, posting chapters — all of it is free. You only earn, you never pay.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Can I publish in Hindi or other Indian languages?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. VoomComix supports all major Indian languages including Hindi, Marathi, Telugu, Tamil, Kannada, Malayalam, Bengali, Gujarati, Punjabi, Odia and Urdu.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Can I use AI to help write my story?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">You can use AI for grammar corrections only — a maximum of 20% of the total content. If the majority of the story is AI-generated, your book will not qualify for monetization and may be removed from the platform.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Can I delete my book after publishing?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">No. Once a book is published it cannot be deleted, to protect readers who have followed and read your chapters. You can edit and rewrite chapters at any time.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>How do I schedule chapter releases?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">In the chapter editor, set a date and time in the Schedule field before clicking Publish. The chapter will go live automatically. You can change the schedule before it publishes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>When do I get paid?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">Payments are processed monthly. Your balance needs to reach a minimum of $10 USD before it is transferred to your bank account. The exact amount is set by VoomComix based on AdSense revenue from your book's pages.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>What happens if my book is found to be plagiarised?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">If VoomComix verifies that your story is copied from another source, your account will be permanently banned without warning. We take originality extremely seriously.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)"><span>Can I publish on other platforms too?</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">For monetization eligibility, your story must be exclusive to VoomComix. Publishing the same story elsewhere disqualifies you from AdSense revenue on VoomComix.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to <span>Start Writing?</span></h2>
+  <p>Join VoomComix today. Create your account, publish your first book and start building your reader base.</p>
+  <div class="cta-btns">
+    <a href="login.html?tab=signup&role=writer" class="btn btn-red btn-large">Create Writer Account</a>
+    <a href="login.html" class="btn btn-outline btn-large">Already have an account</a>
+  </div>
+  <p style="margin-top:20px;font-size:13px;color:var(--muted);">Questions? Email us at <a href="mailto:help@voomcomix.in" style="color:var(--red);">help@voomcomix.in</a></p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">VOOM<span style="color:var(--red);">COMIX</span></div>
+  <p style="margin-bottom:8px;">India's original manga, comic and novel platform.</p>
+  <p><a href="terms.html">Terms & Conditions</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="about.html">About Us</a></p>
+</footer>
+
 <script>
-const sb = getSupabase();
-async function init() {
-  const user = await requireAuth('login.html');
-  if (!user) return;
-  const profile = await getCurrentProfile();
-  if (profile?.role === 'writer' || profile?.role === 'admin') {
-    window.location.href = 'writer-dashboard.html'; return;
-  }
-  // Check if already applied
-  const { data: app } = await sb.from('writer_applications').select('*').eq('user_id', user.id).single();
-  if (app) {
-    document.getElementById('apply-card').innerHTML = `
-      <div class="success-box">
-        <div class="success-ic">${app.status==='pending'?'⏳':app.status==='approved'?'✅':'❌'}</div>
-        <div class="success-t">Application ${app.status==='pending'?'Under Review':app.status==='approved'?'Approved!':'Rejected'}</div>
-        <div class="success-s">${app.status==='pending'?'Your application is being reviewed. Please wait 24-48 hours.':app.status==='approved'?'Congratulations! You are now a writer.':'Your application was not approved. You can apply again with better writing samples.'}</div>
-        ${app.status==='approved'?`<br/><a href="writer-dashboard.html" style="color:var(--red);font-weight:700;font-size:.82rem;">Go to Writer Studio →</a>`:''}
-      </div>`;
+function toggleFaq(el) {
+  const ans = el.nextElementSibling;
+  const icon = el.querySelector('.faq-icon');
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
+  if (!isOpen) {
+    ans.classList.add('open');
+    icon.style.transform = 'rotate(45deg)';
   }
 }
-async function submitApplication() {
-  const reason = document.getElementById('reason').value.trim();
-  const sample = document.getElementById('sample').value.trim();
-  if (!reason) { document.getElementById('err-msg').textContent='Please tell us why you want to write!'; document.getElementById('err-msg').style.display='block'; return; }
-  const btn = document.getElementById('apply-btn');
-  btn.disabled = true; btn.textContent = 'Submitting...';
-  const user = await getCurrentUser();
-  const { error } = await sb.from('writer_applications').insert({ user_id:user.id, reason, sample_writing:sample, status:'pending' });
-  if (error) { document.getElementById('err-msg').textContent = error.message; document.getElementById('err-msg').style.display='block'; btn.disabled=false; btn.textContent='Submit Application →'; return; }
-  document.getElementById('apply-card').style.display='none';
-  document.getElementById('success-card').style.display='block';
-}
-init();
 </script>
 </body>
 </html>
